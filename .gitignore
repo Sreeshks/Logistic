@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+.pytest_cache/
+*.sqlite3
+logistics.db
+
+# Node / React
+node_modules/
+dist/
+build/
+.output/
+.vite/
+*.log
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Uploads dynamic user media (keep folder structure if needed)
+uploads/*
+!uploads/.gitkeep
