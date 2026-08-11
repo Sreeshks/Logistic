@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: white-star-cargo-backend
+    env: python
+    region: singapore
+    plan: free
+    buildCommand: "pip install -r requirements.txt && python -m alembic upgrade head"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: APP_NAME
+        value: "Logistics Website API"
+      - key: APP_ENV
+        value: "production"
+      - key: DEBUG
+        value: "false"
+      - key: DATABASE_URL
+        value: "postgresql://postgres:Sreeshorwot%40123@db.fhvlgotshslsawgfagea.supabase.co:5432/postgres"
+      - key: SUPABASE_URL
+        value: "https://fhvlgotshslsawgfagea.supabase.co"
+      - key: SUPABASE_KEY
+        value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZodmxnb3RzaHNsc2F3Z2ZhZ2VhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY0NTM3MjEsImV4cCI6MjEwMjAyOTcyMX0.31K1r5oVOhxYOK-rDhh6L03mO3V48hdZNO9NetOVnN4"
+      - key: SUPABASE_BUCKET
+        value: "Logi"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "1440"
+      - key: REFRESH_TOKEN_EXPIRE_DAYS
+        value: "30"
+      - key: CORS_ORIGINS
+        value: "*"
