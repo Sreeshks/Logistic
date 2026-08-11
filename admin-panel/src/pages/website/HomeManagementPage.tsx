@@ -63,6 +63,7 @@ export const HomeManagementPage: React.FC = () => {
         button_text: heroData.button_text || '',
         button_url: heroData.button_url || '',
         background_image: heroData.background_image || '',
+        banner_images: heroData.banner_images || '',
       });
     }
   }, [heroData, resetHero]);
@@ -215,17 +216,95 @@ export const HomeManagementPage: React.FC = () => {
           }
         >
           <div className="space-y-4">
-            <Controller
-              name="background_image"
-              control={controlHero}
-              render={({ field }) => (
-                <ImageUploader
-                  label="Background Hero Image"
-                  value={field.value}
-                  onChange={field.onChange}
-                  error={heroErrors.background_image?.message}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Controller
+                name="background_image"
+                control={controlHero}
+                render={({ field }) => (
+                  <ImageUploader
+                    label="Primary Hero Background Image"
+                    value={field.value}
+                    onChange={field.onChange}
+                    error={heroErrors.background_image?.message}
+                  />
+                )}
+              />
+
+              <div>
+                <Controller
+                  name="banner_images"
+                  control={controlHero}
+                  render={({ field }) => (
+                    <div>
+                      <ImageUploader
+                        label="Add Hero Banner Image to Carousel"
+                        value=""
+                        onChange={(newUrl) => {
+                          if (newUrl) {
+                            const existing = field.value ? field.value.split(',').map((s) => s.trim()).filter(Boolean) : [];
+                            if (!existing.includes(newUrl)) {
+                              field.onChange([...existing, newUrl].join(','));
+                            }
+                          }
+                        }}
+                      />
+                    </div>
+                  )}
                 />
-              )}
+              </div>
+            </div>
+
+            {/* Banner Carousel Images Manager */}
+            <Controller
+              name="banner_images"
+              control={controlHero}
+              render={({ field }) => {
+                const imageList = field.value ? field.value.split(',').map((s) => s.trim()).filter(Boolean) : [];
+                return (
+                  <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
+                        Hero Banner Carousel Slides ({imageList.length} images)
+                      </label>
+                      <span className="text-[11px] text-slate-500 font-medium">
+                        Enter comma-separated URLs or upload multiple images above
+                      </span>
+                    </div>
+
+                    {imageList.length > 0 && (
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        {imageList.map((imgUrl, idx) => (
+                          <div key={idx} className="relative group rounded-lg overflow-hidden border border-slate-200 h-24 bg-slate-900">
+                            <img src={imgUrl} alt={`Slide ${idx + 1}`} className="w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const updated = imageList.filter((_, i) => i !== idx);
+                                  field.onChange(updated.join(','));
+                                }}
+                                className="p-1.5 bg-rose-600 text-white rounded-md hover:bg-rose-700 text-xs font-bold"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                            <span className="absolute bottom-1 left-1 bg-slate-900/80 text-white text-[10px] px-1.5 py-0.5 rounded font-mono">
+                              #{idx + 1}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    <Textarea
+                      rows={2}
+                      placeholder="Multiple image URLs separated by commas..."
+                      value={field.value || ''}
+                      onChange={(e) => field.onChange(e.target.value)}
+                    />
+                  </div>
+                );
+              }}
             />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

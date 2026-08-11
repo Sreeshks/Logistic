@@ -5,6 +5,7 @@ import { MainLayout } from '../layouts/MainLayout';
 import { LoginPage } from '../pages/LoginPage';
 import { DashboardPage } from '../pages/DashboardPage';
 import { CompanyPage } from '../pages/CompanyPage';
+import { OrdersPage } from '../pages/orders/OrdersPage';
 import { HomeManagementPage } from '../pages/website/HomeManagementPage';
 import { AboutManagementPage } from '../pages/website/AboutManagementPage';
 import { ServicesListPage } from '../pages/services/ServicesListPage';
@@ -34,6 +35,7 @@ export const AppRoutes: React.FC = () => {
         }
       >
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/orders" element={<OrdersPage />} />
         <Route path="/company" element={<CompanyPage />} />
 
         {/* Website CMS */}

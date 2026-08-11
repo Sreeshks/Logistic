@@ -38,7 +38,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const navigation = [
     {
       group: 'Main',
-      items: [{ name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard }],
+      items: [
+        { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+        { name: 'Orders & Tracking', path: '/orders', icon: Package },
+      ],
     },
     {
       group: 'Website CMS',

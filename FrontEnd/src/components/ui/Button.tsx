@@ -2,8 +2,9 @@ import React from 'react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { Loader2 } from 'lucide-react';
+import { motion, type HTMLMotionProps } from 'framer-motion';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, keyof HTMLMotionProps<'button'>>, HTMLMotionProps<'button'> {
   variant?: 'primary' | 'secondary' | 'accent' | 'outline' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
@@ -13,7 +14,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export const Button: React.FC<ButtonProps> = ({
-  variant = 'primary',
+  variant = 'accent',
   size = 'md',
   isLoading = false,
   leftIcon,
@@ -21,37 +22,57 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   className,
   disabled,
+  style,
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center justify-center font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer rounded-md';
+  const baseStyles =
+    'relative inline-flex items-center justify-center font-extrabold tracking-wide transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer rounded-2xl overflow-hidden group shadow-md hover:shadow-xl active:scale-95';
 
   const variants = {
-    primary: 'bg-slate-900 text-white hover:bg-slate-800 focus:ring-slate-900 shadow-md hover:shadow-lg',
-    secondary: 'bg-blue-900 text-white hover:bg-blue-950 focus:ring-blue-900 shadow-md',
-    accent: 'bg-orange-600 text-white hover:bg-orange-700 focus:ring-orange-500 shadow-md hover:shadow-lg',
-    outline: 'border-2 border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white focus:ring-slate-900',
-    ghost: 'text-slate-700 hover:bg-slate-100 focus:ring-slate-400',
+    accent:
+      'bg-brand-gradient text-white hover:brightness-110 focus:ring-orange-500 shadow-orange-600/30 border border-orange-400/30',
+    primary:
+      'bg-slate-900 text-white hover:bg-slate-800 focus:ring-slate-900 shadow-slate-900/30 border border-slate-700/50',
+    secondary:
+      'bg-slate-800 text-slate-100 hover:bg-slate-700 focus:ring-slate-800 border border-slate-700',
+    outline:
+      'border-2 border-slate-300 text-slate-800 bg-white/90 backdrop-blur-md hover:bg-slate-900 hover:text-white hover:border-slate-900 focus:ring-slate-900',
+    ghost:
+      'text-slate-700 hover:bg-slate-100 focus:ring-slate-400',
   };
 
   const sizes = {
-    sm: 'px-3 py-1.5 text-xs font-semibold gap-1.5',
-    md: 'px-5 py-2.5 text-sm font-semibold gap-2',
-    lg: 'px-7 py-3.5 text-base font-semibold gap-2.5',
+    sm: 'px-4 py-2 text-xs font-bold gap-1.5',
+    md: 'px-6 py-3 text-sm font-bold gap-2',
+    lg: 'px-8 py-4 text-base font-extrabold gap-2.5',
   };
 
+  const dynamicStyle =
+    variant === 'accent'
+      ? { backgroundColor: 'var(--primary-color)', ...style }
+      : style;
+
   return (
-    <button
+    <motion.button
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.97 }}
       className={twMerge(clsx(baseStyles, variants[variant], sizes[size], className))}
       disabled={disabled || isLoading}
+      style={dynamicStyle}
       {...props}
     >
+      {/* Animated Shine Highlight Effect */}
+      <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" />
+
       {isLoading ? (
         <Loader2 className="w-4 h-4 animate-spin shrink-0" />
       ) : (
-        leftIcon && <span className="shrink-0">{leftIcon}</span>
+        leftIcon && <span className="shrink-0 group-hover:-translate-x-0.5 transition-transform">{leftIcon}</span>
       )}
-      <span>{children}</span>
-      {!isLoading && rightIcon && <span className="shrink-0">{rightIcon}</span>}
-    </button>
+      <span className="relative z-10">{children}</span>
+      {!isLoading && rightIcon && (
+        <span className="shrink-0 group-hover:translate-x-1 transition-transform duration-300">{rightIcon}</span>
+      )}
+    </motion.button>
   );
 };

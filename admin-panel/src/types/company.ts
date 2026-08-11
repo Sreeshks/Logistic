@@ -17,6 +17,10 @@ export interface CompanyInfo {
   linkedin?: string | null;
   youtube?: string | null;
   twitter?: string | null;
+  primary_color?: string | null;
+  secondary_color?: string | null;
+  accent_color?: string | null;
+  theme_mode?: string | null;
   created_at: string;
   updated_at: string;
 }

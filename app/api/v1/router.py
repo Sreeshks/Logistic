@@ -14,6 +14,7 @@ from app.api.v1.branches import admin_router as branches_admin_router, public_ro
 from app.api.v1.destinations import admin_router as destinations_admin_router, public_router as destinations_public_router
 from app.api.v1.dashboard import router as dashboard_router
 from app.api.v1.upload import router as upload_router
+from app.api.v1.orders import router as orders_router
 
 api_router = APIRouter()
 
@@ -23,9 +24,10 @@ api_router.include_router(health_router)
 # Auth
 api_router.include_router(auth_router, prefix="/auth", tags=["Authentication"])
 
-# Dashboard & Upload
+# Dashboard & Upload & Orders
 api_router.include_router(dashboard_router)
 api_router.include_router(upload_router)
+api_router.include_router(orders_router)
 
 # Admin routers
 api_router.include_router(company_admin_router)

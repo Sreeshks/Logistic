@@ -6,6 +6,7 @@ export interface HomeHero {
   button_text?: string | null;
   button_url?: string | null;
   background_image?: string | null;
+  banner_images?: string | null;
   created_at: string;
   updated_at: string;
 }

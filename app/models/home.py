@@ -17,6 +17,7 @@ class HomeHero(Base):
     secondary_button_text: Mapped[str | None] = mapped_column(sa.String(100), nullable=True, default="Our Services")
     secondary_button_url: Mapped[str | None] = mapped_column(sa.String(255), nullable=True, default="/services")
     background_image: Mapped[str | None] = mapped_column(sa.String(500), nullable=True)
+    banner_images: Mapped[str | None] = mapped_column(sa.Text, nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(
         sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False

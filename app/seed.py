@@ -15,6 +15,7 @@ from app.models.gallery import GalleryItem
 from app.models.blog import Blog, BlogStatus
 from app.models.faq import FAQ
 from app.models.contact import ContactMessage, ContactStatus
+from app.models.order import Order, OrderStatus
 from app.core.security import hash_password
 from app.utils.slug import generate_slug
 
@@ -71,6 +72,10 @@ def seed_database():
                 linkedin=None,
                 youtube=None,
                 twitter=None,
+                primary_color="#ea580c",
+                secondary_color="#0f172a",
+                accent_color="#0284c7",
+                theme_mode="light",
             )
             db.add(company)
             db.flush()
@@ -258,7 +263,8 @@ def seed_database():
                 button_url="/contact",
                 secondary_button_text="Our Services",
                 secondary_button_url="/services",
-                background_image="/uploads/hero_bg.jpg",
+                background_image="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=2000",
+                banner_images="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=2000,https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=2000,https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=2000,https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&q=80&w=2000",
             )
             db.add(hero)
             print("Seeded Home Hero.")
@@ -270,6 +276,7 @@ def seed_database():
             hero.button_url = "/contact"
             hero.secondary_button_text = "Our Services"
             hero.secondary_button_url = "/services"
+            hero.banner_images = "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=2000,https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=2000,https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=2000,https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&q=80&w=2000"
 
         # 8. Seed Company Statistics
         if db.query(CompanyStatistic).count() == 0:
@@ -391,17 +398,48 @@ def seed_database():
             print("Seeded FAQs.")
 
         # 13. Seed Contact Message
-        if db.query(ContactMessage).count() == 0:
-            msg = ContactMessage(
-                name="Sultan Al-Harthy",
-                email="sultan@example.com",
-                phone="99887766",
-                subject="Door to Door Air Cargo Inquiry",
-                message="Hello, I would like to inquire about door to door air cargo delivery rates and timeline for shipping household goods to India.",
-                status=ContactStatus.NEW,
-            )
-            db.add(msg)
-            print("Seeded Contact Message.")
+        # 14. Seed Orders / Cargo Shipments
+        if db.query(Order).count() == 0:
+            sample_orders = [
+                Order(
+                    tracking_number="WSC-998231",
+                    sender_name="Mohammed Al-Busaidi",
+                    recipient_name="Rahul Sharma",
+                    origin="Ruwi Branch, Muscat, Oman",
+                    destination="Kochi, Kerala, India",
+                    service_type="Air Cargo",
+                    status=OrderStatus.IN_TRANSIT,
+                    current_location="Muscat International Airport Freight Terminal",
+                    estimated_delivery="18 Aug 2026",
+                    notes="Direct Air Freight dispatch under AWB-88902.",
+                ),
+                Order(
+                    tracking_number="WSC-100821",
+                    sender_name="Ahmed Said",
+                    recipient_name="Suresh Kumar",
+                    origin="Misfah Warehouse, Oman",
+                    destination="Mumbai, Maharashtra, India",
+                    service_type="Sea Cargo",
+                    status=OrderStatus.PICKED_UP,
+                    current_location="Misfah Logistics Hub",
+                    estimated_delivery="05 Sep 2026",
+                    notes="Container loading scheduled for Sultan Qaboos Port.",
+                ),
+                Order(
+                    tracking_number="WSC-773412",
+                    sender_name="Salim Al-Harthy",
+                    recipient_name="Tariq Mansoor",
+                    origin="Barka Office, Oman",
+                    destination="Dhaka, Bangladesh",
+                    service_type="Door to Door Service",
+                    status=OrderStatus.DELIVERED,
+                    current_location="Dhaka Distribution Depot",
+                    estimated_delivery="10 Aug 2026",
+                    notes="Successfully delivered to recipient address.",
+                ),
+            ]
+            db.add_all(sample_orders)
+            print("Seeded Sample Orders & Cargo Shipments.")
 
         db.commit()
         print("White Star Cargo database seed completed successfully!")

@@ -27,6 +27,11 @@ class CompanyUpdate(BaseModel):
     youtube: str | None = None
     twitter: str | None = None
 
+    primary_color: str | None = None
+    secondary_color: str | None = None
+    accent_color: str | None = None
+    theme_mode: str | None = None
+
 
 class CompanyResponse(BaseModel):
     id: int
@@ -51,6 +56,11 @@ class CompanyResponse(BaseModel):
     linkedin: str | None = None
     youtube: str | None = None
     twitter: str | None = None
+
+    primary_color: str | None = None
+    secondary_color: str | None = None
+    accent_color: str | None = None
+    theme_mode: str | None = None
 
     branches: list[BranchResponse] = []
     company_contacts: list[CompanyContactResponse] = []

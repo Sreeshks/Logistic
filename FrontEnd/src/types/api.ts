@@ -22,6 +22,10 @@ export interface CompanyInfo {
   youtube_url?: string | null;
   twitter_url?: string | null;
   google_maps_url?: string | null;
+  primary_color?: string | null;
+  secondary_color?: string | null;
+  accent_color?: string | null;
+  theme_mode?: string | null;
 }
 
 export interface HomeHero {
@@ -34,6 +38,7 @@ export interface HomeHero {
   secondary_cta_text?: string | null;
   secondary_cta_url?: string | null;
   background_image_url?: string | null;
+  banner_images?: string | null;
 }
 
 export interface Statistic {

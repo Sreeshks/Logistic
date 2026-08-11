@@ -18,6 +18,10 @@ export const companySchema = z.object({
   linkedin: z.string().optional().nullable(),
   youtube: z.string().optional().nullable(),
   twitter: z.string().optional().nullable(),
+  primary_color: z.string().optional().nullable(),
+  secondary_color: z.string().optional().nullable(),
+  accent_color: z.string().optional().nullable(),
+  theme_mode: z.string().optional().nullable(),
 });
 
 export type CompanyFormData = z.infer<typeof companySchema>;

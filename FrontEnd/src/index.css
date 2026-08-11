@@ -2,11 +2,10 @@
 
 @layer base {
   :root {
-    --color-primary: #0f172a;
-    --color-primary-light: #1e3a8a;
-    --color-secondary: #1e293b;
-    --color-accent: #f97316;
-    --color-accent-hover: #ea580c;
+    --primary-color: #ea580c;
+    --secondary-color: #0f172a;
+    --accent-color: #0284c7;
+    --theme-mode: light;
     --color-bg: #f8fafc;
     --color-surface: #ffffff;
     --color-text-main: #0f172a;
@@ -28,23 +27,59 @@
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
+    background-color: #f8fafc;
   }
 }
 
-/* Custom Utilities for Premium Corporate Aesthetic */
+/* Ken Burns Zoom Effect */
+@keyframes kenburns {
+  0% {
+    transform: scale(1) translate(0, 0);
+  }
+  50% {
+    transform: scale(1.08) translate(-1%, -0.5%);
+  }
+  100% {
+    transform: scale(1) translate(0, 0);
+  }
+}
+
+.animate-kenburns {
+  animation: kenburns 16s ease-in-out infinite alternate;
+}
+
+/* Premium Light Glassmorphism & Card Utilities */
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.05);
+}
+
+.glass-nav {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* Custom Gradients & Glows */
+.text-brand-gradient {
+  background: linear-gradient(135deg, var(--primary-color) 0%, #c2410c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-brand-gradient {
+  background: linear-gradient(135deg, var(--primary-color) 0%, #c2410c 100%);
+}
+
+.glow-orange {
+  box-shadow: 0 15px 35px -5px rgba(234, 88, 12, 0.15);
+}
+
 .bg-grid-pattern {
-  background-image: radial-gradient(rgba(15, 23, 42, 0.08) 1px, transparent 1px);
-  background-size: 24px 24px;
-}
-
-.text-gradient {
-  background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.text-accent-gradient {
-  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  background-image: radial-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
 }

@@ -32,6 +32,12 @@ class Company(Base):
     youtube: Mapped[str | None] = mapped_column(sa.String(255), nullable=True)
     twitter: Mapped[str | None] = mapped_column(sa.String(255), nullable=True)
 
+    # Theme & Appearance
+    primary_color: Mapped[str | None] = mapped_column(sa.String(50), nullable=True, default="#ea580c")
+    secondary_color: Mapped[str | None] = mapped_column(sa.String(50), nullable=True, default="#0f172a")
+    accent_color: Mapped[str | None] = mapped_column(sa.String(50), nullable=True, default="#06b6d4")
+    theme_mode: Mapped[str | None] = mapped_column(sa.String(20), nullable=True, default="dark")
+
     created_at: Mapped[datetime] = mapped_column(
         sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False
     )

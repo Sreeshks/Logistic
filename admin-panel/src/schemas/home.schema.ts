@@ -7,6 +7,7 @@ export const homeHeroSchema = z.object({
   button_text: z.string().optional().nullable(),
   button_url: z.string().optional().nullable(),
   background_image: z.string().optional().nullable(),
+  banner_images: z.string().optional().nullable(),
 });
 
 export type HomeHeroFormData = z.infer<typeof homeHeroSchema>;

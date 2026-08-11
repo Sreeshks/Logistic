@@ -17,6 +17,7 @@ class HomeHeroUpdate(BaseModel):
     secondary_button_text: str | None = None
     secondary_button_url: str | None = None
     background_image: str | None = None
+    banner_images: str | None = None
 
 
 class HomeHeroResponse(BaseModel):
@@ -29,6 +30,7 @@ class HomeHeroResponse(BaseModel):
     secondary_button_text: str | None = None
     secondary_button_url: str | None = None
     background_image: str | None = None
+    banner_images: str | None = None
     created_at: datetime
     updated_at: datetime
 
