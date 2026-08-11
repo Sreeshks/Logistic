@@ -10,6 +10,13 @@ import {
   Truck,
   X,
   CheckCircle2,
+  Plane,
+  Ship,
+  Box,
+  Warehouse,
+  MapPin,
+  Trophy,
+  Package,
 } from 'lucide-react';
 
 import { Container } from '../../components/ui/Container';
@@ -19,8 +26,6 @@ import { Skeleton } from '../../components/ui/Skeleton';
 import { ErrorState } from '../../components/ui/ErrorState';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { getHomeData } from '../../api/home.api';
-import { HeroCarousel } from '../../components/HeroCarousel';
-import { QuickTrackWidget } from '../../components/QuickTrackWidget';
 import { ScrollReveal, StaggerContainer, StaggerItem } from '../../components/ScrollReveal';
 
 export const HomePage: React.FC = () => {
@@ -42,11 +47,6 @@ export const HomePage: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             {[1, 2, 3, 4].map((i) => (
               <Skeleton key={i} className="h-28 rounded-2xl bg-slate-200" />
-            ))}
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
-              <Skeleton key={i} className="h-72 rounded-2xl bg-slate-200" />
             ))}
           </div>
         </Container>
@@ -80,180 +80,359 @@ export const HomePage: React.FC = () => {
   const filteredGallery =
     activeCategory === 'ALL' ? gallery : gallery.filter((item) => item.category === activeCategory);
 
+  // Background image priority: Hero uploaded background -> public local hero image fallback
+  const heroBgImage =
+    hero?.background_image_url ||
+    hero?.background_image ||
+    '/hero_landing_bg.png';
+
+  // Helper to resolve service icons
+  const getServiceIcon = (title: string, iconStr?: string) => {
+    const name = (title || '').toLowerCase();
+    if (name.includes('air')) return <Plane className="w-6 h-6 text-primary" />;
+    if (name.includes('sea')) return <Ship className="w-6 h-6 text-primary" />;
+    if (name.includes('door')) return <Truck className="w-6 h-6 text-primary" />;
+    if (name.includes('pack') || name.includes('shift')) return <Box className="w-6 h-6 text-primary" />;
+    if (name.includes('storage') || name.includes('ware')) return <Warehouse className="w-6 h-6 text-primary" />;
+    return <Truck className="w-6 h-6 text-primary" />;
+  };
+
+  // Helper to resolve stat icons
+  const getStatIcon = (iconStr?: string) => {
+    const icon = (iconStr || '').toLowerCase();
+    if (icon.includes('trophy') || icon.includes('year') || icon.includes('award')) return <Trophy className="w-8 h-8 text-primary shrink-0" />;
+    if (icon.includes('package') || icon.includes('box') || icon.includes('customer')) return <Package className="w-8 h-8 text-primary shrink-0" />;
+    if (icon.includes('globe') || icon.includes('country') || icon.includes('world')) return <Globe2 className="w-8 h-8 text-primary shrink-0" />;
+    return <Truck className="w-8 h-8 text-primary shrink-0" />;
+  };
+
   return (
-    <div className="space-y-16 sm:space-y-24 pb-16 sm:pb-20 bg-slate-50 text-slate-900 min-h-screen overflow-hidden">
-      {/* 1. HERO BANNER SECTION WITH MULTI-IMAGE CAROUSEL */}
-      <section className="relative min-h-[580px] sm:min-h-[640px] lg:min-h-[720px] flex items-center overflow-hidden">
-        {/* Multi-Image Hero Carousel Background */}
-        <HeroCarousel
-          bannerImages={(hero as any)?.banner_images}
-          defaultImage={hero?.background_image_url}
-        />
+    <div className="bg-slate-50 text-slate-900 min-h-screen overflow-hidden">
+      {/* 1. HERO BANNER SECTION (MATCHES LANDINGPAGE.PNG EXACTLY) */}
+      <section className="relative min-h-[640px] lg:min-h-[720px] bg-[#0c182c] text-white flex items-center overflow-hidden py-12 lg:py-16">
+        {/* Background Image with Dark Overlay */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src={heroBgImage}
+            alt="White Star Cargo Hero"
+            className="w-full h-full object-cover opacity-60"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0c182c]/95 via-[#0c182c]/85 to-[#0c182c]/40" />
+        </div>
 
-        {/* Hero Content Overlay with Animated Scroll Reveals */}
-        <Container className="relative z-20 py-16 sm:py-20 lg:py-28">
-          <div className="max-w-3xl space-y-4 sm:space-y-6">
-            {hero?.subtitle && (
+        <Container className="relative z-10 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left Content Column */}
+            <div className="lg:col-span-7 space-y-6">
               <ScrollReveal variant="fade-down" delay={0.1}>
-                <span className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider bg-primary/20 text-primary border border-primary/30 backdrop-blur-md shadow-lg">
-                  <Truck className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                  {hero.subtitle}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-primary">
+                    {hero?.subtitle || 'TRUSTED | RELIABLE | WORLDWIDE'}
+                  </span>
+                  <span className="h-0.5 w-12 bg-primary inline-block" />
+                </div>
               </ScrollReveal>
-            )}
 
-            <ScrollReveal variant="fade-up" delay={0.2}>
-              <h1 className="text-3xl sm:text-5xl lg:text-7xl font-black tracking-tight text-white leading-tight drop-shadow-md">
-                {hero?.heading || (hero as any)?.title || 'WHITE STAR CARGO & LOGISTICS'}
-              </h1>
-            </ScrollReveal>
+              <ScrollReveal variant="fade-up" delay={0.2}>
+                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight uppercase">
+                  {hero?.heading || (hero as any)?.title || 'DELIVERING TRUST, CONNECTING WORLDWIDE'}
+                </h1>
+              </ScrollReveal>
 
-            <ScrollReveal variant="fade-up" delay={0.3}>
-              <p className="text-sm sm:text-lg lg:text-xl text-slate-200 font-normal leading-relaxed max-w-2xl drop-shadow-sm">
-                {hero?.description ||
-                  'Connecting global trade lanes through seamless Air Cargo, Sea Freight, Door to Door shipping, professional packing & short and long term warehousing.'}
+              <ScrollReveal variant="fade-up" delay={0.3}>
+                <p className="text-sm sm:text-base lg:text-lg text-slate-200 font-normal leading-relaxed max-w-2xl">
+                  {hero?.description ||
+                    'Worldwide Air & Sea Cargo, Professional Packing & Shifting, and Long & Short Time Storage Facilities.'}
+                </p>
+              </ScrollReveal>
+
+              <ScrollReveal variant="zoom-in" delay={0.4}>
+                <div className="flex flex-wrap items-center gap-4 pt-2">
+                  <Link to={hero?.primary_cta_url || (hero as any)?.button_url || '/contact'}>
+                    <Button
+                      variant="accent"
+                      size="lg"
+                      className="px-7 py-3.5 rounded-xl font-bold text-sm sm:text-base shadow-xl justify-center"
+                      rightIcon={<ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />}
+                    >
+                      {hero?.primary_cta_text || (hero as any)?.button_text || 'Contact Us'}
+                    </Button>
+                  </Link>
+
+                  <Link to={hero?.secondary_cta_url || '/services'}>
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="px-7 py-3.5 rounded-xl font-bold text-sm sm:text-base border-white/40 text-white hover:bg-white/10 backdrop-blur-md justify-center"
+                      rightIcon={<ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />}
+                    >
+                      {hero?.secondary_cta_text || 'Our Services'}
+                    </Button>
+                  </Link>
+                </div>
+              </ScrollReveal>
+
+              {/* Bottom 4 Feature Highlights Row */}
+              <ScrollReveal variant="fade-up" delay={0.5} className="pt-6 sm:pt-10">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-slate-700/60 pt-6">
+                  <div className="flex items-start gap-2.5">
+                    <div className="p-2 rounded-lg bg-primary/20 text-primary border border-primary/30 shrink-0">
+                      <ShieldCheck className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-white uppercase tracking-wider">SAFE & SECURE</h4>
+                      <p className="text-[11px] text-slate-300 leading-tight mt-0.5">Your cargo is safe in our hands</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-2.5">
+                    <div className="p-2 rounded-lg bg-primary/20 text-primary border border-primary/30 shrink-0">
+                      <Clock className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-white uppercase tracking-wider">ON-TIME DELIVERY</h4>
+                      <p className="text-[11px] text-slate-300 leading-tight mt-0.5">Fast & reliable delivery across India</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-2.5">
+                    <div className="p-2 rounded-lg bg-primary/20 text-primary border border-primary/30 shrink-0">
+                      <Globe2 className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-white uppercase tracking-wider">WORLDWIDE REACH</h4>
+                      <p className="text-[11px] text-slate-300 leading-tight mt-0.5">Air & Sea cargo to all major destinations</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-2.5">
+                    <div className="p-2 rounded-lg bg-primary/20 text-primary border border-primary/30 shrink-0">
+                      <Box className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-white uppercase tracking-wider">DOOR TO DOOR</h4>
+                      <p className="text-[11px] text-slate-300 leading-tight mt-0.5">Complete logistics solution</p>
+                    </div>
+                  </div>
+                </div>
+              </ScrollReveal>
+            </div>
+
+            {/* Right Quick Delivery Side Card */}
+            <div className="lg:col-span-5">
+              <ScrollReveal variant="fade-left" delay={0.3}>
+                <div className="rounded-3xl overflow-hidden shadow-2xl border border-slate-700/60 bg-[#111e36]">
+                  {/* Top Block: Air Cargo */}
+                  <div className="p-6 bg-[#111e36] border-b border-slate-700/50 relative overflow-hidden group">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h3 className="text-xl font-extrabold text-white uppercase tracking-tight">AIR CARGO</h3>
+                        <p className="text-xs font-bold text-primary uppercase tracking-wider mt-0.5">ALL OVER INDIA</p>
+                        <div className="mt-3 text-lg font-black text-white">7 – 15 DAYS DELIVERY</div>
+                        <Link
+                          to="/services"
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-200 hover:text-white mt-3 group-hover:translate-x-1 transition-transform"
+                        >
+                          <span>Learn More</span>
+                          <ArrowRight className="w-3.5 h-3.5 text-primary" />
+                        </Link>
+                      </div>
+                      <div className="w-12 h-12 rounded-2xl bg-slate-800/80 border border-slate-700 flex items-center justify-center text-primary shrink-0">
+                        <Plane className="w-7 h-7 stroke-[1.5]" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Middle Block: Sea Cargo */}
+                  <div className="p-6 bg-primary text-white relative overflow-hidden group">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h3 className="text-xl font-extrabold text-white uppercase tracking-tight">SEA CARGO</h3>
+                        <p className="text-xs font-bold text-white/90 uppercase tracking-wider mt-0.5">ALL OVER INDIA</p>
+                        <div className="mt-3 text-lg font-black text-white">25 – 35 DAYS DELIVERY</div>
+                        <Link
+                          to="/services"
+                          className="inline-flex items-center gap-1.5 text-xs font-bold text-white mt-3 group-hover:translate-x-1 transition-transform"
+                        >
+                          <span>Learn More</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </Link>
+                      </div>
+                      <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white shrink-0">
+                        <Ship className="w-7 h-7 stroke-[1.5]" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Bottom Block: Opening Soon */}
+                  <div className="p-4 bg-[#0c1628] text-white flex flex-wrap items-center justify-between gap-2 text-xs border-t border-slate-800">
+                    <span className="font-bold text-slate-300 uppercase tracking-wider text-[11px]">OPENING SOON</span>
+                    <div className="flex items-center gap-4">
+                      <span className="flex items-center gap-1 font-bold text-white">
+                        <MapPin className="w-3.5 h-3.5 text-primary" />
+                        BARKA
+                      </span>
+                      <span className="flex items-center gap-1 font-bold text-white">
+                        <MapPin className="w-3.5 h-3.5 text-primary" />
+                        NIZWA
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </ScrollReveal>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* 2. "WHAT WE DO" - COMPLETE LOGISTICS SOLUTIONS SECTION (MATCHES LANDINGPAGE.PNG EXACTLY) */}
+      <section className="py-16 sm:py-20 bg-white">
+        <Container>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-12">
+            {/* Left Intro Block */}
+            <div className="lg:col-span-4 space-y-4">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold uppercase tracking-widest text-primary">WHAT WE DO</span>
+                <span className="h-0.5 w-10 bg-primary inline-block" />
+              </div>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                Complete Logistics Solutions
+              </h2>
+              <p className="text-slate-600 text-sm leading-relaxed">
+                From pickup to final delivery, we handle everything with care, professionalism and commitment.
               </p>
-            </ScrollReveal>
-
-            <ScrollReveal variant="zoom-in" delay={0.4}>
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-2 sm:pt-4">
-                <Link to={hero?.primary_cta_url || (hero as any)?.button_url || '/contact'}>
-                  <Button
-                    variant="accent"
-                    size="lg"
-                    className="w-full sm:w-auto text-sm sm:text-base font-bold shadow-xl justify-center"
-                    rightIcon={<ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />}
-                  >
-                    {hero?.primary_cta_text || (hero as any)?.button_text || 'Contact Us Now'}
+              <div className="pt-2">
+                <Link to="/services">
+                  <Button variant="accent" size="md" className="px-6 py-3 rounded-xl font-bold" rightIcon={<ArrowRight className="w-4 h-4" />}>
+                    Explore All Services
                   </Button>
                 </Link>
+              </div>
+            </div>
 
-                <Link to={hero?.secondary_cta_url || '/services'}>
-                  <Button
-                    variant="outline"
-                    size="lg"
-                    className="w-full sm:w-auto text-sm sm:text-base font-bold border-white/80 bg-white/10 text-white hover:bg-white hover:text-slate-900 backdrop-blur-md justify-center"
-                  >
-                    {hero?.secondary_cta_text || 'Our Services'}
-                  </Button>
-                </Link>
+            {/* Right 5 Services Cards Grid */}
+            <div className="lg:col-span-8">
+              <StaggerContainer className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                {services.length > 0 ? (
+                  services.slice(0, 5).map((srv) => (
+                    <StaggerItem key={srv.id}>
+                      <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between h-full group">
+                        <div>
+                          <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            {getServiceIcon(srv.title, srv.icon)}
+                          </div>
+                          <h3 className="text-base font-extrabold text-slate-900 mb-2 leading-snug group-hover:text-primary transition-colors">
+                            {srv.title}
+                          </h3>
+                          <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">
+                            {srv.short_description}
+                          </p>
+                        </div>
+                        <div className="pt-4 border-t border-slate-100 mt-4">
+                          <Link to={`/services/${srv.slug}`} className="inline-flex items-center gap-1 text-xs font-bold text-primary hover:brightness-110">
+                            <ArrowRight className="w-4 h-4" />
+                          </Link>
+                        </div>
+                      </div>
+                    </StaggerItem>
+                  ))
+                ) : (
+                  // Fallback 5 standard service cards
+                  [
+                    { title: 'Air Cargo', desc: 'Fast & reliable air cargo services to all over India.' },
+                    { title: 'Sea Cargo', desc: 'Cost-effective sea cargo services to all over India.' },
+                    { title: 'Door To Door', desc: 'Hassle-free door to door delivery anywhere in India.' },
+                    { title: 'Packing & Shifting', desc: 'Professional packing & shifting for safe delivery.' },
+                    { title: 'Storage Facility', desc: 'Long & short time storage facility with full security.' },
+                  ].map((item, idx) => (
+                    <StaggerItem key={idx}>
+                      <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between h-full group">
+                        <div>
+                          <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            {getServiceIcon(item.title)}
+                          </div>
+                          <h3 className="text-base font-extrabold text-slate-900 mb-2 leading-snug group-hover:text-primary transition-colors">
+                            {item.title}
+                          </h3>
+                          <p className="text-xs text-slate-600 leading-relaxed">
+                            {item.desc}
+                          </p>
+                        </div>
+                        <div className="pt-4 border-t border-slate-100 mt-4">
+                          <Link to="/services" className="inline-flex items-center gap-1 text-xs font-bold text-primary">
+                            <ArrowRight className="w-4 h-4" />
+                          </Link>
+                        </div>
+                      </div>
+                    </StaggerItem>
+                  ))
+                )}
+              </StaggerContainer>
+            </div>
+          </div>
+
+          {/* 3. STATISTICS BANNER (DARK CURVED CONTAINER BELOW SERVICES MATCHES LANDINGPAGE.PNG) */}
+          <div className="mt-8">
+            <ScrollReveal variant="zoom-in">
+              <div className="bg-[#0b172a] text-white p-8 sm:p-10 rounded-3xl shadow-2xl border border-slate-800">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center md:text-left">
+                  {statistics.length > 0 ? (
+                    statistics.map((stat) => (
+                      <div key={stat.id} className="flex flex-col md:flex-row items-center md:items-start gap-4">
+                        {getStatIcon(stat.icon)}
+                        <div>
+                          <div className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+                            {stat.value}
+                          </div>
+                          <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1">
+                            {stat.label}
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    // Default stats fallback if empty
+                    [
+                      { label: 'Years Experience', value: '10+', icon: 'trophy' },
+                      { label: 'Happy Customers', value: '50K+', icon: 'package' },
+                      { label: 'Countries Covered', value: '8+', icon: 'globe' },
+                      { label: 'On-time Delivery', value: '100%', icon: 'truck' },
+                    ].map((stat, idx) => (
+                      <div key={idx} className="flex flex-col md:flex-row items-center md:items-start gap-4">
+                        {getStatIcon(stat.icon)}
+                        <div>
+                          <div className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+                            {stat.value}
+                          </div>
+                          <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1">
+                            {stat.label}
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
               </div>
             </ScrollReveal>
           </div>
         </Container>
       </section>
 
-      {/* 2. QUICK SHIPMENT TRACKING & CALCULATOR WIDGET */}
-      <section className="-mt-16 sm:-mt-20 lg:-mt-28 relative z-30 px-2 sm:px-0">
+      {/* 4. WHY CHOOSE WHITE STAR CARGO SECTION */}
+      <section className="py-14 sm:py-20 relative overflow-hidden bg-slate-50 border-t border-slate-200">
         <Container>
-          <ScrollReveal variant="zoom-in" delay={0.2}>
-            <QuickTrackWidget />
-          </ScrollReveal>
-        </Container>
-      </section>
-
-      {/* 3. ANIMATED STATISTICS COUNTER */}
-      {statistics.length > 0 && (
-        <section className="py-2 sm:py-4">
-          <Container>
-            <StaggerContainer className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
-              {statistics.map((stat) => (
-                <StaggerItem key={stat.id}>
-                  <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white border border-slate-200 shadow-md hover:shadow-xl transition-all duration-300 text-center group hover:-translate-y-1">
-                    <div className="text-2xl sm:text-4xl lg:text-5xl font-black text-primary tracking-tight">
-                      {stat.value}
-                    </div>
-                    <div className="mt-1 sm:mt-2 text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-wider sm:tracking-widest group-hover:text-slate-900 transition-colors">
-                      {stat.label}
-                    </div>
-                  </div>
-                </StaggerItem>
-              ))}
-            </StaggerContainer>
-          </Container>
-        </section>
-      )}
-
-      {/* 4. FEATURED SERVICES SECTION */}
-      <section className="py-6 sm:py-10">
-        <Container>
-          <ScrollReveal variant="fade-up">
-            <SectionTitle
-              badge="Our Core Services"
-              title="Comprehensive Freight & Logistics Solutions"
-              subtitle="Tailored transportation, door-to-door delivery, and secure storage services designed for operational precision."
-            />
-          </ScrollReveal>
-
-          {services.length === 0 ? (
-            <EmptyState title="No Featured Services" message="Services will appear here once configured in the admin panel." />
-          ) : (
-            <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-              {services.map((service) => (
-                <StaggerItem key={service.id}>
-                  <div className="group rounded-2xl sm:rounded-3xl overflow-hidden bg-white border border-slate-200 shadow-md hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col h-full">
-                    <div className="h-48 sm:h-56 overflow-hidden relative bg-slate-100">
-                      <img
-                        src={
-                          service.image_url ||
-                          'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=800'
-                        }
-                        alt={service.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent" />
-                      <div className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-white/90 backdrop-blur-md p-2 sm:p-2.5 rounded-xl sm:rounded-2xl border border-slate-200 text-primary shadow-md">
-                        <Truck className="w-4 h-4 sm:w-5 sm:h-5" />
-                      </div>
-                    </div>
-
-                    <div className="p-5 sm:p-7 flex flex-col flex-grow">
-                      <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 mb-2 group-hover:text-primary transition-colors">
-                        {service.title}
-                      </h3>
-                      <p className="text-slate-600 text-xs sm:text-sm mb-5 sm:mb-6 flex-grow leading-relaxed line-clamp-3">
-                        {service.short_description}
-                      </p>
-                      <Link
-                        to={`/services/${service.slug}`}
-                        className="inline-flex items-center text-xs sm:text-sm font-bold text-primary hover:brightness-110 gap-2 mt-auto group/link"
-                      >
-                        <span>Explore Details</span>
-                        <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover/link:translate-x-1 transition-transform" />
-                      </Link>
-                    </div>
-                  </div>
-                </StaggerItem>
-              ))}
-            </StaggerContainer>
-          )}
-
-          <ScrollReveal variant="fade-up" delay={0.2} className="text-center mt-10 sm:mt-14">
-            <Link to="/services">
-              <Button variant="outline" size="md" className="w-full sm:w-auto border-slate-300 text-slate-800 hover:bg-slate-100 justify-center" rightIcon={<ArrowRight className="w-4 h-4" />}>
-                View All Logistics Services
-              </Button>
-            </Link>
-          </ScrollReveal>
-        </Container>
-      </section>
-
-      {/* 5. WHY CHOOSE US TRUST & SECURITY SECTION */}
-      <section className="py-14 sm:py-20 relative overflow-hidden bg-white border-y border-slate-200">
-        <div className="absolute inset-0 bg-grid-pattern opacity-30 pointer-events-none" />
-        <Container className="relative z-10">
           <ScrollReveal variant="fade-up">
             <SectionTitle
               badge="Why Choose White Star Cargo"
               title="Building Global Supply Chain Trust"
-              subtitle="Industry-leading logistics standards backed by real-time GPS fleet monitoring, customs compliance, and dedicated support."
+              subtitle="Industry-leading logistics standards backed by real-time tracking, customs compliance, and dedicated support."
             />
           </ScrollReveal>
 
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             <StaggerItem>
-              <div className="p-6 sm:p-8 bg-slate-50 rounded-2xl sm:rounded-3xl border border-slate-200/80 hover:border-primary/50 shadow-sm hover:shadow-xl transition-all duration-300 group h-full">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-5 sm:mb-6 group-hover:scale-110 transition-transform">
+              <div className="p-6 sm:p-8 bg-white rounded-3xl border border-slate-200 hover:border-primary/50 shadow-sm hover:shadow-xl transition-all duration-300 group h-full">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-5 sm:mb-6 group-hover:scale-110 transition-transform">
                   <ShieldCheck className="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
                 <h4 className="text-lg sm:text-xl font-bold text-slate-900 mb-2.5">100% Cargo Safety & Insurance</h4>
@@ -264,8 +443,8 @@ export const HomePage: React.FC = () => {
             </StaggerItem>
 
             <StaggerItem>
-              <div className="p-6 sm:p-8 bg-slate-50 rounded-2xl sm:rounded-3xl border border-slate-200/80 hover:border-primary/50 shadow-sm hover:shadow-xl transition-all duration-300 group h-full">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-5 sm:mb-6 group-hover:scale-110 transition-transform">
+              <div className="p-6 sm:p-8 bg-white rounded-3xl border border-slate-200 hover:border-primary/50 shadow-sm hover:shadow-xl transition-all duration-300 group h-full">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-5 sm:mb-6 group-hover:scale-110 transition-transform">
                   <Globe2 className="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
                 <h4 className="text-lg sm:text-xl font-bold text-slate-900 mb-2.5">Global Freight Network</h4>
@@ -276,8 +455,8 @@ export const HomePage: React.FC = () => {
             </StaggerItem>
 
             <StaggerItem>
-              <div className="p-6 sm:p-8 bg-slate-50 rounded-2xl sm:rounded-3xl border border-slate-200/80 hover:border-primary/50 shadow-sm hover:shadow-xl transition-all duration-300 group h-full">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-5 sm:mb-6 group-hover:scale-110 transition-transform">
+              <div className="p-6 sm:p-8 bg-white rounded-3xl border border-slate-200 hover:border-primary/50 shadow-sm hover:shadow-xl transition-all duration-300 group h-full">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-5 sm:mb-6 group-hover:scale-110 transition-transform">
                   <Clock className="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
                 <h4 className="text-lg sm:text-xl font-bold text-slate-900 mb-2.5">On-Time Delivery Guarantee</h4>
@@ -290,12 +469,12 @@ export const HomePage: React.FC = () => {
         </Container>
       </section>
 
-      {/* 6. ABOUT COMPANY PREVIEW */}
-      <section className="py-6 sm:py-10">
+      {/* 5. ABOUT COMPANY PREVIEW */}
+      <section className="py-14 sm:py-20 bg-white border-t border-slate-200">
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-14 items-center">
             <ScrollReveal variant="fade-left">
-              <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border border-slate-200 group">
+              <div className="relative rounded-3xl overflow-hidden shadow-xl border border-slate-200 group">
                 <img
                   src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=1200"
                   alt="Logistics Operations Center"
@@ -303,7 +482,7 @@ export const HomePage: React.FC = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-slate-900/10 to-transparent" />
 
-                <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 bg-white/95 backdrop-blur-md p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-slate-200 text-slate-900 shadow-xl">
+                <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 bg-white/95 backdrop-blur-md p-4 sm:p-6 rounded-2xl border border-slate-200 text-slate-900 shadow-xl">
                   <div className="flex items-center gap-3 sm:gap-4">
                     <div className="p-2.5 sm:p-3.5 bg-primary rounded-xl text-white shadow-md shrink-0">
                       <Award className="w-5 h-5 sm:w-7 sm:h-7" />
@@ -346,7 +525,7 @@ export const HomePage: React.FC = () => {
 
                 <div className="pt-2 sm:pt-4">
                   <Link to="/about">
-                    <Button variant="accent" size="md" className="w-full sm:w-auto justify-center" rightIcon={<ArrowRight className="w-4 h-4" />}>
+                    <Button variant="accent" size="md" className="w-full sm:w-auto justify-center rounded-xl font-bold" rightIcon={<ArrowRight className="w-4 h-4" />}>
                       Read More About Us
                     </Button>
                   </Link>
@@ -357,9 +536,9 @@ export const HomePage: React.FC = () => {
         </Container>
       </section>
 
-      {/* 7. PROJECT & FLEET GALLERY GRID WITH LIGHTBOX */}
+      {/* 6. PROJECT & FLEET GALLERY GRID */}
       {gallery.length > 0 && (
-        <section className="py-10 sm:py-14 bg-slate-100/70 border-t border-slate-200">
+        <section className="py-12 sm:py-16 bg-slate-100/70 border-t border-slate-200">
           <Container>
             <ScrollReveal variant="fade-up">
               <SectionTitle
@@ -393,7 +572,7 @@ export const HomePage: React.FC = () => {
                 <StaggerItem key={item.id}>
                   <div
                     onClick={() => setSelectedImage(item.image_url)}
-                    className="group relative h-60 sm:h-72 rounded-2xl sm:rounded-3xl overflow-hidden cursor-pointer bg-white border border-slate-200 shadow-md hover:shadow-2xl transition-all duration-500"
+                    className="group relative h-60 sm:h-72 rounded-3xl overflow-hidden cursor-pointer bg-white border border-slate-200 shadow-md hover:shadow-2xl transition-all duration-500"
                   >
                     <img
                       src={item.image_url}
@@ -403,7 +582,7 @@ export const HomePage: React.FC = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                     <div className="absolute bottom-4 left-4 right-4 sm:bottom-5 sm:left-5 sm:right-5 text-white">
                       {item.category && (
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-white bg-primary/90 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg mb-1.5 inline-block">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-white bg-primary px-2.5 py-1 rounded-lg mb-1.5 inline-block">
                           {item.category}
                         </span>
                       )}
@@ -419,7 +598,7 @@ export const HomePage: React.FC = () => {
 
             <ScrollReveal variant="fade-up" delay={0.2} className="text-center mt-10 sm:mt-12">
               <Link to="/gallery">
-                <Button variant="outline" size="md" className="w-full sm:w-auto border-slate-300 text-slate-800 hover:bg-white justify-center" rightIcon={<ArrowRight className="w-4 h-4" />}>
+                <Button variant="outline" size="md" className="w-full sm:w-auto border-slate-300 text-slate-800 hover:bg-white justify-center rounded-xl font-bold" rightIcon={<ArrowRight className="w-4 h-4" />}>
                   View Full Media Gallery
                 </Button>
               </Link>
@@ -428,9 +607,9 @@ export const HomePage: React.FC = () => {
         </section>
       )}
 
-      {/* 8. FEATURED BLOG & NEWS SECTION */}
+      {/* 7. FEATURED BLOG & NEWS SECTION */}
       {blogs.length > 0 && (
-        <section className="py-6 sm:py-10">
+        <section className="py-12 sm:py-16 bg-white border-t border-slate-200">
           <Container>
             <ScrollReveal variant="fade-up">
               <SectionTitle
@@ -443,7 +622,7 @@ export const HomePage: React.FC = () => {
             <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {blogs.map((blog) => (
                 <StaggerItem key={blog.id}>
-                  <div className="group rounded-2xl sm:rounded-3xl overflow-hidden bg-white border border-slate-200 shadow-md hover:shadow-2xl transition-all duration-500 flex flex-col h-full">
+                  <div className="group rounded-3xl overflow-hidden bg-white border border-slate-200 shadow-md hover:shadow-2xl transition-all duration-500 flex flex-col h-full">
                     <div className="h-44 sm:h-48 overflow-hidden bg-slate-100 relative">
                       <img
                         src={
@@ -479,14 +658,6 @@ export const HomePage: React.FC = () => {
                 </StaggerItem>
               ))}
             </StaggerContainer>
-
-            <ScrollReveal variant="fade-up" delay={0.2} className="text-center mt-10 sm:mt-12">
-              <Link to="/blog">
-                <Button variant="outline" size="md" className="w-full sm:w-auto border-slate-300 text-slate-800 hover:bg-slate-100 justify-center" rightIcon={<ArrowRight className="w-4 h-4" />}>
-                  View All Blog Articles
-                </Button>
-              </Link>
-            </ScrollReveal>
           </Container>
         </section>
       )}
@@ -503,7 +674,7 @@ export const HomePage: React.FC = () => {
           >
             <X className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
           </button>
-          <img src={selectedImage} alt="Expanded view" className="max-w-full max-h-[90vh] rounded-xl sm:rounded-2xl shadow-2xl object-contain border border-slate-800" />
+          <img src={selectedImage} alt="Expanded view" className="max-w-full max-h-[90vh] rounded-2xl shadow-2xl object-contain border border-slate-800" />
         </div>
       )}
     </div>

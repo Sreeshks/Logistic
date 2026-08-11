@@ -17,6 +17,11 @@ class Settings(BaseSettings):
     upload_dir: Path = Path("uploads")
     max_upload_size_mb: int = Field(default=10, gt=0)
 
+    # Supabase Cloud Storage & Project Integration
+    supabase_url: str | None = "https://fhvlgotshslsawgfagea.supabase.co"
+    supabase_key: str | None = None
+    supabase_bucket: str = "Logi"
+
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",

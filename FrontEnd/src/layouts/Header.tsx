@@ -39,13 +39,13 @@ export const Header: React.FC<HeaderProps> = ({ companyInfo }) => {
   return (
     <header className="w-full z-50 sticky top-0 transition-all duration-300">
       {/* Top Header Utility Bar */}
-      <div className="bg-slate-900 text-slate-200 text-xs py-2 border-b border-slate-800 hidden md:block">
+      <div className="bg-[#0a1120] text-slate-300 text-xs py-2 border-b border-slate-800/80 hidden md:block">
         <Container className="flex justify-between items-center">
           <div className="flex items-center space-x-6">
             {companyInfo?.phone && (
               <a href={`tel:${companyInfo.phone}`} className="flex items-center gap-1.5 hover:text-primary transition-colors">
                 <Phone className="w-3.5 h-3.5 text-primary" />
-                <span className="font-semibold">{companyInfo.phone}</span>
+                <span className="font-bold text-white">{companyInfo.phone}</span>
               </a>
             )}
             {companyInfo?.email && (
@@ -55,15 +55,15 @@ export const Header: React.FC<HeaderProps> = ({ companyInfo }) => {
               </a>
             )}
             {companyInfo?.address && (
-              <span className="text-slate-300 flex items-center gap-1 hidden lg:flex">
+              <span className="text-slate-300 flex items-center gap-1.5 hidden lg:flex">
                 <MapPin className="w-3.5 h-3.5 text-primary" />
                 <span>{companyInfo.address}</span>
               </span>
             )}
           </div>
           <div className="flex items-center space-x-4">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-primary/15 text-primary border border-primary/30">
-              <ShieldCheck className="w-3 h-3 text-primary" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-slate-800/90 text-slate-200 border border-slate-700/60 shadow-sm">
+              <ShieldCheck className="w-3.5 h-3.5 text-primary" />
               ISO 9001:2015 Accredited Cargo Hub
             </span>
           </div>
@@ -75,28 +75,28 @@ export const Header: React.FC<HeaderProps> = ({ companyInfo }) => {
         className={`transition-all duration-300 ${
           isScrolled
             ? 'bg-white/95 backdrop-blur-md shadow-md py-2.5 sm:py-3 border-b border-slate-200'
-            : 'bg-white py-3.5 sm:py-4 border-b border-slate-200 shadow-sm'
+            : 'bg-white py-3 sm:py-3.5 border-b border-slate-200 shadow-sm'
         }`}
       >
         <Container className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2.5 sm:gap-3 group">
+          <Link to="/" className="flex items-center gap-3 group">
             {companyInfo?.logo_url ? (
-              <img src={companyInfo.logo_url} alt={companyInfo.company_name} className="h-9 sm:h-10 w-auto object-contain" />
+              <img src={companyInfo.logo_url} alt={companyInfo.company_name} className="h-10 sm:h-12 w-auto object-contain" />
             ) : (
-              <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-brand-gradient flex items-center justify-center text-white shadow-lg glow-brand group-hover:scale-105 transition-transform shrink-0">
-                <Truck className="w-5 h-5 sm:w-6 sm:h-6" />
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-primary flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform shrink-0">
+                <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                  <path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z" />
+                </svg>
               </div>
             )}
             <div className="flex flex-col">
-              <span className="text-base sm:text-xl font-black tracking-tight text-slate-900 uppercase leading-none">
+              <span className="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 uppercase leading-none">
                 {companyInfo?.company_name || 'WHITE STAR CARGO'}
               </span>
-              {companyInfo?.tagline && (
-                <span className="text-[9px] sm:text-[10px] text-primary font-bold tracking-wider uppercase mt-0.5 line-clamp-1">
-                  {companyInfo.tagline}
-                </span>
-              )}
+              <span className="text-[9px] sm:text-[10px] text-primary font-bold tracking-wider uppercase mt-1">
+                {companyInfo?.tagline || 'DOOR TO DOOR SERVICE | PROFESSIONAL PACKING & SHIFTING'}
+              </span>
             </div>
           </Link>
 
@@ -107,10 +107,10 @@ export const Header: React.FC<HeaderProps> = ({ companyInfo }) => {
                 key={link.path}
                 to={link.path}
                 className={({ isActive }) =>
-                  `px-4 py-2 text-sm font-semibold rounded-xl transition-all ${
+                  `px-3.5 py-2 text-sm font-bold transition-colors ${
                     isActive
-                      ? 'text-white bg-primary shadow-md font-bold'
-                      : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
+                      ? 'text-primary'
+                      : 'text-slate-700 hover:text-primary'
                   }`
                 }
               >
@@ -122,7 +122,7 @@ export const Header: React.FC<HeaderProps> = ({ companyInfo }) => {
           {/* Right Action Buttons */}
           <div className="hidden lg:flex items-center space-x-3">
             <Link to="/contact">
-              <Button variant="accent" size="sm" rightIcon={<ArrowRight className="w-4 h-4" />}>
+              <Button variant="accent" size="sm" className="px-5 py-2.5 rounded-full font-bold shadow-md" rightIcon={<ArrowRight className="w-4 h-4" />}>
                 Get a Quote
               </Button>
             </Link>
