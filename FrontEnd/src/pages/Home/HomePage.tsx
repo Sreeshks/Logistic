@@ -27,6 +27,7 @@ import { ErrorState } from '../../components/ui/ErrorState';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { getHomeData } from '../../api/home.api';
 import { ScrollReveal, StaggerContainer, StaggerItem } from '../../components/ScrollReveal';
+import { HeroCarousel } from '../../components/HeroCarousel';
 
 export const HomePage: React.FC = () => {
   const { data: response, isLoading, isError, refetch } = useQuery({
@@ -83,7 +84,6 @@ export const HomePage: React.FC = () => {
   // Background image priority: Hero uploaded background -> public local hero image fallback
   const heroBgImage =
     hero?.background_image_url ||
-    hero?.background_image ||
     '/hero_landing_bg.png';
 
   // Helper to resolve service icons
@@ -110,15 +110,11 @@ export const HomePage: React.FC = () => {
     <div className="bg-slate-50 text-slate-900 min-h-screen overflow-hidden">
       {/* 1. HERO BANNER SECTION (MATCHES LANDINGPAGE.PNG EXACTLY) */}
       <section className="relative min-h-[640px] lg:min-h-[720px] bg-[#0c182c] text-white flex items-center overflow-hidden py-12 lg:py-16">
-        {/* Background Image with Dark Overlay */}
-        <div className="absolute inset-0 z-0">
-          <img
-            src={heroBgImage}
-            alt="White Star Cargo Hero"
-            className="w-full h-full object-cover opacity-60"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0c182c]/95 via-[#0c182c]/85 to-[#0c182c]/40" />
-        </div>
+        {/* Background Carousel with Dark Overlay */}
+        <HeroCarousel
+          bannerImages={hero?.banner_images}
+          defaultImage={heroBgImage}
+        />
 
         <Container className="relative z-10 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
@@ -135,7 +131,7 @@ export const HomePage: React.FC = () => {
 
               <ScrollReveal variant="fade-up" delay={0.2}>
                 <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight uppercase">
-                  {hero?.heading || (hero as any)?.title || 'DELIVERING TRUST, CONNECTING WORLDWIDE'}
+                  {hero?.heading || 'DELIVERING TRUST, CONNECTING WORLDWIDE'}
                 </h1>
               </ScrollReveal>
 
@@ -148,14 +144,14 @@ export const HomePage: React.FC = () => {
 
               <ScrollReveal variant="zoom-in" delay={0.4}>
                 <div className="flex flex-wrap items-center gap-4 pt-2">
-                  <Link to={hero?.primary_cta_url || (hero as any)?.button_url || '/contact'}>
+                  <Link to={hero?.primary_cta_url || '/contact'}>
                     <Button
                       variant="accent"
                       size="lg"
                       className="px-7 py-3.5 rounded-xl font-bold text-sm sm:text-base shadow-xl justify-center"
                       rightIcon={<ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />}
                     >
-                      {hero?.primary_cta_text || (hero as any)?.button_text || 'Contact Us'}
+                      {hero?.primary_cta_text || 'Contact Us'}
                     </Button>
                   </Link>
 
@@ -319,7 +315,7 @@ export const HomePage: React.FC = () => {
                       <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between h-full group">
                         <div>
                           <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                            {getServiceIcon(srv.title, srv.icon)}
+                            {getServiceIcon(srv.title, srv.icon_name)}
                           </div>
                           <h3 className="text-base font-extrabold text-slate-900 mb-2 leading-snug group-hover:text-primary transition-colors">
                             {srv.title}
@@ -555,11 +551,10 @@ export const HomePage: React.FC = () => {
                   <button
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
-                    className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold uppercase tracking-wider transition-all ${
-                      activeCategory === cat
-                        ? 'bg-primary text-white shadow-md'
-                        : 'bg-white text-slate-700 hover:text-slate-900 border border-slate-200 hover:bg-slate-50'
-                    }`}
+                    className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold uppercase tracking-wider transition-all ${activeCategory === cat
+                      ? 'bg-primary text-white shadow-md'
+                      : 'bg-white text-slate-700 hover:text-slate-900 border border-slate-200 hover:bg-slate-50'
+                      }`}
                   >
                     {cat}
                   </button>
