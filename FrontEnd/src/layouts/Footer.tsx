@@ -21,7 +21,7 @@ export const Footer: React.FC<FooterProps> = ({ companyInfo }) => {
               {companyInfo?.logo_url ? (
                 <img src={companyInfo.logo_url} alt={companyInfo.company_name} className="h-9 w-auto object-contain" />
               ) : (
-                <div className="w-9 h-9 rounded-lg bg-orange-600 flex items-center justify-center text-white">
+                <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center text-white">
                   <Truck className="w-5 h-5" />
                 </div>
               )}
@@ -35,37 +35,36 @@ export const Footer: React.FC<FooterProps> = ({ companyInfo }) => {
             {/* Social Links */}
             <div className="flex items-center space-x-3 pt-2">
               {companyInfo?.facebook_url && (
-                <a href={companyInfo.facebook_url} target="_blank" rel="noreferrer" aria-label="Facebook" className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-orange-600 hover:text-white transition-colors">
+                <a href={companyInfo.facebook_url} target="_blank" rel="noreferrer" aria-label="Facebook" className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-colors">
                   <Globe className="w-4 h-4" />
                 </a>
               )}
               {companyInfo?.instagram_url && (
-                <a href={companyInfo.instagram_url} target="_blank" rel="noreferrer" aria-label="Instagram" className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-orange-600 hover:text-white transition-colors">
+                <a href={companyInfo.instagram_url} target="_blank" rel="noreferrer" aria-label="Instagram" className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-colors">
                   <Globe className="w-4 h-4" />
                 </a>
               )}
               {companyInfo?.linkedin_url && (
-                <a href={companyInfo.linkedin_url} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-orange-600 hover:text-white transition-colors">
+                <a href={companyInfo.linkedin_url} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-colors">
                   <Globe className="w-4 h-4" />
                 </a>
               )}
               {companyInfo?.youtube_url && (
-                <a href={companyInfo.youtube_url} target="_blank" rel="noreferrer" aria-label="YouTube" className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-orange-600 hover:text-white transition-colors">
+                <a href={companyInfo.youtube_url} target="_blank" rel="noreferrer" aria-label="YouTube" className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-colors">
                   <Globe className="w-4 h-4" />
                 </a>
               )}
               {companyInfo?.twitter_url && (
-                <a href={companyInfo.twitter_url} target="_blank" rel="noreferrer" aria-label="Twitter" className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-orange-600 hover:text-white transition-colors">
+                <a href={companyInfo.twitter_url} target="_blank" rel="noreferrer" aria-label="Twitter" className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-colors">
                   <Globe className="w-4 h-4" />
                 </a>
               )}
             </div>
           </div>
 
-
           {/* Column 2: Quick Links */}
           <div>
-            <h4 className="text-white text-base font-bold uppercase tracking-wider mb-4 border-l-2 border-orange-500 pl-2">
+            <h4 className="text-white text-base font-bold uppercase tracking-wider mb-4 border-l-2 border-primary pl-2">
               Navigation
             </h4>
             <ul className="space-y-2.5 text-sm">
@@ -81,7 +80,7 @@ export const Footer: React.FC<FooterProps> = ({ companyInfo }) => {
 
           {/* Column 3: Logistics Services */}
           <div>
-            <h4 className="text-white text-base font-bold uppercase tracking-wider mb-4 border-l-2 border-orange-500 pl-2">
+            <h4 className="text-white text-base font-bold uppercase tracking-wider mb-4 border-l-2 border-primary pl-2">
               Solutions
             </h4>
             <ul className="space-y-2.5 text-sm">
@@ -96,19 +95,19 @@ export const Footer: React.FC<FooterProps> = ({ companyInfo }) => {
 
           {/* Column 4: Contact Info */}
           <div>
-            <h4 className="text-white text-base font-bold uppercase tracking-wider mb-4 border-l-2 border-orange-500 pl-2">
+            <h4 className="text-white text-base font-bold uppercase tracking-wider mb-4 border-l-2 border-primary pl-2">
               Contact Info
             </h4>
             <ul className="space-y-3 text-sm">
               {companyInfo?.address && (
                 <li className="flex items-start space-x-3">
-                  <MapPin className="w-5 h-5 text-orange-500 shrink-0 mt-0.5" />
+                  <MapPin className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                   <span className="text-slate-300">{companyInfo.address}</span>
                 </li>
               )}
               {companyInfo?.phone && (
                 <li className="flex items-center space-x-3">
-                  <Phone className="w-5 h-5 text-orange-500 shrink-0" />
+                  <Phone className="w-5 h-5 text-primary shrink-0" />
                   <a href={`tel:${companyInfo.phone}`} className="hover:text-white transition-colors text-slate-300">
                     {companyInfo.phone}
                   </a>
@@ -116,7 +115,7 @@ export const Footer: React.FC<FooterProps> = ({ companyInfo }) => {
               )}
               {companyInfo?.email && (
                 <li className="flex items-center space-x-3">
-                  <Mail className="w-5 h-5 text-orange-500 shrink-0" />
+                  <Mail className="w-5 h-5 text-primary shrink-0" />
                   <a href={`mailto:${companyInfo.email}`} className="hover:text-white transition-colors text-slate-300">
                     {companyInfo.email}
                   </a>
@@ -124,7 +123,7 @@ export const Footer: React.FC<FooterProps> = ({ companyInfo }) => {
               )}
               {companyInfo?.working_hours && (
                 <li className="flex items-start space-x-3">
-                  <Clock className="w-5 h-5 text-orange-500 shrink-0 mt-0.5" />
+                  <Clock className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                   <span className="text-slate-400">{companyInfo.working_hours}</span>
                 </li>
               )}

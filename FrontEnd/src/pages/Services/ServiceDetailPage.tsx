@@ -69,7 +69,7 @@ export const ServiceDetailPage: React.FC = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-900/80 to-transparent" />
 
           <div className="relative z-10 p-8 sm:p-12 max-w-3xl space-y-4">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-orange-500/20 text-orange-400 border border-orange-500/30">
+            <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-primary/20 text-primary border border-primary/30">
               <Truck className="w-3.5 h-3.5" />
               Specialized Service
             </span>
@@ -96,19 +96,19 @@ export const ServiceDetailPage: React.FC = () => {
                 <h3 className="text-lg font-bold text-slate-900 mb-4">Key Capabilities & Features</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="flex items-center gap-2.5">
-                    <CheckCircle2 className="w-5 h-5 text-orange-600 shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
                     <span className="text-sm font-medium text-slate-700">Real-time status tracking & milestone updates</span>
                   </div>
                   <div className="flex items-center gap-2.5">
-                    <CheckCircle2 className="w-5 h-5 text-orange-600 shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
                     <span className="text-sm font-medium text-slate-700">Full customs compliance & documentation handling</span>
                   </div>
                   <div className="flex items-center gap-2.5">
-                    <CheckCircle2 className="w-5 h-5 text-orange-600 shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
                     <span className="text-sm font-medium text-slate-700">Door-to-door multimodal transit options</span>
                   </div>
                   <div className="flex items-center gap-2.5">
-                    <CheckCircle2 className="w-5 h-5 text-orange-600 shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-primary shrink-0" />
                     <span className="text-sm font-medium text-slate-700">Cargo insurance coverage options available</span>
                   </div>
                 </div>
@@ -119,7 +119,7 @@ export const ServiceDetailPage: React.FC = () => {
           {/* Sidebar CTA Card */}
           <div className="space-y-6">
             <div className="bg-slate-900 text-white p-8 rounded-2xl border border-slate-800 space-y-6 shadow-xl">
-              <div className="w-12 h-12 rounded-xl bg-orange-600 flex items-center justify-center text-white">
+              <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-white">
                 <Shield className="w-6 h-6" />
               </div>
               <h3 className="text-xl font-bold text-white">Request a Custom Quote</h3>

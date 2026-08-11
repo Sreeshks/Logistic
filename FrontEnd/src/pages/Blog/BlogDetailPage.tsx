@@ -58,7 +58,7 @@ export const BlogDetailPage: React.FC = () => {
 
         {/* Header */}
         <div className="space-y-4 my-6">
-          <span className="px-3 py-1 bg-orange-100 text-orange-700 text-xs font-bold uppercase rounded-full tracking-wider border border-orange-200">
+          <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-bold uppercase rounded-full tracking-wider border border-primary/20">
             {blog.category || 'Logistics'}
           </span>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-tight">
@@ -68,13 +68,13 @@ export const BlogDetailPage: React.FC = () => {
           <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-500 pt-2 border-b border-slate-200 pb-6">
             {blog.author_name && (
               <span className="flex items-center gap-1">
-                <User className="w-4 h-4 text-orange-600" />
+                <User className="w-4 h-4 text-primary" />
                 {blog.author_name}
               </span>
             )}
             {blog.published_at && (
               <span className="flex items-center gap-1">
-                <Calendar className="w-4 h-4 text-orange-600" />
+                <Calendar className="w-4 h-4 text-primary" />
                 {new Date(blog.published_at).toLocaleDateString(undefined, {
                   year: 'numeric',
                   month: 'long',
@@ -98,7 +98,7 @@ export const BlogDetailPage: React.FC = () => {
 
         {/* Article Body Content */}
         <div className="bg-white p-8 sm:p-12 rounded-2xl border border-slate-200 shadow-sm space-y-6">
-          <p className="text-lg font-semibold text-slate-800 leading-relaxed italic border-l-4 border-orange-500 pl-4 bg-orange-50/50 py-3 rounded-r-lg">
+          <p className="text-lg font-semibold text-slate-800 leading-relaxed italic border-l-4 border-primary pl-4 bg-primary/5 py-3 rounded-r-lg">
             {blog.summary}
           </p>
 

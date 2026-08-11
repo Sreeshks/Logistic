@@ -96,7 +96,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
         <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 lg:bottom-12 lg:right-12 z-20 flex items-center gap-2 sm:gap-4 bg-slate-950/85 backdrop-blur-md border border-slate-700/80 rounded-2xl p-2 sm:p-2.5 shadow-2xl scale-95 sm:scale-100">
           {/* Slide Progress Counter */}
           <div className="px-3 py-1 flex items-center gap-2 border-r border-slate-700 text-xs font-mono font-bold text-white">
-            <span className="text-orange-500">0{currentIndex + 1}</span>
+            <span className="text-primary">0{currentIndex + 1}</span>
             <span className="text-slate-500">/</span>
             <span className="text-slate-400">0{images.length}</span>
           </div>
@@ -110,7 +110,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
                 aria-label={`Go to slide ${idx + 1}`}
                 className={`h-2 rounded-full transition-all duration-300 ${
                   idx === currentIndex
-                    ? 'w-6 bg-orange-500 shadow-lg shadow-orange-500/50'
+                    ? 'w-6 bg-primary shadow-lg'
                     : 'w-2 bg-slate-600 hover:bg-slate-400'
                 }`}
               />
@@ -130,7 +130,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
             <button
               onClick={() => setIsPlaying(!isPlaying)}
               aria-label={isPlaying ? 'Pause Auto-Play' : 'Start Auto-Play'}
-              className="p-2 text-orange-400 hover:text-orange-300 hover:bg-slate-800 rounded-xl transition-colors"
+              className="p-2 text-primary hover:brightness-125 hover:bg-slate-800 rounded-xl transition-colors"
             >
               {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
             </button>

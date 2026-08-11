@@ -95,7 +95,7 @@ export const HomePage: React.FC = () => {
           <div className="max-w-3xl space-y-4 sm:space-y-6">
             {hero?.subtitle && (
               <ScrollReveal variant="fade-down" delay={0.1}>
-                <span className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider bg-orange-500/20 text-orange-400 border border-orange-500/30 backdrop-blur-md shadow-lg">
+                <span className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider bg-primary/20 text-primary border border-primary/30 backdrop-blur-md shadow-lg">
                   <Truck className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   {hero.subtitle}
                 </span>
@@ -121,7 +121,7 @@ export const HomePage: React.FC = () => {
                   <Button
                     variant="accent"
                     size="lg"
-                    className="w-full sm:w-auto text-sm sm:text-base font-bold shadow-xl shadow-orange-600/30 justify-center"
+                    className="w-full sm:w-auto text-sm sm:text-base font-bold shadow-xl justify-center"
                     rightIcon={<ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />}
                   >
                     {hero?.primary_cta_text || (hero as any)?.button_text || 'Contact Us Now'}
@@ -160,7 +160,7 @@ export const HomePage: React.FC = () => {
               {statistics.map((stat) => (
                 <StaggerItem key={stat.id}>
                   <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white border border-slate-200 shadow-md hover:shadow-xl transition-all duration-300 text-center group hover:-translate-y-1">
-                    <div className="text-2xl sm:text-4xl lg:text-5xl font-black text-orange-600 tracking-tight">
+                    <div className="text-2xl sm:text-4xl lg:text-5xl font-black text-primary tracking-tight">
                       {stat.value}
                     </div>
                     <div className="mt-1 sm:mt-2 text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-wider sm:tracking-widest group-hover:text-slate-900 transition-colors">
@@ -202,13 +202,13 @@ export const HomePage: React.FC = () => {
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent" />
-                      <div className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-white/90 backdrop-blur-md p-2 sm:p-2.5 rounded-xl sm:rounded-2xl border border-slate-200 text-orange-600 shadow-md">
+                      <div className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-white/90 backdrop-blur-md p-2 sm:p-2.5 rounded-xl sm:rounded-2xl border border-slate-200 text-primary shadow-md">
                         <Truck className="w-4 h-4 sm:w-5 sm:h-5" />
                       </div>
                     </div>
 
                     <div className="p-5 sm:p-7 flex flex-col flex-grow">
-                      <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 mb-2 group-hover:text-orange-600 transition-colors">
+                      <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 mb-2 group-hover:text-primary transition-colors">
                         {service.title}
                       </h3>
                       <p className="text-slate-600 text-xs sm:text-sm mb-5 sm:mb-6 flex-grow leading-relaxed line-clamp-3">
@@ -216,7 +216,7 @@ export const HomePage: React.FC = () => {
                       </p>
                       <Link
                         to={`/services/${service.slug}`}
-                        className="inline-flex items-center text-xs sm:text-sm font-bold text-orange-600 hover:text-orange-700 gap-2 mt-auto group/link"
+                        className="inline-flex items-center text-xs sm:text-sm font-bold text-primary hover:brightness-110 gap-2 mt-auto group/link"
                       >
                         <span>Explore Details</span>
                         <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover/link:translate-x-1 transition-transform" />
@@ -252,8 +252,8 @@ export const HomePage: React.FC = () => {
 
           <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             <StaggerItem>
-              <div className="p-6 sm:p-8 bg-slate-50 rounded-2xl sm:rounded-3xl border border-slate-200/80 hover:border-orange-500/50 shadow-sm hover:shadow-xl transition-all duration-300 group h-full">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center mb-5 sm:mb-6 group-hover:scale-110 transition-transform">
+              <div className="p-6 sm:p-8 bg-slate-50 rounded-2xl sm:rounded-3xl border border-slate-200/80 hover:border-primary/50 shadow-sm hover:shadow-xl transition-all duration-300 group h-full">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-5 sm:mb-6 group-hover:scale-110 transition-transform">
                   <ShieldCheck className="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
                 <h4 className="text-lg sm:text-xl font-bold text-slate-900 mb-2.5">100% Cargo Safety & Insurance</h4>
@@ -264,8 +264,8 @@ export const HomePage: React.FC = () => {
             </StaggerItem>
 
             <StaggerItem>
-              <div className="p-6 sm:p-8 bg-slate-50 rounded-2xl sm:rounded-3xl border border-slate-200/80 hover:border-orange-500/50 shadow-sm hover:shadow-xl transition-all duration-300 group h-full">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center mb-5 sm:mb-6 group-hover:scale-110 transition-transform">
+              <div className="p-6 sm:p-8 bg-slate-50 rounded-2xl sm:rounded-3xl border border-slate-200/80 hover:border-primary/50 shadow-sm hover:shadow-xl transition-all duration-300 group h-full">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-5 sm:mb-6 group-hover:scale-110 transition-transform">
                   <Globe2 className="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
                 <h4 className="text-lg sm:text-xl font-bold text-slate-900 mb-2.5">Global Freight Network</h4>
@@ -276,8 +276,8 @@ export const HomePage: React.FC = () => {
             </StaggerItem>
 
             <StaggerItem>
-              <div className="p-6 sm:p-8 bg-slate-50 rounded-2xl sm:rounded-3xl border border-slate-200/80 hover:border-orange-500/50 shadow-sm hover:shadow-xl transition-all duration-300 group h-full">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center mb-5 sm:mb-6 group-hover:scale-110 transition-transform">
+              <div className="p-6 sm:p-8 bg-slate-50 rounded-2xl sm:rounded-3xl border border-slate-200/80 hover:border-primary/50 shadow-sm hover:shadow-xl transition-all duration-300 group h-full">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-5 sm:mb-6 group-hover:scale-110 transition-transform">
                   <Clock className="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
                 <h4 className="text-lg sm:text-xl font-bold text-slate-900 mb-2.5">On-Time Delivery Guarantee</h4>
@@ -305,12 +305,12 @@ export const HomePage: React.FC = () => {
 
                 <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 bg-white/95 backdrop-blur-md p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-slate-200 text-slate-900 shadow-xl">
                   <div className="flex items-center gap-3 sm:gap-4">
-                    <div className="p-2.5 sm:p-3.5 bg-orange-600 rounded-xl text-white shadow-md shadow-orange-600/30 shrink-0">
+                    <div className="p-2.5 sm:p-3.5 bg-primary rounded-xl text-white shadow-md shrink-0">
                       <Award className="w-5 h-5 sm:w-7 sm:h-7" />
                     </div>
                     <div>
                       <h5 className="font-extrabold text-sm sm:text-lg text-slate-900">Licensed Freight Forwarder</h5>
-                      <p className="text-[11px] sm:text-xs text-orange-600 font-semibold">Ruwi & Misfah Terminals, Sultanate of Oman</p>
+                      <p className="text-[11px] sm:text-xs text-primary font-semibold">Ruwi & Misfah Terminals, Sultanate of Oman</p>
                     </div>
                   </div>
                 </div>
@@ -319,7 +319,7 @@ export const HomePage: React.FC = () => {
 
             <ScrollReveal variant="fade-right">
               <div className="space-y-4 sm:space-y-6">
-                <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider bg-orange-100 text-orange-700 border border-orange-200">
+                <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-bold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">
                   About Our Company
                 </span>
                 <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-tight">
@@ -331,15 +331,15 @@ export const HomePage: React.FC = () => {
 
                 <div className="space-y-3 sm:space-y-4 pt-1 sm:pt-2">
                   <div className="flex items-center gap-3">
-                    <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600 shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0" />
                     <span className="text-xs sm:text-sm font-semibold text-slate-800">End-to-end Air & Sea Cargo handling across India & worldwide</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600 shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0" />
                     <span className="text-xs sm:text-sm font-semibold text-slate-800">Door to Door pick-up and delivery services</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600 shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0" />
                     <span className="text-xs sm:text-sm font-semibold text-slate-800">Short-term & long-term warehouse storage facilities</span>
                   </div>
                 </div>
@@ -378,7 +378,7 @@ export const HomePage: React.FC = () => {
                     onClick={() => setActiveCategory(cat)}
                     className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold uppercase tracking-wider transition-all ${
                       activeCategory === cat
-                        ? 'bg-orange-600 text-white shadow-md shadow-orange-600/30'
+                        ? 'bg-primary text-white shadow-md'
                         : 'bg-white text-slate-700 hover:text-slate-900 border border-slate-200 hover:bg-slate-50'
                     }`}
                   >
@@ -403,11 +403,11 @@ export const HomePage: React.FC = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                     <div className="absolute bottom-4 left-4 right-4 sm:bottom-5 sm:left-5 sm:right-5 text-white">
                       {item.category && (
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-orange-300 bg-slate-900/80 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg mb-1.5 inline-block">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-white bg-primary/90 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg mb-1.5 inline-block">
                           {item.category}
                         </span>
                       )}
-                      <h4 className="text-base sm:text-lg font-bold group-hover:text-orange-400 transition-colors">{item.title}</h4>
+                      <h4 className="text-base sm:text-lg font-bold group-hover:text-primary transition-colors">{item.title}</h4>
                       {item.description && (
                         <p className="text-[11px] sm:text-xs text-slate-200 mt-1 line-clamp-1">{item.description}</p>
                       )}
@@ -456,12 +456,12 @@ export const HomePage: React.FC = () => {
                     </div>
                     <div className="p-5 sm:p-7 flex flex-col flex-grow">
                       <div className="flex items-center justify-between text-xs text-slate-500 mb-2 sm:mb-3">
-                        <span className="font-bold text-orange-600 uppercase tracking-wider">{blog.category || 'Logistics'}</span>
+                        <span className="font-bold text-primary uppercase tracking-wider">{blog.category || 'Logistics'}</span>
                         {blog.published_at && (
                           <span>{new Date(blog.published_at).toLocaleDateString()}</span>
                         )}
                       </div>
-                      <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors">
+                      <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-2 line-clamp-2 group-hover:text-primary transition-colors">
                         {blog.title}
                       </h3>
                       <p className="text-slate-600 text-xs sm:text-sm mb-5 sm:mb-6 flex-grow line-clamp-3 leading-relaxed">
@@ -469,10 +469,10 @@ export const HomePage: React.FC = () => {
                       </p>
                       <Link
                         to={`/blog/${blog.slug}`}
-                        className="inline-flex items-center text-xs sm:text-sm font-bold text-slate-900 hover:text-orange-600 gap-1.5 mt-auto transition-colors"
+                        className="inline-flex items-center text-xs sm:text-sm font-bold text-slate-900 hover:text-primary gap-1.5 mt-auto transition-colors"
                       >
                         <span>Read Article</span>
-                        <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-600" />
+                        <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary" />
                       </Link>
                     </div>
                   </div>
@@ -501,7 +501,7 @@ export const HomePage: React.FC = () => {
             className="absolute top-4 right-4 sm:top-6 sm:right-6 text-white p-2.5 hover:bg-slate-800 rounded-full transition-colors"
             onClick={() => setSelectedImage(null)}
           >
-            <X className="w-6 h-6 sm:w-8 sm:h-8 text-orange-400" />
+            <X className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
           </button>
           <img src={selectedImage} alt="Expanded view" className="max-w-full max-h-[90vh] rounded-xl sm:rounded-2xl shadow-2xl object-contain border border-slate-800" />
         </div>

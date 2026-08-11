@@ -51,7 +51,7 @@ export const FAQPage: React.FC = () => {
               placeholder="Search questions (e.g., tracking, customs, rates)..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-white border border-slate-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm"
+              className="w-full pl-11 pr-4 py-3 bg-white border border-slate-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
             />
           </div>
         </div>
@@ -85,14 +85,14 @@ export const FAQPage: React.FC = () => {
                 >
                   <button
                     onClick={() => toggleFaq(faq.id)}
-                    className="w-full p-5 text-left flex items-center justify-between font-bold text-slate-900 text-base sm:text-lg focus:outline-none hover:text-orange-600 transition-colors"
+                    className="w-full p-5 text-left flex items-center justify-between font-bold text-slate-900 text-base sm:text-lg focus:outline-none hover:text-primary transition-colors"
                   >
                     <span className="flex items-center gap-3">
-                      <HelpCircle className="w-5 h-5 text-orange-500 shrink-0" />
+                      <HelpCircle className="w-5 h-5 text-primary shrink-0" />
                       {faq.question}
                     </span>
                     {isOpen ? (
-                      <ChevronUp className="w-5 h-5 text-orange-600 shrink-0" />
+                      <ChevronUp className="w-5 h-5 text-primary shrink-0" />
                     ) : (
                       <ChevronDown className="w-5 h-5 text-slate-400 shrink-0" />
                     )}

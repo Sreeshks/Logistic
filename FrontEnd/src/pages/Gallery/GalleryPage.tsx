@@ -42,7 +42,7 @@ export const GalleryPage: React.FC = () => {
               onClick={() => setSelectedCategory(cat)}
               className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all capitalize ${
                 selectedCategory === cat
-                  ? 'bg-slate-900 text-white shadow-md'
+                  ? 'bg-primary text-white shadow-md'
                   : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
               }`}
             >
@@ -85,7 +85,7 @@ export const GalleryPage: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent opacity-80 group-hover:opacity-95 transition-opacity" />
                 <div className="absolute bottom-4 left-4 right-4 text-white">
                   {item.category && (
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-orange-400 bg-slate-900/80 px-2 py-0.5 rounded mb-1 inline-block">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-slate-900/80 px-2 py-0.5 rounded mb-1 inline-block">
                       {item.category}
                     </span>
                   )}

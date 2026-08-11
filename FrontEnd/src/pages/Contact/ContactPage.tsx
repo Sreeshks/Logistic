@@ -64,7 +64,7 @@ export const ContactPage: React.FC = () => {
           {/* Company Contact Information */}
           <div className="space-y-6">
             <div className="bg-slate-900 text-white p-8 rounded-2xl border border-slate-800 space-y-6 shadow-xl">
-              <h3 className="text-xl font-bold text-white border-l-4 border-orange-500 pl-3">
+              <h3 className="text-xl font-bold text-white border-l-4 border-primary pl-3">
                 Headquarters Info
               </h3>
 
@@ -78,7 +78,7 @@ export const ContactPage: React.FC = () => {
                 <ul className="space-y-5 text-sm">
                   {company?.address && (
                     <li className="flex items-start gap-3">
-                      <MapPin className="w-5 h-5 text-orange-500 shrink-0 mt-0.5" />
+                      <MapPin className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                       <div>
                         <span className="text-xs text-slate-400 block font-bold uppercase">Address</span>
                         <span className="text-slate-200">{company.address}</span>
@@ -87,10 +87,10 @@ export const ContactPage: React.FC = () => {
                   )}
                   {company?.phone && (
                     <li className="flex items-start gap-3">
-                      <Phone className="w-5 h-5 text-orange-500 shrink-0 mt-0.5" />
+                      <Phone className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                       <div>
                         <span className="text-xs text-slate-400 block font-bold uppercase">Phone</span>
-                        <a href={`tel:${company.phone}`} className="text-slate-200 hover:text-orange-400 transition-colors">
+                        <a href={`tel:${company.phone}`} className="text-slate-200 hover:text-primary transition-colors">
                           {company.phone}
                         </a>
                       </div>
@@ -98,10 +98,10 @@ export const ContactPage: React.FC = () => {
                   )}
                   {company?.email && (
                     <li className="flex items-start gap-3">
-                      <Mail className="w-5 h-5 text-orange-500 shrink-0 mt-0.5" />
+                      <Mail className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                       <div>
                         <span className="text-xs text-slate-400 block font-bold uppercase">Email</span>
-                        <a href={`mailto:${company.email}`} className="text-slate-200 hover:text-orange-400 transition-colors">
+                        <a href={`mailto:${company.email}`} className="text-slate-200 hover:text-primary transition-colors">
                           {company.email}
                         </a>
                       </div>
@@ -109,7 +109,7 @@ export const ContactPage: React.FC = () => {
                   )}
                   {company?.working_hours && (
                     <li className="flex items-start gap-3">
-                      <Clock className="w-5 h-5 text-orange-500 shrink-0 mt-0.5" />
+                      <Clock className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                       <div>
                         <span className="text-xs text-slate-400 block font-bold uppercase">Working Hours</span>
                         <span className="text-slate-300">{company.working_hours}</span>
@@ -169,7 +169,7 @@ export const ContactPage: React.FC = () => {
                       placeholder="John Doe"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white"
                     />
                   </div>
 
@@ -183,7 +183,7 @@ export const ContactPage: React.FC = () => {
                       placeholder="john@example.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white"
                     />
                   </div>
                 </div>
@@ -198,7 +198,7 @@ export const ContactPage: React.FC = () => {
                       placeholder="+1 (555) 000-0000"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white"
                     />
                   </div>
 
@@ -212,7 +212,7 @@ export const ContactPage: React.FC = () => {
                       placeholder="Freight Quote Request / General Inquiry"
                       value={formData.subject}
                       onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                      className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white"
+                      className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white"
                     />
                   </div>
                 </div>
@@ -227,7 +227,7 @@ export const ContactPage: React.FC = () => {
                     placeholder="Provide details about your origin, destination, cargo volume, or general inquiry..."
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white"
+                    className="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white"
                   />
                 </div>
 

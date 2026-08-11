@@ -32,8 +32,8 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
           className={clsx(
             'inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-3',
             light
-              ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30'
-              : 'bg-orange-100 text-orange-700 border border-orange-200'
+              ? 'bg-primary/20 text-primary border border-primary/30'
+              : 'bg-primary/10 text-primary border border-primary/20'
           )}
         >
           {badge}

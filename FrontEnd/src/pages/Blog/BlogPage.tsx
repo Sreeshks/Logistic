@@ -42,7 +42,7 @@ export const BlogPage: React.FC = () => {
               placeholder="Search articles..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-white border border-slate-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm"
+              className="w-full pl-11 pr-4 py-3 bg-white border border-slate-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
             />
           </div>
         </div>
@@ -82,7 +82,7 @@ export const BlogPage: React.FC = () => {
                 </div>
                 <div className="p-6 flex flex-col flex-grow">
                   <div className="flex items-center justify-between text-xs text-slate-500 mb-3">
-                    <span className="font-semibold text-orange-600 uppercase bg-orange-50 px-2 py-0.5 rounded border border-orange-100">
+                    <span className="font-semibold text-primary uppercase bg-primary/10 px-2 py-0.5 rounded border border-primary/20">
                       {blog.category || 'Industry News'}
                     </span>
                     {blog.published_at && (
@@ -111,10 +111,10 @@ export const BlogPage: React.FC = () => {
                     )}
                     <Link
                       to={`/blog/${blog.slug}`}
-                      className="inline-flex items-center text-sm font-bold text-slate-900 hover:text-orange-600 gap-1 transition-colors ml-auto"
+                      className="inline-flex items-center text-sm font-bold text-slate-900 hover:text-primary gap-1 transition-colors ml-auto"
                     >
                       <span>Read Article</span>
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-4 h-4 text-primary" />
                     </Link>
                   </div>
                 </div>

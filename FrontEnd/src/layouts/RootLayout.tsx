@@ -10,13 +10,14 @@ export const RootLayout: React.FC = () => {
   const { data: response } = useQuery({
     queryKey: ['companyInfo'],
     queryFn: getCompanyInfo,
-    staleTime: 1000 * 60 * 30, // cache for 30 minutes
+    staleTime: 5000,
+    refetchOnWindowFocus: true,
   });
 
   const companyInfo = response?.data;
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 font-sans text-slate-900 selection:bg-orange-500 selection:text-white">
+    <div className="min-h-screen flex flex-col bg-slate-50 font-sans text-slate-900 selection:bg-primary selection:text-white">
       <Header companyInfo={companyInfo} />
       <main className="flex-grow">
         <Outlet />

@@ -66,7 +66,7 @@ export const AboutPage: React.FC = () => {
             </p>
             <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100">
               <div className="p-4 bg-slate-50 rounded-xl">
-                <span className="text-2xl font-black text-orange-600 block mb-1">
+                <span className="text-2xl font-black text-primary block mb-1">
                   {about?.years_experience || 10}+ Years
                 </span>
                 <span className="text-xs font-bold text-slate-600 uppercase">Industry Leadership</span>
@@ -94,7 +94,7 @@ export const AboutPage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8">
           {/* Mission */}
           <div className="bg-slate-900 text-white p-8 rounded-2xl border border-slate-800 space-y-4 shadow-md">
-            <div className="w-12 h-12 rounded-xl bg-orange-600 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center">
               <Target className="w-6 h-6 text-white" />
             </div>
             <h4 className="text-xl font-bold text-white">Our Mission</h4>
@@ -106,7 +106,7 @@ export const AboutPage: React.FC = () => {
 
           {/* Vision */}
           <div className="bg-slate-900 text-white p-8 rounded-2xl border border-slate-800 space-y-4 shadow-md">
-            <div className="w-12 h-12 rounded-xl bg-orange-600 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center">
               <Eye className="w-6 h-6 text-white" />
             </div>
             <h4 className="text-xl font-bold text-white">Our Vision</h4>
@@ -118,7 +118,7 @@ export const AboutPage: React.FC = () => {
 
           {/* Values */}
           <div className="bg-slate-900 text-white p-8 rounded-2xl border border-slate-800 space-y-4 shadow-md">
-            <div className="w-12 h-12 rounded-xl bg-orange-600 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center">
               <ShieldCheck className="w-6 h-6 text-white" />
             </div>
             <h4 className="text-xl font-bold text-white">Core Values</h4>

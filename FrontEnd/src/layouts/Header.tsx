@@ -43,27 +43,27 @@ export const Header: React.FC<HeaderProps> = ({ companyInfo }) => {
         <Container className="flex justify-between items-center">
           <div className="flex items-center space-x-6">
             {companyInfo?.phone && (
-              <a href={`tel:${companyInfo.phone}`} className="flex items-center gap-1.5 hover:text-orange-400 transition-colors">
-                <Phone className="w-3.5 h-3.5 text-orange-500" />
+              <a href={`tel:${companyInfo.phone}`} className="flex items-center gap-1.5 hover:text-primary transition-colors">
+                <Phone className="w-3.5 h-3.5 text-primary" />
                 <span className="font-semibold">{companyInfo.phone}</span>
               </a>
             )}
             {companyInfo?.email && (
-              <a href={`mailto:${companyInfo.email}`} className="flex items-center gap-1.5 hover:text-orange-400 transition-colors">
-                <Mail className="w-3.5 h-3.5 text-orange-500" />
+              <a href={`mailto:${companyInfo.email}`} className="flex items-center gap-1.5 hover:text-primary transition-colors">
+                <Mail className="w-3.5 h-3.5 text-primary" />
                 <span>{companyInfo.email}</span>
               </a>
             )}
             {companyInfo?.address && (
               <span className="text-slate-300 flex items-center gap-1 hidden lg:flex">
-                <MapPin className="w-3.5 h-3.5 text-orange-500" />
+                <MapPin className="w-3.5 h-3.5 text-primary" />
                 <span>{companyInfo.address}</span>
               </span>
             )}
           </div>
           <div className="flex items-center space-x-4">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-orange-500/20 text-orange-300 border border-orange-500/30">
-              <ShieldCheck className="w-3 h-3 text-orange-400" />
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-primary/15 text-primary border border-primary/30">
+              <ShieldCheck className="w-3 h-3 text-primary" />
               ISO 9001:2015 Accredited Cargo Hub
             </span>
           </div>
@@ -84,7 +84,7 @@ export const Header: React.FC<HeaderProps> = ({ companyInfo }) => {
             {companyInfo?.logo_url ? (
               <img src={companyInfo.logo_url} alt={companyInfo.company_name} className="h-9 sm:h-10 w-auto object-contain" />
             ) : (
-              <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-gradient-to-br from-orange-600 to-amber-600 flex items-center justify-center text-white shadow-lg shadow-orange-600/30 group-hover:scale-105 transition-transform shrink-0">
+              <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-brand-gradient flex items-center justify-center text-white shadow-lg glow-brand group-hover:scale-105 transition-transform shrink-0">
                 <Truck className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
             )}
@@ -93,7 +93,7 @@ export const Header: React.FC<HeaderProps> = ({ companyInfo }) => {
                 {companyInfo?.company_name || 'WHITE STAR CARGO'}
               </span>
               {companyInfo?.tagline && (
-                <span className="text-[9px] sm:text-[10px] text-orange-600 font-bold tracking-wider uppercase mt-0.5 line-clamp-1">
+                <span className="text-[9px] sm:text-[10px] text-primary font-bold tracking-wider uppercase mt-0.5 line-clamp-1">
                   {companyInfo.tagline}
                 </span>
               )}
@@ -109,7 +109,7 @@ export const Header: React.FC<HeaderProps> = ({ companyInfo }) => {
                 className={({ isActive }) =>
                   `px-4 py-2 text-sm font-semibold rounded-xl transition-all ${
                     isActive
-                      ? 'text-white bg-orange-600 shadow-md shadow-orange-600/30 font-bold'
+                      ? 'text-white bg-primary shadow-md font-bold'
                       : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
                   }`
                 }
@@ -134,7 +134,7 @@ export const Header: React.FC<HeaderProps> = ({ companyInfo }) => {
             className="lg:hidden p-2 text-slate-800 hover:text-slate-900 focus:outline-none rounded-xl bg-slate-100 border border-slate-200 active:scale-95 transition-all"
             aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? <X className="w-6 h-6 text-orange-600" /> : <Menu className="w-6 h-6 text-orange-600" />}
+            {mobileMenuOpen ? <X className="w-6 h-6 text-primary" /> : <Menu className="w-6 h-6 text-primary" />}
           </button>
         </Container>
       </div>
@@ -154,7 +154,7 @@ export const Header: React.FC<HeaderProps> = ({ companyInfo }) => {
                   to={link.path}
                   className={({ isActive }) =>
                     `px-4 py-3 text-base font-semibold rounded-2xl transition-colors ${
-                      isActive ? 'bg-orange-600 text-white font-bold shadow-md shadow-orange-600/30' : 'text-slate-800 hover:bg-slate-100 active:bg-slate-200'
+                      isActive ? 'bg-primary text-white font-bold shadow-md' : 'text-slate-800 hover:bg-slate-100 active:bg-slate-200'
                     }`
                   }
                 >
@@ -169,13 +169,13 @@ export const Header: React.FC<HeaderProps> = ({ companyInfo }) => {
                     href={`tel:${companyInfo.phone}`}
                     className="flex items-center justify-center gap-2 w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-2xl text-sm transition-colors"
                   >
-                    <Phone className="w-4 h-4 text-orange-600" />
+                    <Phone className="w-4 h-4 text-primary" />
                     <span>Call Us: {companyInfo.phone}</span>
                   </a>
                 )}
 
                 <Link to="/contact" className="block w-full">
-                  <Button variant="accent" size="md" className="w-full justify-center shadow-lg shadow-orange-600/30" rightIcon={<ArrowRight className="w-4 h-4" />}>
+                  <Button variant="accent" size="md" className="w-full justify-center shadow-lg" rightIcon={<ArrowRight className="w-4 h-4" />}>
                     Get a Quote
                   </Button>
                 </Link>

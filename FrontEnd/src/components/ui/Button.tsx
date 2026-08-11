@@ -26,17 +26,17 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseStyles =
-    'relative inline-flex items-center justify-center font-extrabold tracking-wide transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer rounded-2xl overflow-hidden group shadow-md hover:shadow-xl active:scale-95';
+    'relative inline-flex items-center justify-center font-extrabold tracking-wide transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer rounded-2xl overflow-hidden group shadow-md hover:shadow-xl active:scale-95';
 
   const variants = {
     accent:
-      'bg-brand-gradient text-white hover:brightness-110 focus:ring-orange-500 shadow-orange-600/30 border border-orange-400/30',
+      'bg-brand-gradient text-white hover:brightness-110 focus:ring-primary border border-white/20',
     primary:
-      'bg-slate-900 text-white hover:bg-slate-800 focus:ring-slate-900 shadow-slate-900/30 border border-slate-700/50',
+      'bg-secondary text-white hover:brightness-125 focus:ring-secondary border border-slate-700/50',
     secondary:
       'bg-slate-800 text-slate-100 hover:bg-slate-700 focus:ring-slate-800 border border-slate-700',
     outline:
-      'border-2 border-slate-300 text-slate-800 bg-white/90 backdrop-blur-md hover:bg-slate-900 hover:text-white hover:border-slate-900 focus:ring-slate-900',
+      'border-2 border-slate-300 text-slate-800 bg-white/90 backdrop-blur-md hover:bg-primary hover:text-white hover:border-primary focus:ring-primary',
     ghost:
       'text-slate-700 hover:bg-slate-100 focus:ring-slate-400',
   };
@@ -50,6 +50,8 @@ export const Button: React.FC<ButtonProps> = ({
   const dynamicStyle =
     variant === 'accent'
       ? { backgroundColor: 'var(--primary-color)', ...style }
+      : variant === 'primary'
+      ? { backgroundColor: 'var(--secondary-color)', ...style }
       : style;
 
   return (

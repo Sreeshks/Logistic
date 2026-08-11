@@ -1,10 +1,22 @@
 @import "tailwindcss";
 
+@theme {
+  --color-primary: var(--primary-color);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary-color);
+  --color-accent: var(--accent-color);
+  --color-brand-orange: var(--primary-color);
+}
+
 @layer base {
   :root {
     --primary-color: #ea580c;
+    --primary-hover: #c2410c;
+    --primary-rgb: 234, 88, 12;
     --secondary-color: #0f172a;
+    --secondary-rgb: 15, 23, 42;
     --accent-color: #0284c7;
+    --accent-rgb: 2, 132, 199;
     --theme-mode: light;
     --color-bg: #f8fafc;
     --color-surface: #ffffff;
@@ -66,20 +78,25 @@
 
 /* Custom Gradients & Glows */
 .text-brand-gradient {
-  background: linear-gradient(135deg, var(--primary-color) 0%, #c2410c 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .bg-brand-gradient {
-  background: linear-gradient(135deg, var(--primary-color) 0%, #c2410c 100%);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
 }
 
-.glow-orange {
-  box-shadow: 0 15px 35px -5px rgba(234, 88, 12, 0.15);
+.bg-brand-accent-gradient {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+}
+
+.glow-orange, .glow-brand {
+  box-shadow: 0 15px 35px -5px rgba(var(--primary-rgb, 234, 88, 12), 0.25);
 }
 
 .bg-grid-pattern {
   background-image: radial-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px);
   background-size: 28px 28px;
 }
+

@@ -47,7 +47,7 @@ export const QuickTrackWidget: React.FC = () => {
   const getStatusColor = (status?: string) => {
     switch (status) {
       case 'IN_TRANSIT':
-        return 'text-orange-600 bg-orange-100 border-orange-300';
+        return 'text-primary bg-primary/10 border-primary/30';
       case 'DELIVERED':
         return 'text-emerald-700 bg-emerald-100 border-emerald-300';
       case 'PICKED_UP':
@@ -62,7 +62,7 @@ export const QuickTrackWidget: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto bg-white/95 backdrop-blur-xl border border-slate-200 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl relative z-30 glow-orange">
+    <div className="w-full max-w-4xl mx-auto bg-white/95 backdrop-blur-xl border border-slate-200 rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-2xl relative z-30 glow-brand">
       {/* Widget Header Tabs */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 mb-4 sm:mb-6 gap-3">
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
@@ -73,7 +73,7 @@ export const QuickTrackWidget: React.FC = () => {
             }}
             className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl text-[11px] sm:text-xs font-bold uppercase tracking-wider transition-all ${
               activeTab === 'track'
-                ? 'bg-orange-600 text-white shadow-md shadow-orange-600/30'
+                ? 'bg-primary text-white shadow-md'
                 : 'bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200'
             }`}
           >
@@ -88,7 +88,7 @@ export const QuickTrackWidget: React.FC = () => {
             }}
             className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-xl text-[11px] sm:text-xs font-bold uppercase tracking-wider transition-all ${
               activeTab === 'quote'
-                ? 'bg-orange-600 text-white shadow-md shadow-orange-600/30'
+                ? 'bg-primary text-white shadow-md'
                 : 'bg-slate-100 text-slate-600 hover:text-slate-900 hover:bg-slate-200'
             }`}
           >
@@ -97,8 +97,8 @@ export const QuickTrackWidget: React.FC = () => {
           </button>
         </div>
 
-        <div className="hidden sm:flex items-center gap-2 text-[11px] font-semibold text-orange-700 bg-orange-50 px-3 py-1 rounded-full border border-orange-200">
-          <ShieldCheck className="w-3.5 h-3.5 text-orange-600" />
+        <div className="hidden sm:flex items-center gap-2 text-[11px] font-semibold text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
+          <ShieldCheck className="w-3.5 h-3.5 text-primary" />
           <span>Real-Time Live Database Tracking</span>
         </div>
       </div>
@@ -117,13 +117,13 @@ export const QuickTrackWidget: React.FC = () => {
                   setTrackingNumber(e.target.value);
                   setTrackResult(null);
                 }}
-                className="w-full h-13 bg-slate-50 border border-slate-300 rounded-2xl pl-12 pr-4 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-orange-600 focus:ring-2 focus:ring-orange-600/20 font-mono transition-all uppercase font-bold"
+                className="w-full h-13 bg-slate-50 border border-slate-300 rounded-2xl pl-12 pr-4 text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 font-mono transition-all uppercase font-bold"
               />
             </div>
             <button
               type="submit"
               disabled={isLoading}
-              className="h-13 px-8 bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 text-white font-bold rounded-2xl text-sm transition-all flex items-center justify-center gap-2 shrink-0 shadow-md shadow-orange-600/30 disabled:opacity-50"
+              className="h-13 px-8 bg-brand-gradient hover:brightness-110 text-white font-bold rounded-2xl text-sm transition-all flex items-center justify-center gap-2 shrink-0 shadow-md disabled:opacity-50"
             >
               {isLoading ? (
                 <>
@@ -147,7 +147,7 @@ export const QuickTrackWidget: React.FC = () => {
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 pb-3 gap-2">
                     <div>
                       <span className="text-xs text-slate-500 font-semibold">Tracking Number:</span>
-                      <h4 className="font-mono text-lg font-black text-orange-600">{trackResult.tracking_number}</h4>
+                      <h4 className="font-mono text-lg font-black text-primary">{trackResult.tracking_number}</h4>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-xs text-slate-500 font-semibold">Status:</span>
@@ -167,7 +167,7 @@ export const QuickTrackWidget: React.FC = () => {
                     <div className="p-3 bg-white rounded-xl border border-slate-200">
                       <span className="text-slate-400 font-bold uppercase text-[10px] block mb-1">Current GPS Location</span>
                       <div className="flex items-center gap-1 font-bold text-slate-900">
-                        <MapPin className="w-3.5 h-3.5 text-orange-600 shrink-0" />
+                        <MapPin className="w-3.5 h-3.5 text-primary shrink-0" />
                         <span>{trackResult.current_location || 'Hub Processing'}</span>
                       </div>
                     </div>
@@ -206,7 +206,7 @@ export const QuickTrackWidget: React.FC = () => {
           <div className="text-right">
             <Link
               to="/contact"
-              className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 bg-orange-600 hover:bg-orange-500 text-white font-bold text-sm rounded-2xl transition-all gap-2 shadow-md shadow-orange-600/30"
+              className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 bg-primary hover:brightness-110 text-white font-bold text-sm rounded-2xl transition-all gap-2 shadow-md"
             >
               <span>Request Custom Quote</span>
               <ArrowRight className="w-4 h-4" />

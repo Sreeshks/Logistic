@@ -42,7 +42,7 @@ export const ServicesPage: React.FC = () => {
               placeholder="Search services (e.g. Air Freight, Ocean, Customs)..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-white border border-slate-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm"
+              className="w-full pl-11 pr-4 py-3 bg-white border border-slate-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
             />
           </div>
         </div>
@@ -78,7 +78,7 @@ export const ServicesPage: React.FC = () => {
                     alt={service.title}
                     className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                   />
-                  <div className="absolute top-4 right-4 bg-slate-900/80 backdrop-blur-md p-2 rounded-lg text-orange-400">
+                  <div className="absolute top-4 right-4 bg-slate-900/80 backdrop-blur-md p-2 rounded-lg text-primary">
                     <Truck className="w-5 h-5" />
                   </div>
                 </div>
@@ -92,7 +92,7 @@ export const ServicesPage: React.FC = () => {
                   <div className="pt-4 border-t border-slate-100 flex items-center justify-between mt-auto">
                     <Link
                       to={`/services/${service.slug}`}
-                      className="inline-flex items-center text-sm font-bold text-orange-600 hover:text-orange-700 gap-1.5 transition-colors"
+                      className="inline-flex items-center text-sm font-bold text-primary hover:brightness-110 gap-1.5 transition-colors"
                     >
                       <span>Explore Service</span>
                       <ArrowRight className="w-4 h-4" />
