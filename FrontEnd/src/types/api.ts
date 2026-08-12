@@ -45,6 +45,7 @@ export interface HomeHero {
   background_image?: string | null;
   background_image_url?: string | null;
   banner_images?: string | null;
+  mobile_banner_images?: string | null;
   highlights?: string | null;
 }
 

@@ -85,6 +85,7 @@ export const HomeManagementPage: React.FC = () => {
         secondary_button_url: heroData.secondary_button_url || '',
         background_image: heroData.background_image || '',
         banner_images: heroData.banner_images || '',
+        mobile_banner_images: heroData.mobile_banner_images || '',
         highlights: JSON.stringify(parsed),
       });
     }
@@ -276,7 +277,7 @@ export const HomeManagementPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Banner Carousel Images Manager */}
+            {/* Desktop Banner Carousel Images Manager */}
             <Controller
               name="banner_images"
               control={controlHero}
@@ -286,10 +287,10 @@ export const HomeManagementPage: React.FC = () => {
                   <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
                     <div className="flex items-center justify-between">
                       <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                        Hero Banner Carousel Slides ({imageList.length} images)
+                        Desktop Banner Carousel Slides ({imageList.length} images)
                       </label>
                       <span className="text-[11px] text-slate-500 font-medium">
-                        Enter comma-separated URLs or upload multiple images above
+                        For desktop screens & laptops
                       </span>
                     </div>
 
@@ -297,7 +298,7 @@ export const HomeManagementPage: React.FC = () => {
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         {imageList.map((imgUrl, idx) => (
                           <div key={idx} className="relative group rounded-lg overflow-hidden border border-slate-200 h-24 bg-slate-900">
-                            <img src={imgUrl} alt={`Slide ${idx + 1}`} className="w-full h-full object-cover" />
+                            <img src={imgUrl} alt={`Desktop Slide ${idx + 1}`} className="w-full h-full object-cover" />
                             <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                               <button
                                 type="button"
@@ -311,7 +312,7 @@ export const HomeManagementPage: React.FC = () => {
                               </button>
                             </div>
                             <span className="absolute bottom-1 left-1 bg-slate-900/80 text-white text-[10px] px-1.5 py-0.5 rounded font-mono">
-                              #{idx + 1}
+                              Desktop #{idx + 1}
                             </span>
                           </div>
                         ))}
@@ -320,7 +321,7 @@ export const HomeManagementPage: React.FC = () => {
 
                     <Textarea
                       rows={2}
-                      placeholder="Multiple image URLs separated by commas..."
+                      placeholder="Multiple desktop image URLs separated by commas..."
                       value={field.value || ''}
                       onChange={(e) => field.onChange(e.target.value)}
                     />
@@ -328,6 +329,82 @@ export const HomeManagementPage: React.FC = () => {
                 );
               }}
             />
+
+            {/* Mobile Banner Carousel Images Manager */}
+            <div className="space-y-3">
+              <Controller
+                name="mobile_banner_images"
+                control={controlHero}
+                render={({ field }) => (
+                  <div>
+                    <ImageUploader
+                      label="Upload Mobile Banner Image (Optimized for Phones / Vertical Display)"
+                      value=""
+                      onChange={(newUrl) => {
+                        if (newUrl) {
+                          const existing = field.value ? field.value.split(',').map((s) => s.trim()).filter(Boolean) : [];
+                          if (!existing.includes(newUrl)) {
+                            field.onChange([...existing, newUrl].join(','));
+                          }
+                        }
+                      }}
+                    />
+                  </div>
+                )}
+              />
+
+              <Controller
+                name="mobile_banner_images"
+                control={controlHero}
+                render={({ field }) => {
+                  const mobileImageList = field.value ? field.value.split(',').map((s) => s.trim()).filter(Boolean) : [];
+                  return (
+                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
+                          Mobile Banner Carousel Slides ({mobileImageList.length} images)
+                        </label>
+                        <span className="text-[11px] text-slate-500 font-medium">
+                          Displays on mobile screens (&lt; 640px)
+                        </span>
+                      </div>
+
+                      {mobileImageList.length > 0 && (
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                          {mobileImageList.map((imgUrl, idx) => (
+                            <div key={idx} className="relative group rounded-lg overflow-hidden border border-slate-200 h-28 bg-slate-900">
+                              <img src={imgUrl} alt={`Mobile Slide ${idx + 1}`} className="w-full h-full object-cover" />
+                              <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const updated = mobileImageList.filter((_, i) => i !== idx);
+                                    field.onChange(updated.join(','));
+                                  }}
+                                  className="p-1.5 bg-rose-600 text-white rounded-md hover:bg-rose-700 text-xs font-bold"
+                                >
+                                  Remove
+                                </button>
+                              </div>
+                              <span className="absolute bottom-1 left-1 bg-blue-600 text-white text-[10px] px-1.5 py-0.5 rounded font-mono">
+                                Mobile #{idx + 1}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      <Textarea
+                        rows={2}
+                        placeholder="Multiple mobile image URLs separated by commas..."
+                        value={field.value || ''}
+                        onChange={(e) => field.onChange(e.target.value)}
+                      />
+                    </div>
+                  );
+                }}
+              />
+            </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input label="Main Heading *" error={heroErrors.title?.message} {...registerHero('title')} />

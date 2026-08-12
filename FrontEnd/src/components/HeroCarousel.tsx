@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 interface HeroCarouselProps {
   bannerImages?: string | string[] | null;
+  mobileBannerImages?: string | string[] | null;
   defaultImage?: string | null;
   heading?: string;
   subtitle?: string;
@@ -21,54 +22,69 @@ const DEFAULT_SLIDES = [
 
 export const HeroCarousel: React.FC<HeroCarouselProps> = ({
   bannerImages,
+  mobileBannerImages,
   defaultImage,
 }) => {
-  let images: string[] = [];
-
+  let desktopImages: string[] = [];
   if (Array.isArray(bannerImages)) {
-    images = bannerImages.filter(Boolean);
+    desktopImages = bannerImages.filter(Boolean);
   } else if (typeof bannerImages === 'string' && bannerImages.trim()) {
-    images = bannerImages
+    desktopImages = bannerImages
       .split(',')
       .map((s) => s.trim())
       .filter(Boolean);
   }
 
-  if (defaultImage && !images.includes(defaultImage)) {
-    images.unshift(defaultImage);
+  if (defaultImage && !desktopImages.includes(defaultImage)) {
+    desktopImages.unshift(defaultImage);
   }
 
-  if (images.length === 0) {
-    images = DEFAULT_SLIDES;
+  if (desktopImages.length === 0) {
+    desktopImages = DEFAULT_SLIDES;
+  }
+
+  let mobileImages: string[] = [];
+  if (Array.isArray(mobileBannerImages)) {
+    mobileImages = mobileBannerImages.filter(Boolean);
+  } else if (typeof mobileBannerImages === 'string' && mobileBannerImages.trim()) {
+    mobileImages = mobileBannerImages
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
   }
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    if (images.length <= 1) return;
+    if (desktopImages.length <= 1) return;
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % images.length);
+      setCurrentIndex((prev) => (prev + 1) % desktopImages.length);
     }, 6000);
     return () => clearInterval(interval);
-  }, [images.length]);
+  }, [desktopImages.length]);
 
   return (
     <div className="absolute inset-0 z-0 overflow-hidden bg-slate-950">
       {/* Slide Images */}
-      {images.map((imgUrl, index) => {
+      {desktopImages.map((desktopImgUrl, index) => {
         const isActive = index === currentIndex;
+        const mobileImgUrl = mobileImages[index] || mobileImages[0];
         return (
           <div
-            key={imgUrl + index}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${isActive ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
-              }`}
+            key={desktopImgUrl + index}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+              isActive ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
+            }`}
           >
-            <img
-              src={imgUrl}
-              alt={`Logistics Banner Slide ${index + 1}`}
-              className={`w-full h-full object-cover object-center ${isActive ? 'animate-kenburns' : ''
-                }`}
-            />
+            <picture className="block w-full h-full">
+              {mobileImgUrl && <source media="(max-width: 639px)" srcSet={mobileImgUrl} />}
+              <img
+                src={desktopImgUrl}
+                alt={`Logistics Banner Slide ${index + 1}`}
+                className={`w-full h-full object-cover object-center ${isActive ? 'animate-kenburns' : ''}`}
+              />
+            </picture>
+
             {/* Balanced Gradient Overlay for proper background image visibility & text readability */}
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-slate-950/10" />
             <div className="absolute inset-0 bg-gradient-to-r from-slate-950/75 via-slate-950/35 to-transparent" />

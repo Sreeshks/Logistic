@@ -149,6 +149,7 @@ export const HomePage: React.FC = () => {
         {/* Background Carousel with Dark Overlay */}
         <HeroCarousel
           bannerImages={hero?.banner_images}
+          mobileBannerImages={hero?.mobile_banner_images}
           defaultImage={heroBgImage}
         />
 

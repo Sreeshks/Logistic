@@ -9,6 +9,7 @@ export interface HomeHero {
   secondary_button_url?: string | null;
   background_image?: string | null;
   banner_images?: string | null;
+  mobile_banner_images?: string | null;
   highlights?: string | null;
   created_at: string;
   updated_at: string;

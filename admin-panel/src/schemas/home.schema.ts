@@ -10,6 +10,7 @@ export const homeHeroSchema = z.object({
   secondary_button_url: z.string().optional().nullable(),
   background_image: z.string().optional().nullable(),
   banner_images: z.string().optional().nullable(),
+  mobile_banner_images: z.string().optional().nullable(),
   highlights: z.string().optional().nullable(),
 });
 
