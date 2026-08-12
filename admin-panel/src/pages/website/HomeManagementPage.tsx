@@ -43,12 +43,23 @@ export const HomeManagementPage: React.FC = () => {
     },
   });
 
+  // Feature highlights state
+  const defaultHighlightsList = [
+    { title: 'SAFE & SECURE', subtitle: 'Your cargo is safe in our hands', icon: 'shield' },
+    { title: 'ON-TIME DELIVERY', subtitle: 'Fast & reliable delivery across India', icon: 'clock' },
+    { title: 'WORLDWIDE REACH', subtitle: 'Air & Sea cargo to all major destinations', icon: 'globe' },
+    { title: 'DOOR TO DOOR', subtitle: 'Complete logistics solution', icon: 'box' },
+  ];
+
+  const [highlightsList, setHighlightsList] = useState(defaultHighlightsList);
+
   // Hero form
   const {
     register: registerHero,
     handleSubmit: handleSubmitHero,
     control: controlHero,
     reset: resetHero,
+    setValue: setValueHero,
     formState: { errors: heroErrors, isSubmitting: heroSubmitting },
   } = useForm<HomeHeroFormData>({
     resolver: zodResolver(homeHeroSchema),
@@ -56,14 +67,25 @@ export const HomeManagementPage: React.FC = () => {
 
   useEffect(() => {
     if (heroData) {
+      let parsed = defaultHighlightsList;
+      if (heroData.highlights) {
+        try {
+          const res = JSON.parse(heroData.highlights);
+          if (Array.isArray(res) && res.length > 0) parsed = res;
+        } catch (e) {}
+      }
+      setHighlightsList(parsed);
       resetHero({
         title: heroData.title || '',
         subtitle: heroData.subtitle || '',
         description: heroData.description || '',
         button_text: heroData.button_text || '',
         button_url: heroData.button_url || '',
+        secondary_button_text: heroData.secondary_button_text || '',
+        secondary_button_url: heroData.secondary_button_url || '',
         background_image: heroData.background_image || '',
         banner_images: heroData.banner_images || '',
+        highlights: JSON.stringify(parsed),
       });
     }
   }, [heroData, resetHero]);
@@ -315,8 +337,76 @@ export const HomeManagementPage: React.FC = () => {
             <Textarea label="Hero Description" rows={3} error={heroErrors.description?.message} {...registerHero('description')} />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Input label="Button Text" placeholder="Explore Services" error={heroErrors.button_text?.message} {...registerHero('button_text')} />
-              <Input label="Button URL" placeholder="/services" error={heroErrors.button_url?.message} {...registerHero('button_url')} />
+              <Input label="Primary Button Text" placeholder="Contact Us" error={heroErrors.button_text?.message} {...registerHero('button_text')} />
+              <Input label="Primary Button URL" placeholder="/contact" error={heroErrors.button_url?.message} {...registerHero('button_url')} />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Input label="Secondary Button Text" placeholder="Our Services" error={heroErrors.secondary_button_text?.message} {...registerHero('secondary_button_text')} />
+              <Input label="Secondary Button URL" placeholder="/services" error={heroErrors.secondary_button_url?.message} {...registerHero('secondary_button_url')} />
+            </div>
+
+            {/* Feature Highlights Cards Editor (4 items) */}
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-4">
+              <div>
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800">
+                  Hero Section Feature Highlights (4 Cards)
+                </h3>
+                <p className="text-[11px] text-slate-500 font-medium mt-0.5">
+                  Edit the titles, descriptions and icons displayed in the bottom highlight row of the hero section
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {highlightsList.map((item, idx) => (
+                  <div key={idx} className="p-3.5 bg-white border border-slate-200 rounded-xl space-y-2 shadow-sm">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-bold text-blue-600 font-mono">Card #{idx + 1}</span>
+                    </div>
+
+                    <Input
+                      label="Title *"
+                      value={item.title || ''}
+                      onChange={(e) => {
+                        const updated = [...highlightsList];
+                        updated[idx] = { ...updated[idx], title: e.target.value };
+                        setHighlightsList(updated);
+                        setValueHero('highlights', JSON.stringify(updated));
+                      }}
+                    />
+
+                    <Input
+                      label="Description"
+                      value={item.subtitle || ''}
+                      onChange={(e) => {
+                        const updated = [...highlightsList];
+                        updated[idx] = { ...updated[idx], subtitle: e.target.value };
+                        setHighlightsList(updated);
+                        setValueHero('highlights', JSON.stringify(updated));
+                      }}
+                    />
+
+                    <div>
+                      <label className="block text-[11px] font-bold text-slate-700 mb-1">Icon Type</label>
+                      <select
+                        className="w-full text-xs p-2 bg-white border border-slate-300 rounded-lg font-medium"
+                        value={item.icon || 'shield'}
+                        onChange={(e) => {
+                          const updated = [...highlightsList];
+                          updated[idx] = { ...updated[idx], icon: e.target.value };
+                          setHighlightsList(updated);
+                          setValueHero('highlights', JSON.stringify(updated));
+                        }}
+                      >
+                        <option value="shield">Shield / Safe & Secure</option>
+                        <option value="clock">Clock / On-Time Delivery</option>
+                        <option value="globe">Globe / Worldwide Reach</option>
+                        <option value="box">Box / Door To Door</option>
+                      </select>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </Card>

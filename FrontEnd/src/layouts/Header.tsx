@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Menu, X, Phone, Mail, Truck, ArrowRight, ShieldCheck, MapPin } from 'lucide-react';
+import { Menu, X, Phone, Mail, ArrowRight, ShieldCheck, MapPin } from 'lucide-react';
 import { Container } from '../components/ui/Container';
 import { Button } from '../components/ui/Button';
 import type { CompanyInfo } from '../types/api';

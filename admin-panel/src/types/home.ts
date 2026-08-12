@@ -5,8 +5,11 @@ export interface HomeHero {
   description?: string | null;
   button_text?: string | null;
   button_url?: string | null;
+  secondary_button_text?: string | null;
+  secondary_button_url?: string | null;
   background_image?: string | null;
   banner_images?: string | null;
+  highlights?: string | null;
   created_at: string;
   updated_at: string;
 }

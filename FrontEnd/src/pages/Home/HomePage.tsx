@@ -24,7 +24,6 @@ import { SectionTitle } from '../../components/ui/SectionTitle';
 import { Button } from '../../components/ui/Button';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { ErrorState } from '../../components/ui/ErrorState';
-import { EmptyState } from '../../components/ui/EmptyState';
 import { getHomeData } from '../../api/home.api';
 import { ScrollReveal, StaggerContainer, StaggerItem } from '../../components/ScrollReveal';
 import { HeroCarousel } from '../../components/HeroCarousel';
@@ -81,14 +80,21 @@ export const HomePage: React.FC = () => {
   const filteredGallery =
     activeCategory === 'ALL' ? gallery : gallery.filter((item) => item.category === activeCategory);
 
-  // Background image priority: Hero uploaded background -> public local hero image fallback
+  // Background image priority: Hero DB image -> Hero uploaded background -> public local hero image fallback
   const heroBgImage =
+    hero?.background_image ||
     hero?.background_image_url ||
     '/hero_landing_bg.png';
 
+  // Hero title helper to render multi-tone dynamic title attractively
+  const rawTitle = hero?.title || hero?.heading || 'DELIVERING TRUST, CONNECTING WORLDWIDE';
+  const titleParts = rawTitle.includes(',') ? rawTitle.split(',') : [rawTitle];
+  const firstPart = titleParts[0]?.trim();
+  const secondPart = titleParts.slice(1).join(',').trim();
+
   // Helper to resolve service icons
-  const getServiceIcon = (title: string, iconStr?: string) => {
-    const name = (title || '').toLowerCase();
+  const getServiceIcon = (title: string, iconStr?: string | null) => {
+    const name = (iconStr || title || '').toLowerCase();
     if (name.includes('air')) return <Plane className="w-6 h-6 text-primary" />;
     if (name.includes('sea')) return <Ship className="w-6 h-6 text-primary" />;
     if (name.includes('door')) return <Truck className="w-6 h-6 text-primary" />;
@@ -98,13 +104,43 @@ export const HomePage: React.FC = () => {
   };
 
   // Helper to resolve stat icons
-  const getStatIcon = (iconStr?: string) => {
+  const getStatIcon = (iconStr?: string | null) => {
     const icon = (iconStr || '').toLowerCase();
     if (icon.includes('trophy') || icon.includes('year') || icon.includes('award')) return <Trophy className="w-8 h-8 text-primary shrink-0" />;
     if (icon.includes('package') || icon.includes('box') || icon.includes('customer')) return <Package className="w-8 h-8 text-primary shrink-0" />;
     if (icon.includes('globe') || icon.includes('country') || icon.includes('world')) return <Globe2 className="w-8 h-8 text-primary shrink-0" />;
     return <Truck className="w-8 h-8 text-primary shrink-0" />;
   };
+
+  // Helper to resolve highlight icons
+  const getHighlightIcon = (iconStr?: string) => {
+    const icon = (iconStr || '').toLowerCase();
+    if (icon.includes('shield') || icon.includes('safe') || icon.includes('lock')) return <ShieldCheck className="w-4 h-4" />;
+    if (icon.includes('clock') || icon.includes('time')) return <Clock className="w-4 h-4" />;
+    if (icon.includes('globe') || icon.includes('world')) return <Globe2 className="w-4 h-4" />;
+    if (icon.includes('box') || icon.includes('door') || icon.includes('package')) return <Box className="w-4 h-4" />;
+    return <ShieldCheck className="w-4 h-4" />;
+  };
+
+  // Dynamic feature highlights from DB
+  const defaultHighlights = [
+    { title: 'SAFE & SECURE', subtitle: 'Your cargo is safe in our hands', icon: 'shield' },
+    { title: 'ON-TIME DELIVERY', subtitle: 'Fast & reliable delivery across India', icon: 'clock' },
+    { title: 'WORLDWIDE REACH', subtitle: 'Air & Sea cargo to all major destinations', icon: 'globe' },
+    { title: 'DOOR TO DOOR', subtitle: 'Complete logistics solution', icon: 'box' },
+  ];
+
+  let heroHighlights = defaultHighlights;
+  if (hero?.highlights) {
+    try {
+      const parsed = typeof hero.highlights === 'string' ? JSON.parse(hero.highlights) : hero.highlights;
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        heroHighlights = parsed;
+      }
+    } catch (e) {
+      // Fallback to default
+    }
+  }
 
   return (
     <div className="bg-slate-50 text-slate-900 min-h-screen overflow-hidden">
@@ -119,51 +155,57 @@ export const HomePage: React.FC = () => {
         <Container className="relative z-10 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left Content Column */}
-            <div className="lg:col-span-7 space-y-6">
+            <div className="lg:col-span-8 space-y-6">
               <ScrollReveal variant="fade-down" delay={0.1}>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs sm:text-sm font-bold uppercase tracking-widest text-primary">
+                  <span className="text-[11px] sm:text-xs font-extrabold uppercase tracking-widest text-primary">
                     {hero?.subtitle || 'TRUSTED | RELIABLE | WORLDWIDE'}
                   </span>
-                  <span className="h-0.5 w-12 bg-primary inline-block" />
+                  <span className="h-0.5 w-10 bg-primary inline-block" />
                 </div>
               </ScrollReveal>
 
               <ScrollReveal variant="fade-up" delay={0.2}>
-                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight uppercase">
-                  {hero?.heading || 'DELIVERING TRUST, CONNECTING WORLDWIDE'}
+                <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.18] uppercase">
+                  <span className="bg-gradient-to-r from-white via-slate-100 to-slate-200 bg-clip-text text-transparent drop-shadow-sm block">
+                    {firstPart}
+                  </span>
+                  {secondPart && (
+                    <span className="bg-gradient-to-r from-amber-400 via-primary to-orange-400 bg-clip-text text-transparent font-black drop-shadow-md block mt-1 sm:mt-1.5">
+                      {secondPart}
+                    </span>
+                  )}
                 </h1>
               </ScrollReveal>
 
               <ScrollReveal variant="fade-up" delay={0.3}>
-                <p className="text-sm sm:text-base lg:text-lg text-slate-200 font-normal leading-relaxed max-w-2xl">
+                <p className="text-xs sm:text-sm lg:text-base text-slate-300 font-normal leading-relaxed max-w-xl">
                   {hero?.description ||
                     'Worldwide Air & Sea Cargo, Professional Packing & Shifting, and Long & Short Time Storage Facilities.'}
                 </p>
               </ScrollReveal>
 
               <ScrollReveal variant="zoom-in" delay={0.4}>
-                <div className="flex flex-wrap items-center gap-4 pt-2">
-                  <Link to={hero?.primary_cta_url || '/contact'}>
+                <div className="flex flex-wrap items-center gap-3.5 pt-2">
+                  <Link to={hero?.button_url || hero?.primary_cta_url || '/contact'}>
                     <Button
                       variant="accent"
-                      size="lg"
-                      className="px-7 py-3.5 rounded-xl font-bold text-sm sm:text-base shadow-xl justify-center"
-                      rightIcon={<ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />}
+                      size="md"
+                      className="px-6 py-3 rounded-xl font-bold text-xs sm:text-sm shadow-xl justify-center"
+                      rightIcon={<ArrowRight className="w-4 h-4" />}
                     >
-                      {hero?.primary_cta_text || 'Contact Us'}
+                      {hero?.button_text || hero?.primary_cta_text || 'Contact Us'}
                     </Button>
                   </Link>
 
-                  <Link to={hero?.secondary_cta_url || '/services'}>
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      className="px-7 py-3.5 rounded-xl font-bold text-sm sm:text-base border-white/40 text-white hover:bg-white/10 backdrop-blur-md justify-center"
-                      rightIcon={<ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />}
+                  <Link to={hero?.secondary_button_url || hero?.secondary_cta_url || '/services'}>
+                    <button
+                      type="button"
+                      className="relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-extrabold text-xs sm:text-sm text-slate-900 bg-white hover:bg-slate-100 hover:scale-105 border border-white shadow-xl transition-all duration-300 cursor-pointer group"
                     >
-                      {hero?.secondary_cta_text || 'Our Services'}
-                    </Button>
+                      <span>{hero?.secondary_button_text || hero?.secondary_cta_text || 'Our Services'}</span>
+                      <ArrowRight className="w-4 h-4 text-primary group-hover:translate-x-1 transition-transform" />
+                    </button>
                   </Link>
                 </div>
               </ScrollReveal>
@@ -171,105 +213,77 @@ export const HomePage: React.FC = () => {
               {/* Bottom 4 Feature Highlights Row */}
               <ScrollReveal variant="fade-up" delay={0.5} className="pt-6 sm:pt-10">
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-slate-700/60 pt-6">
-                  <div className="flex items-start gap-2.5">
-                    <div className="p-2 rounded-lg bg-primary/20 text-primary border border-primary/30 shrink-0">
-                      <ShieldCheck className="w-4 h-4" />
+                  {heroHighlights.map((item, idx) => (
+                    <div key={idx} className="flex items-start gap-2.5">
+                      <div className="p-2 rounded-lg bg-primary/20 text-primary border border-primary/30 shrink-0">
+                        {getHighlightIcon(item.icon)}
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold text-white uppercase tracking-wider">{item.title}</h4>
+                        <p className="text-[11px] text-slate-300 leading-tight mt-0.5">{item.subtitle}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-white uppercase tracking-wider">SAFE & SECURE</h4>
-                      <p className="text-[11px] text-slate-300 leading-tight mt-0.5">Your cargo is safe in our hands</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-2.5">
-                    <div className="p-2 rounded-lg bg-primary/20 text-primary border border-primary/30 shrink-0">
-                      <Clock className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-white uppercase tracking-wider">ON-TIME DELIVERY</h4>
-                      <p className="text-[11px] text-slate-300 leading-tight mt-0.5">Fast & reliable delivery across India</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-2.5">
-                    <div className="p-2 rounded-lg bg-primary/20 text-primary border border-primary/30 shrink-0">
-                      <Globe2 className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-white uppercase tracking-wider">WORLDWIDE REACH</h4>
-                      <p className="text-[11px] text-slate-300 leading-tight mt-0.5">Air & Sea cargo to all major destinations</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-2.5">
-                    <div className="p-2 rounded-lg bg-primary/20 text-primary border border-primary/30 shrink-0">
-                      <Box className="w-4 h-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-white uppercase tracking-wider">DOOR TO DOOR</h4>
-                      <p className="text-[11px] text-slate-300 leading-tight mt-0.5">Complete logistics solution</p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </ScrollReveal>
             </div>
 
             {/* Right Quick Delivery Side Card */}
-            <div className="lg:col-span-5">
+            <div className="lg:col-span-4 lg:ml-auto w-full max-w-sm sm:max-w-md">
               <ScrollReveal variant="fade-left" delay={0.3}>
-                <div className="rounded-3xl overflow-hidden shadow-2xl border border-slate-700/60 bg-[#111e36]">
+                <div className="rounded-2xl overflow-hidden shadow-2xl border border-slate-700/60 bg-[#111e36]">
                   {/* Top Block: Air Cargo */}
-                  <div className="p-6 bg-[#111e36] border-b border-slate-700/50 relative overflow-hidden group">
+                  <div className="p-4 sm:p-4.5 bg-[#111e36] border-b border-slate-700/50 relative overflow-hidden group">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="text-xl font-extrabold text-white uppercase tracking-tight">AIR CARGO</h3>
-                        <p className="text-xs font-bold text-primary uppercase tracking-wider mt-0.5">ALL OVER INDIA</p>
-                        <div className="mt-3 text-lg font-black text-white">7 – 15 DAYS DELIVERY</div>
+                        <h3 className="text-base sm:text-lg font-extrabold text-white uppercase tracking-tight">AIR CARGO</h3>
+                        <p className="text-[10px] sm:text-[11px] font-bold text-primary uppercase tracking-wider mt-0.5">ALL OVER INDIA</p>
+                        <div className="mt-1.5 text-sm sm:text-base font-black text-white">7 – 15 DAYS DELIVERY</div>
                         <Link
                           to="/services"
-                          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-200 hover:text-white mt-3 group-hover:translate-x-1 transition-transform"
+                          className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-200 hover:text-white mt-2 group-hover:translate-x-1 transition-transform"
                         >
                           <span>Learn More</span>
-                          <ArrowRight className="w-3.5 h-3.5 text-primary" />
+                          <ArrowRight className="w-3 h-3 text-primary" />
                         </Link>
                       </div>
-                      <div className="w-12 h-12 rounded-2xl bg-slate-800/80 border border-slate-700 flex items-center justify-center text-primary shrink-0">
-                        <Plane className="w-7 h-7 stroke-[1.5]" />
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-800/80 border border-slate-700 flex items-center justify-center text-primary shrink-0">
+                        <Plane className="w-5 h-5 stroke-[1.5]" />
                       </div>
                     </div>
                   </div>
 
                   {/* Middle Block: Sea Cargo */}
-                  <div className="p-6 bg-primary text-white relative overflow-hidden group">
+                  <div className="p-4 sm:p-4.5 bg-primary text-white relative overflow-hidden group">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="text-xl font-extrabold text-white uppercase tracking-tight">SEA CARGO</h3>
-                        <p className="text-xs font-bold text-white/90 uppercase tracking-wider mt-0.5">ALL OVER INDIA</p>
-                        <div className="mt-3 text-lg font-black text-white">25 – 35 DAYS DELIVERY</div>
+                        <h3 className="text-base sm:text-lg font-extrabold text-white uppercase tracking-tight">SEA CARGO</h3>
+                        <p className="text-[10px] sm:text-[11px] font-bold text-white/90 uppercase tracking-wider mt-0.5">ALL OVER INDIA</p>
+                        <div className="mt-1.5 text-sm sm:text-base font-black text-white">25 – 35 DAYS DELIVERY</div>
                         <Link
                           to="/services"
-                          className="inline-flex items-center gap-1.5 text-xs font-bold text-white mt-3 group-hover:translate-x-1 transition-transform"
+                          className="inline-flex items-center gap-1 text-[11px] font-bold text-white mt-2 group-hover:translate-x-1 transition-transform"
                         >
                           <span>Learn More</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
+                          <ArrowRight className="w-3 h-3" />
                         </Link>
                       </div>
-                      <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white shrink-0">
-                        <Ship className="w-7 h-7 stroke-[1.5]" />
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white shrink-0">
+                        <Ship className="w-5 h-5 stroke-[1.5]" />
                       </div>
                     </div>
                   </div>
 
                   {/* Bottom Block: Opening Soon */}
-                  <div className="p-4 bg-[#0c1628] text-white flex flex-wrap items-center justify-between gap-2 text-xs border-t border-slate-800">
-                    <span className="font-bold text-slate-300 uppercase tracking-wider text-[11px]">OPENING SOON</span>
-                    <div className="flex items-center gap-4">
+                  <div className="px-3.5 py-2.5 bg-[#0c1628] text-white flex flex-wrap items-center justify-between gap-2 text-[11px] border-t border-slate-800">
+                    <span className="font-bold text-slate-300 uppercase tracking-wider text-[10px]">OPENING SOON</span>
+                    <div className="flex items-center gap-3">
                       <span className="flex items-center gap-1 font-bold text-white">
-                        <MapPin className="w-3.5 h-3.5 text-primary" />
+                        <MapPin className="w-3 h-3 text-primary" />
                         BARKA
                       </span>
                       <span className="flex items-center gap-1 font-bold text-white">
-                        <MapPin className="w-3.5 h-3.5 text-primary" />
+                        <MapPin className="w-3 h-3 text-primary" />
                         NIZWA
                       </span>
                     </div>

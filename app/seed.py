@@ -253,10 +253,16 @@ def seed_database():
             print("Seeded Destinations.")
 
         # 7. Seed Home Hero
+        default_highlights_json = (
+            '[{"title": "SAFE & SECURE", "subtitle": "Your cargo is safe in our hands", "icon": "shield"}, '
+            '{"title": "ON-TIME DELIVERY", "subtitle": "Fast & reliable delivery across India", "icon": "clock"}, '
+            '{"title": "WORLDWIDE REACH", "subtitle": "Air & Sea cargo to all major destinations", "icon": "globe"}, '
+            '{"title": "DOOR TO DOOR", "subtitle": "Complete logistics solution", "icon": "box"}]'
+        )
         hero = db.query(HomeHero).first()
         if not hero:
             hero = HomeHero(
-                title="WHITE STAR CARGO",
+                title="DELIVERING TRUST, CONNECTING WORLDWIDE",
                 subtitle="Door to Door Cargo & Logistics Services",
                 description="Worldwide Air & Sea Cargo, Professional Packing & Shifting, and Long & Short Time Storage Facilities.",
                 button_text="Contact Us",
@@ -265,11 +271,12 @@ def seed_database():
                 secondary_button_url="/services",
                 background_image="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=2000",
                 banner_images="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=2000,https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=2000,https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=2000,https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&q=80&w=2000",
+                highlights=default_highlights_json,
             )
             db.add(hero)
             print("Seeded Home Hero.")
         else:
-            hero.title = "WHITE STAR CARGO"
+            hero.title = "DELIVERING TRUST, CONNECTING WORLDWIDE"
             hero.subtitle = "Door to Door Cargo & Logistics Services"
             hero.description = "Worldwide Air & Sea Cargo, Professional Packing & Shifting, and Long & Short Time Storage Facilities."
             hero.button_text = "Contact Us"
@@ -277,6 +284,8 @@ def seed_database():
             hero.secondary_button_text = "Our Services"
             hero.secondary_button_url = "/services"
             hero.banner_images = "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=2000,https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=2000,https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=2000,https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&q=80&w=2000"
+            if not hero.highlights:
+                hero.highlights = default_highlights_json
 
         # 8. Seed Company Statistics
         if db.query(CompanyStatistic).count() == 0:
@@ -398,6 +407,18 @@ def seed_database():
             print("Seeded FAQs.")
 
         # 13. Seed Contact Message
+        if db.query(ContactMessage).count() == 0:
+            c_msg = ContactMessage(
+                name="Customer Support Test",
+                email="customer@example.com",
+                phone="95807130",
+                subject="General Freight Inquiry",
+                message="Requesting door to door air cargo rates to Kerala.",
+                status=ContactStatus.NEW,
+            )
+            db.add(c_msg)
+            print("Seeded Contact Message.")
+
         # 14. Seed Orders / Cargo Shipments
         if db.query(Order).count() == 0:
             sample_orders = [

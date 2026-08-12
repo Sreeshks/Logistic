@@ -30,15 +30,22 @@ export interface CompanyInfo {
 
 export interface HomeHero {
   id: number;
-  heading: string;
+  title?: string;
+  heading?: string;
   subtitle?: string | null;
   description?: string | null;
+  button_text?: string | null;
+  button_url?: string | null;
   primary_cta_text?: string | null;
   primary_cta_url?: string | null;
+  secondary_button_text?: string | null;
+  secondary_button_url?: string | null;
   secondary_cta_text?: string | null;
   secondary_cta_url?: string | null;
+  background_image?: string | null;
   background_image_url?: string | null;
   banner_images?: string | null;
+  highlights?: string | null;
 }
 
 export interface Statistic {

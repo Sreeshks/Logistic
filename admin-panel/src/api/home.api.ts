@@ -18,7 +18,7 @@ export const homeApi = {
     return res.data;
   },
 
-  createStatistic: async (payload: Omit<CompanyStatistic, 'id' | 'created_at' | 'updated_at'>): Promise<ApiResponse<CompanyStatistic>> => {
+  createStatistic: async (payload: Partial<CompanyStatistic>): Promise<ApiResponse<CompanyStatistic>> => {
     const res = await apiClient.post<ApiResponse<CompanyStatistic>>('/admin/home/statistics', payload);
     return res.data;
   },

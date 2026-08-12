@@ -13,6 +13,9 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    watch: {
+      ignored: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.webp', '**/uploads/**'],
+    },
   },
 })
 
