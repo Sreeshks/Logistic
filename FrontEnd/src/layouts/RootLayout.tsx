@@ -5,6 +5,7 @@ import { Header } from './Header';
 import { Footer } from './Footer';
 import { CTASection } from './CTASection';
 import { getCompanyInfo } from '../api/company.api';
+import { FloatingContactWidget } from '../components/FloatingContactWidget';
 
 export const RootLayout: React.FC = () => {
   const { data: response } = useQuery({
@@ -24,6 +25,7 @@ export const RootLayout: React.FC = () => {
       </main>
       <CTASection />
       <Footer companyInfo={companyInfo} />
+      <FloatingContactWidget companyInfo={companyInfo} />
     </div>
   );
 };

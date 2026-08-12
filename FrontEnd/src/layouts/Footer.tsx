@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Truck, Phone, Mail, MapPin, Clock, Globe } from 'lucide-react';
+import { Truck, Phone, Mail, MapPin, Clock, Globe, MessageCircle } from 'lucide-react';
 import { Container } from '../components/ui/Container';
 import type { CompanyInfo } from '../types/api';
 
@@ -10,6 +10,8 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ companyInfo }) => {
   const currentYear = new Date().getFullYear();
+  const rawWhatsapp = companyInfo?.whatsapp || '';
+  const cleanWhatsapp = rawWhatsapp.replace(/[^0-9]/g, '');
 
   return (
     <footer className="bg-slate-950 text-slate-400 border-t border-slate-900 pt-16 pb-8">
@@ -33,29 +35,64 @@ export const Footer: React.FC<FooterProps> = ({ companyInfo }) => {
               {companyInfo?.description || 'Providing seamless global freight forwarding, warehousing, and supply chain solutions tailored for modern business growth.'}
             </p>
             {/* Social Links */}
-            <div className="flex items-center space-x-3 pt-2">
+            <div className="flex flex-wrap items-center gap-2 pt-2">
               {companyInfo?.facebook_url && (
-                <a href={companyInfo.facebook_url} target="_blank" rel="noreferrer" aria-label="Facebook" className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-colors">
+                <a
+                  href={companyInfo.facebook_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Facebook"
+                  className="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center text-slate-300 hover:bg-blue-600 hover:text-white transition-all shadow-sm"
+                  title="Facebook"
+                >
                   <Globe className="w-4 h-4" />
                 </a>
               )}
               {companyInfo?.instagram_url && (
-                <a href={companyInfo.instagram_url} target="_blank" rel="noreferrer" aria-label="Instagram" className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-colors">
+                <a
+                  href={companyInfo.instagram_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Instagram"
+                  className="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center text-slate-300 hover:bg-pink-600 hover:text-white transition-all shadow-sm"
+                  title="Instagram"
+                >
                   <Globe className="w-4 h-4" />
                 </a>
               )}
               {companyInfo?.linkedin_url && (
-                <a href={companyInfo.linkedin_url} target="_blank" rel="noreferrer" aria-label="LinkedIn" className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-colors">
+                <a
+                  href={companyInfo.linkedin_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="LinkedIn"
+                  className="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center text-slate-300 hover:bg-blue-700 hover:text-white transition-all shadow-sm"
+                  title="LinkedIn"
+                >
                   <Globe className="w-4 h-4" />
                 </a>
               )}
               {companyInfo?.youtube_url && (
-                <a href={companyInfo.youtube_url} target="_blank" rel="noreferrer" aria-label="YouTube" className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-colors">
+                <a
+                  href={companyInfo.youtube_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="YouTube"
+                  className="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center text-slate-300 hover:bg-red-600 hover:text-white transition-all shadow-sm"
+                  title="YouTube"
+                >
                   <Globe className="w-4 h-4" />
                 </a>
               )}
               {companyInfo?.twitter_url && (
-                <a href={companyInfo.twitter_url} target="_blank" rel="noreferrer" aria-label="Twitter" className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary hover:text-white transition-colors">
+                <a
+                  href={companyInfo.twitter_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Twitter"
+                  className="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center text-slate-300 hover:bg-sky-500 hover:text-white transition-all shadow-sm"
+                  title="Twitter / X"
+                >
                   <Globe className="w-4 h-4" />
                 </a>
               )}
@@ -110,6 +147,19 @@ export const Footer: React.FC<FooterProps> = ({ companyInfo }) => {
                   <Phone className="w-5 h-5 text-primary shrink-0" />
                   <a href={`tel:${companyInfo.phone}`} className="hover:text-white transition-colors text-slate-300">
                     {companyInfo.phone}
+                  </a>
+                </li>
+              )}
+              {cleanWhatsapp && (
+                <li className="flex items-center space-x-3">
+                  <MessageCircle className="w-5 h-5 text-[#25D366] shrink-0 fill-current" />
+                  <a
+                    href={`https://wa.me/${cleanWhatsapp}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-white transition-colors text-slate-300 font-medium"
+                  >
+                    WhatsApp: {companyInfo?.whatsapp || companyInfo?.phone}
                   </a>
                 </li>
               )}
