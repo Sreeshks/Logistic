@@ -9,19 +9,23 @@ import { ErrorState } from '../../components/ui/ErrorState';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { Breadcrumb } from '../../components/ui/Breadcrumb';
 import { getPublicGallery } from '../../api/gallery.api';
+import { getImageUrl } from '../../utils/image';
 
 export const GalleryPage: React.FC = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const { data: response, isLoading, isError, refetch } = useQuery({
     queryKey: ['publicGallery', selectedCategory],
-    queryFn: () => getPublicGallery(selectedCategory === 'all' ? undefined : selectedCategory),
+    queryFn: () => getPublicGallery(selectedCategory === 'ALL' ? undefined : selectedCategory),
   });
 
   const galleryItems = response?.data || [];
 
-  const categories = ['all', 'air', 'ocean', 'road', 'warehouse', 'projects'];
+  const categories = [
+    'ALL',
+    ...Array.from(new Set(galleryItems.map((item) => item.category).filter((c): c is string => Boolean(c)))),
+  ];
 
   return (
     <div className="py-12 space-y-12">
@@ -29,44 +33,46 @@ export const GalleryPage: React.FC = () => {
         <Breadcrumb items={[{ label: 'Gallery' }]} />
 
         <SectionTitle
-          badge="Fleet & Operations"
+          badge="Project Portfolio"
           title="Logistics Project Showcase"
           subtitle="Explore images of our international cargo vessels, freight aircraft, logistics hubs, and heavy transport projects."
         />
 
-        {/* Category Filters */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-all capitalize ${
-                selectedCategory === cat
-                  ? 'bg-primary text-white shadow-md'
-                  : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
+        {/* Categories Bar */}
+        {categories.length > 1 && (
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
+                  selectedCategory === cat
+                    ? 'bg-primary text-white shadow-md'
+                    : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        )}
 
-        {/* Gallery Grid */}
+        {/* Content */}
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <Skeleton key={i} className="h-64 rounded-xl" />
+              <Skeleton key={i} className="h-72 rounded-xl" />
             ))}
           </div>
         ) : isError ? (
           <ErrorState
             title="Failed to Load Gallery"
-            message="Could not fetch gallery items from the backend."
+            message="Could not fetch gallery items from backend API."
             onRetry={refetch}
           />
         ) : galleryItems.length === 0 ? (
           <EmptyState
-            title="No Gallery Images"
+            title="No Images Found"
             message={`No images found in category "${selectedCategory}".`}
           />
         ) : (
@@ -74,11 +80,11 @@ export const GalleryPage: React.FC = () => {
             {galleryItems.map((item) => (
               <div
                 key={item.id}
-                onClick={() => setSelectedImage(item.image_url)}
+                onClick={() => setSelectedImage(getImageUrl(item.image_url))}
                 className="group relative h-72 rounded-xl overflow-hidden cursor-pointer bg-slate-900 shadow-sm hover:shadow-xl transition-all"
               >
                 <img
-                  src={item.image_url}
+                  src={getImageUrl(item.image_url)}
                   alt={item.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />

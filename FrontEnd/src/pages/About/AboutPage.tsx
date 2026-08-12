@@ -8,6 +8,7 @@ import { Skeleton } from '../../components/ui/Skeleton';
 import { ErrorState } from '../../components/ui/ErrorState';
 import { Breadcrumb } from '../../components/ui/Breadcrumb';
 import { getAboutContent } from '../../api/about.api';
+import { getImageUrl } from '../../utils/image';
 
 export const AboutPage: React.FC = () => {
   const { data: response, isLoading, isError, refetch } = useQuery({
@@ -81,8 +82,9 @@ export const AboutPage: React.FC = () => {
           <div className="rounded-xl overflow-hidden shadow-lg border border-slate-200">
             <img
               src={
-                about?.image_url ||
-                'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=1000'
+                about?.image_url
+                  ? getImageUrl(about.image_url)
+                  : 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=1000'
               }
               alt="Logistics Leadership Team & Fleet"
               className="w-full h-80 lg:h-96 object-cover"

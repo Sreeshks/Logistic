@@ -7,19 +7,32 @@ export interface ApiResponse<T = any> {
 
 export interface CompanyInfo {
   id: number;
-  company_name: string;
-  tagline?: string | null;
+  name?: string | null;
+  company_name?: string | null;
+  arabic_name?: string | null;
+  business_type?: string | null;
+  country?: string | null;
+  logo?: string | null;
   logo_url?: string | null;
+  favicon?: string | null;
+  tagline?: string | null;
   description?: string | null;
+  short_description?: string | null;
+  full_description?: string | null;
   email?: string | null;
   phone?: string | null;
   whatsapp?: string | null;
   address?: string | null;
   working_hours?: string | null;
+  facebook?: string | null;
   facebook_url?: string | null;
+  instagram?: string | null;
   instagram_url?: string | null;
+  linkedin?: string | null;
   linkedin_url?: string | null;
+  youtube?: string | null;
   youtube_url?: string | null;
+  twitter?: string | null;
   twitter_url?: string | null;
   google_maps_url?: string | null;
   primary_color?: string | null;
@@ -63,13 +76,22 @@ export interface Service {
   title: string;
   slug: string;
   short_description: string;
+  description?: string | null;
   full_description?: string | null;
+  delivery_information?: string | null;
+  category_name?: string | null;
+  icon?: string | null;
   icon_name?: string | null;
+  image?: string | null;
   image_url?: string | null;
+  display_order?: number;
   is_featured: boolean;
   is_active: boolean;
   meta_title?: string | null;
   meta_description?: string | null;
+  og_title?: string | null;
+  og_description?: string | null;
+  og_image?: string | null;
 }
 
 export interface GalleryItem {

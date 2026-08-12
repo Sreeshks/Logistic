@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, computed_field
 
 
 class ServiceCreate(BaseModel):
@@ -68,4 +68,20 @@ class ServiceResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
 
+    @computed_field
+    @property
+    def image_url(self) -> str | None:
+        return self.image
+
+    @computed_field
+    @property
+    def icon_name(self) -> str | None:
+        return self.icon
+
+    @computed_field
+    @property
+    def full_description(self) -> str | None:
+        return self.description
+
     model_config = ConfigDict(from_attributes=True)
+

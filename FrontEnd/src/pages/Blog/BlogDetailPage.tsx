@@ -9,6 +9,7 @@ import { Skeleton } from '../../components/ui/Skeleton';
 import { ErrorState } from '../../components/ui/ErrorState';
 import { Breadcrumb } from '../../components/ui/Breadcrumb';
 import { getBlogBySlug } from '../../api/blogs.api';
+import { getImageUrl } from '../../utils/image';
 
 export const BlogDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -89,7 +90,7 @@ export const BlogDetailPage: React.FC = () => {
         {blog.featured_image_url && (
           <div className="rounded-2xl overflow-hidden shadow-lg border border-slate-200 mb-8">
             <img
-              src={blog.featured_image_url}
+              src={getImageUrl(blog.featured_image_url)}
               alt={blog.title}
               className="w-full h-[400px] object-cover"
             />

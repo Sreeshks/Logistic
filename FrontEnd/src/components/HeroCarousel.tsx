@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getImageUrl } from '../utils/image';
 
 interface HeroCarouselProps {
   bannerImages?: string | string[] | null;
@@ -25,33 +26,37 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
   mobileBannerImages,
   defaultImage,
 }) => {
-  let desktopImages: string[] = [];
+  let rawDesktopImages: string[] = [];
   if (Array.isArray(bannerImages)) {
-    desktopImages = bannerImages.filter(Boolean);
+    rawDesktopImages = bannerImages.filter(Boolean);
   } else if (typeof bannerImages === 'string' && bannerImages.trim()) {
-    desktopImages = bannerImages
+    rawDesktopImages = bannerImages
       .split(',')
       .map((s) => s.trim())
       .filter(Boolean);
   }
 
-  if (defaultImage && !desktopImages.includes(defaultImage)) {
-    desktopImages.unshift(defaultImage);
+  if (defaultImage && !rawDesktopImages.includes(defaultImage)) {
+    rawDesktopImages.unshift(defaultImage);
   }
+
+  let desktopImages = rawDesktopImages.map(img => getImageUrl(img));
 
   if (desktopImages.length === 0) {
     desktopImages = DEFAULT_SLIDES;
   }
 
-  let mobileImages: string[] = [];
+  let rawMobileImages: string[] = [];
   if (Array.isArray(mobileBannerImages)) {
-    mobileImages = mobileBannerImages.filter(Boolean);
+    rawMobileImages = mobileBannerImages.filter(Boolean);
   } else if (typeof mobileBannerImages === 'string' && mobileBannerImages.trim()) {
-    mobileImages = mobileBannerImages
+    rawMobileImages = mobileBannerImages
       .split(',')
       .map((s) => s.trim())
       .filter(Boolean);
   }
+
+  const mobileImages = rawMobileImages.map(img => getImageUrl(img));
 
   const [currentIndex, setCurrentIndex] = useState(0);
 

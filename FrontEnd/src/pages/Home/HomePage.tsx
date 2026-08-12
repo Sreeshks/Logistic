@@ -25,6 +25,9 @@ import { Button } from '../../components/ui/Button';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { ErrorState } from '../../components/ui/ErrorState';
 import { getHomeData } from '../../api/home.api';
+import { getCompanyInfo } from '../../api/company.api';
+import { getAboutContent } from '../../api/about.api';
+import { getImageUrl } from '../../utils/image';
 import { ScrollReveal, StaggerContainer, StaggerItem } from '../../components/ScrollReveal';
 import { HeroCarousel } from '../../components/HeroCarousel';
 
@@ -33,6 +36,19 @@ export const HomePage: React.FC = () => {
     queryKey: ['homeData'],
     queryFn: getHomeData,
   });
+
+  const { data: companyResponse } = useQuery({
+    queryKey: ['companyInfoHome'],
+    queryFn: getCompanyInfo,
+  });
+
+  const { data: aboutResponse } = useQuery({
+    queryKey: ['aboutContentHome'],
+    queryFn: getAboutContent,
+  });
+
+  const companyInfo = companyResponse?.data;
+  const about = aboutResponse?.data;
 
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>('ALL');
@@ -329,9 +345,19 @@ export const HomePage: React.FC = () => {
                     <StaggerItem key={srv.id}>
                       <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between h-full group">
                         <div>
-                          <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                            {getServiceIcon(srv.title, srv.icon_name)}
-                          </div>
+                          {(srv.image_url || srv.image) ? (
+                            <div className="w-full h-28 rounded-xl overflow-hidden mb-3 bg-slate-100 relative">
+                              <img
+                                src={getImageUrl(srv.image_url || srv.image)}
+                                alt={srv.title}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              />
+                            </div>
+                          ) : (
+                            <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                              {getServiceIcon(srv.title, srv.icon_name || srv.icon)}
+                            </div>
+                          )}
                           <h3 className="text-base font-extrabold text-slate-900 mb-2 leading-snug group-hover:text-primary transition-colors">
                             {srv.title}
                           </h3>
@@ -429,12 +455,12 @@ export const HomePage: React.FC = () => {
         </Container>
       </section>
 
-      {/* 4. WHY CHOOSE WHITE STAR CARGO SECTION */}
+      {/* 4. WHY CHOOSE US SECTION */}
       <section className="py-14 sm:py-20 relative overflow-hidden bg-slate-50 border-t border-slate-200">
         <Container>
           <ScrollReveal variant="fade-up">
             <SectionTitle
-              badge="Why Choose White Star Cargo"
+              badge={companyInfo?.company_name ? `Why Choose ${companyInfo.company_name}` : 'Why Choose Us'}
               title="Building Global Supply Chain Trust"
               subtitle="Industry-leading logistics standards backed by real-time tracking, customs compliance, and dedicated support."
             />
@@ -487,7 +513,11 @@ export const HomePage: React.FC = () => {
             <ScrollReveal variant="fade-left">
               <div className="relative rounded-3xl overflow-hidden shadow-xl border border-slate-200 group">
                 <img
-                  src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=1200"
+                  src={
+                    about?.image_url
+                      ? getImageUrl(about.image_url)
+                      : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=1200'
+                  }
                   alt="Logistics Operations Center"
                   className="w-full h-[320px] sm:h-[450px] object-cover group-hover:scale-105 transition-transform duration-700"
                 />
@@ -500,7 +530,9 @@ export const HomePage: React.FC = () => {
                     </div>
                     <div>
                       <h5 className="font-extrabold text-sm sm:text-lg text-slate-900">Licensed Freight Forwarder</h5>
-                      <p className="text-[11px] sm:text-xs text-primary font-semibold">Ruwi & Misfah Terminals, Sultanate of Oman</p>
+                      <p className="text-[11px] sm:text-xs text-primary font-semibold">
+                        {about?.years_experience ? `${about.years_experience}+ Years Experience` : 'Professional Supply Chain Logistics'}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -513,10 +545,10 @@ export const HomePage: React.FC = () => {
                   About Our Company
                 </span>
                 <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-tight">
-                  Moving Cargo Worldwide With Unmatched Reliability
+                  {about?.title || 'Moving Cargo Worldwide With Unmatched Reliability'}
                 </h2>
                 <p className="text-slate-600 text-xs sm:text-base leading-relaxed">
-                  With over a decade of operational excellence in Oman, White Star Cargo provides multi-modal freight transport, door-to-door cargo handling, professional packing, and secure storage facilities across international shipping lanes.
+                  {about?.story || about?.subtitle || companyInfo?.description || ''}
                 </p>
 
                 <div className="space-y-3 sm:space-y-4 pt-1 sm:pt-2">
@@ -581,11 +613,11 @@ export const HomePage: React.FC = () => {
               {filteredGallery.map((item) => (
                 <StaggerItem key={item.id}>
                   <div
-                    onClick={() => setSelectedImage(item.image_url)}
+                    onClick={() => setSelectedImage(getImageUrl(item.image_url))}
                     className="group relative h-60 sm:h-72 rounded-3xl overflow-hidden cursor-pointer bg-white border border-slate-200 shadow-md hover:shadow-2xl transition-all duration-500"
                   >
                     <img
-                      src={item.image_url}
+                      src={getImageUrl(item.image_url)}
                       alt={item.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
@@ -636,8 +668,9 @@ export const HomePage: React.FC = () => {
                     <div className="h-44 sm:h-48 overflow-hidden bg-slate-100 relative">
                       <img
                         src={
-                          blog.featured_image_url ||
-                          'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800'
+                          blog.featured_image_url
+                            ? getImageUrl(blog.featured_image_url)
+                            : 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800'
                         }
                         alt={blog.title}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"

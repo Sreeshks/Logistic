@@ -11,6 +11,7 @@ import { ErrorState } from '../../components/ui/ErrorState';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { Breadcrumb } from '../../components/ui/Breadcrumb';
 import { getPublicBlogs } from '../../api/blogs.api';
+import { getImageUrl } from '../../utils/image';
 
 export const BlogPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -29,17 +30,17 @@ export const BlogPage: React.FC = () => {
 
         <SectionTitle
           badge="Logistics Knowledge Center"
-          title="Supply Chain Articles & News"
-          subtitle="Expert insights into international shipping regulations, freight cost optimization, and trade dynamics."
+          title="Insights, News & Industry Updates"
+          subtitle="Stay informed with expert shipping guides, regulatory updates, and supply chain best practices."
         />
 
-        {/* Search Input */}
-        <div className="max-w-md mx-auto mb-10">
+        {/* Search Bar */}
+        <div className="max-w-md mx-auto mb-10 relative">
           <div className="relative">
             <Search className="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5" />
             <input
               type="text"
-              placeholder="Search articles..."
+              placeholder="Search articles by keyword or category..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-11 pr-4 py-3 bg-white border border-slate-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
@@ -50,14 +51,14 @@ export const BlogPage: React.FC = () => {
         {/* Content */}
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
+            {[1, 2, 3].map((i) => (
               <Skeleton key={i} className="h-80 rounded-xl" />
             ))}
           </div>
         ) : isError ? (
           <ErrorState
             title="Failed to Load Blog Articles"
-            message="Could not fetch blog posts from backend API."
+            message="Could not fetch posts from the backend server."
             onRetry={refetch}
           />
         ) : blogs.length === 0 ? (
@@ -72,9 +73,9 @@ export const BlogPage: React.FC = () => {
                 <div className="h-48 overflow-hidden">
                   <img
                     src={
-                      blog.featured_image_url ||
-                      (blog as any).featured_image ||
-                      'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800'
+                      (blog.featured_image_url || (blog as any).featured_image)
+                        ? getImageUrl(blog.featured_image_url || (blog as any).featured_image)
+                        : 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=800'
                     }
                     alt={blog.title}
                     className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"

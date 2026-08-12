@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, computed_field
 from app.schemas.branch import BranchResponse
 from app.schemas.company_contact import CompanyContactResponse
 
@@ -68,4 +68,45 @@ class CompanyResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
 
+    @computed_field
+    @property
+    def company_name(self) -> str:
+        return self.name
+
+    @computed_field
+    @property
+    def logo_url(self) -> str | None:
+        return self.logo
+
+    @computed_field
+    @property
+    def description(self) -> str | None:
+        return self.short_description or self.full_description
+
+    @computed_field
+    @property
+    def facebook_url(self) -> str | None:
+        return self.facebook
+
+    @computed_field
+    @property
+    def instagram_url(self) -> str | None:
+        return self.instagram
+
+    @computed_field
+    @property
+    def linkedin_url(self) -> str | None:
+        return self.linkedin
+
+    @computed_field
+    @property
+    def youtube_url(self) -> str | None:
+        return self.youtube
+
+    @computed_field
+    @property
+    def twitter_url(self) -> str | None:
+        return self.twitter
+
     model_config = ConfigDict(from_attributes=True)
+

@@ -4,6 +4,7 @@ import { Menu, X, Phone, Mail, ArrowRight, ShieldCheck, MapPin } from 'lucide-re
 import { Container } from '../components/ui/Container';
 import { Button } from '../components/ui/Button';
 import type { CompanyInfo } from '../types/api';
+import { getImageUrl } from '../utils/image';
 
 interface HeaderProps {
   companyInfo?: CompanyInfo | null;
@@ -81,8 +82,8 @@ export const Header: React.FC<HeaderProps> = ({ companyInfo }) => {
         <Container className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group">
-            {companyInfo?.logo_url ? (
-              <img src={companyInfo.logo_url} alt={companyInfo.company_name} className="h-10 sm:h-12 w-auto object-contain" />
+            {(companyInfo?.logo_url || companyInfo?.logo) ? (
+              <img src={getImageUrl(companyInfo.logo_url || companyInfo.logo)} alt={companyInfo.company_name || companyInfo.name || 'Logo'} className="h-10 sm:h-12 w-auto object-contain" />
             ) : (
               <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-primary flex items-center justify-center text-white shadow-md group-hover:scale-105 transition-transform shrink-0">
                 <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
@@ -91,12 +92,16 @@ export const Header: React.FC<HeaderProps> = ({ companyInfo }) => {
               </div>
             )}
             <div className="flex flex-col">
-              <span className="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 uppercase leading-none">
-                {companyInfo?.company_name || 'WHITE STAR CARGO'}
-              </span>
-              <span className="text-[9px] sm:text-[10px] text-primary font-bold tracking-wider uppercase mt-1">
-                {companyInfo?.tagline || 'DOOR TO DOOR SERVICE | PROFESSIONAL PACKING & SHIFTING'}
-              </span>
+              {(companyInfo?.company_name || companyInfo?.name) && (
+                <span className="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 uppercase leading-none">
+                  {companyInfo.company_name || companyInfo.name}
+                </span>
+              )}
+              {companyInfo?.tagline && (
+                <span className="text-[9px] sm:text-[10px] text-primary font-bold tracking-wider uppercase mt-1">
+                  {companyInfo.tagline}
+                </span>
+              )}
             </div>
           </Link>
 

@@ -11,6 +11,7 @@ import { ErrorState } from '../../components/ui/ErrorState';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { Breadcrumb } from '../../components/ui/Breadcrumb';
 import { getPublicServices } from '../../api/services.api';
+import { getImageUrl } from '../../utils/image';
 
 export const ServicesPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -72,8 +73,9 @@ export const ServicesPage: React.FC = () => {
                 <div className="h-52 overflow-hidden relative">
                   <img
                     src={
-                      service.image_url ||
-                      'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=800'
+                      (service.image_url || service.image)
+                        ? getImageUrl(service.image_url || service.image)
+                        : 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=800'
                     }
                     alt={service.title}
                     className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"

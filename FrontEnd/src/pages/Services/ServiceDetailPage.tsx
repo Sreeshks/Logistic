@@ -9,6 +9,7 @@ import { Skeleton } from '../../components/ui/Skeleton';
 import { ErrorState } from '../../components/ui/ErrorState';
 import { Breadcrumb } from '../../components/ui/Breadcrumb';
 import { getServiceBySlug } from '../../api/services.api';
+import { getImageUrl } from '../../utils/image';
 
 export const ServiceDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -60,8 +61,9 @@ export const ServiceDetailPage: React.FC = () => {
         <div className="relative rounded-2xl overflow-hidden shadow-xl mb-12 bg-slate-900 text-white min-h-[340px] flex items-center">
           <img
             src={
-              service.image_url ||
-              'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=1200'
+              (service.image_url || service.image)
+                ? getImageUrl(service.image_url || service.image)
+                : 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=1200'
             }
             alt={service.title}
             className="absolute inset-0 w-full h-full object-cover opacity-30"
@@ -89,7 +91,7 @@ export const ServiceDetailPage: React.FC = () => {
             <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
               <h2 className="text-2xl font-bold text-slate-900">Service Overview</h2>
               <div className="prose prose-slate max-w-none text-slate-600 leading-relaxed space-y-4">
-                <p>{service.full_description || service.short_description}</p>
+                <p>{service.full_description || service.description || service.short_description}</p>
               </div>
 
               <div className="pt-6 border-t border-slate-100">
