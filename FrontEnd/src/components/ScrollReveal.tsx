@@ -58,7 +58,7 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once, margin: '-50px' }}
+      viewport={{ once, margin: '0px', amount: 0.1 }}
       variants={getVariants()}
       transition={{ duration, delay, ease: [0.25, 0.1, 0.25, 1.0] }}
       className={className}
@@ -78,7 +78,7 @@ export const StaggerContainer: React.FC<{
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: '-40px' }}
+      viewport={{ once: true, margin: '0px', amount: 0.1 }}
       variants={{
         hidden: {},
         visible: {

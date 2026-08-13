@@ -17,6 +17,7 @@ import { Modal } from '../../components/ui/Modal';
 import { ConfirmDialog } from '../../components/ui/ConfirmDialog';
 import { DataTable, Column } from '../../components/ui/DataTable';
 import { StatusBadge } from '../../components/ui/StatusBadge';
+import { getImageUrl } from '../../utils/image';
 import { CompanyStatistic } from '../../types/home';
 
 export const HomeManagementPage: React.FC = () => {
@@ -298,7 +299,7 @@ export const HomeManagementPage: React.FC = () => {
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         {imageList.map((imgUrl, idx) => (
                           <div key={idx} className="relative group rounded-lg overflow-hidden border border-slate-200 h-24 bg-slate-900">
-                            <img src={imgUrl} alt={`Desktop Slide ${idx + 1}`} className="w-full h-full object-cover" />
+                            <img src={getImageUrl(imgUrl)} alt={`Desktop Slide ${idx + 1}`} className="w-full h-full object-cover" />
                             <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                               <button
                                 type="button"
@@ -373,7 +374,7 @@ export const HomeManagementPage: React.FC = () => {
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                           {mobileImageList.map((imgUrl, idx) => (
                             <div key={idx} className="relative group rounded-lg overflow-hidden border border-slate-200 h-28 bg-slate-900">
-                              <img src={imgUrl} alt={`Mobile Slide ${idx + 1}`} className="w-full h-full object-cover" />
+                              <img src={getImageUrl(imgUrl)} alt={`Mobile Slide ${idx + 1}`} className="w-full h-full object-cover" />
                               <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                 <button
                                   type="button"

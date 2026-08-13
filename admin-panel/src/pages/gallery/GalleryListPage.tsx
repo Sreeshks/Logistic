@@ -19,6 +19,7 @@ import { Pagination } from '../../components/ui/Pagination';
 import { Skeleton } from '../../components/ui/Skeleton';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { GalleryItem } from '../../types/gallery';
+import { getImageUrl } from '../../utils/image';
 
 export const GalleryListPage: React.FC = () => {
   const queryClient = useQueryClient();
@@ -113,13 +114,7 @@ export const GalleryListPage: React.FC = () => {
     },
   });
 
-  const getImageUrl = (url?: string | null) => {
-    if (!url) return '';
-    if (url.startsWith('http') || url.startsWith('blob:')) return url;
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1';
-    const serverHost = baseUrl.replace('/api/v1', '');
-    return `${serverHost}${url}`;
-  };
+
 
   return (
     <div className="space-y-6">

@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { UploadCloud, X, Loader2, Image as ImageIcon } from 'lucide-react';
 import { uploadApi } from '../../api/upload.api';
 import { toast } from '../../hooks/useToast';
+import { getImageUrl } from '../../utils/image';
 
 interface ImageUploaderProps {
   label?: string;
@@ -75,14 +76,6 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
     }
   };
 
-  // Convert relative URL like /uploads/... to full backend url if needed or use relative
-  const getImageUrl = (url?: string | null) => {
-    if (!url) return '';
-    if (url.startsWith('http') || url.startsWith('blob:')) return url;
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1';
-    const serverHost = baseUrl.replace('/api/v1', '');
-    return `${serverHost}${url}`;
-  };
 
   return (
     <div className="w-full">
