@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShieldCheck, User, Lock, Server, Terminal, ExternalLink } from 'lucide-react';
+import { ShieldCheck, User, Lock, Server, Terminal, ExternalLink, BookOpen, ArrowRight } from 'lucide-react';
 import { Breadcrumb } from '../components/ui/Breadcrumb';
 import { Card } from '../components/ui/Card';
 
@@ -17,6 +17,29 @@ export const SettingsPage: React.FC = () => {
           <p className="text-xs text-slate-500 font-medium">Global platform parameters and API connection status</p>
         </div>
       </div>
+
+      {/* User Documentation Guide Banner Card */}
+      <Card title="Platform Documentation & User Guide" subtitle="Non-technical administrator manual for managing the website & admin panel">
+        <Link
+          to="/docs"
+          className="p-5 rounded-xl border border-blue-200 bg-blue-50/60 hover:bg-blue-100/70 transition flex items-center justify-between group"
+        >
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-blue-600 text-white rounded-xl shadow-md">
+              <BookOpen className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-900 group-hover:text-blue-700 transition-colors">
+                Open Administrator & User Guide
+              </h3>
+              <p className="text-xs text-slate-600 mt-0.5">
+                Learn how to edit website pages, manage Air/Sea services, upload images, set SEO tags, and track orders.
+              </p>
+            </div>
+          </div>
+          <ArrowRight className="w-5 h-5 text-blue-600 group-hover:translate-x-1 transition-transform shrink-0 ml-3" />
+        </Link>
+      </Card>
 
       <Card title="Quick Security & Profile Shortcuts">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

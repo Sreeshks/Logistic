@@ -12,6 +12,7 @@ import {
   Mail,
   Users,
   User,
+  BookOpen,
   Settings,
   ChevronLeft,
   ChevronRight,
@@ -70,6 +71,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         ...(isSuperAdmin ? [{ name: 'Admin Users', path: '/admin-users', icon: Users }] : []),
         { name: 'Profile', path: '/profile', icon: User },
         { name: 'Settings', path: '/settings', icon: Settings },
+        { name: 'User Guide & Docs', path: '/docs', icon: BookOpen },
       ],
     },
   ];

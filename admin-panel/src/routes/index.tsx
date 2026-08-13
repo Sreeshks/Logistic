@@ -21,6 +21,7 @@ import { ContactDetailPage } from '../pages/contact/ContactDetailPage';
 import { AdminUsersPage } from '../pages/admin-users/AdminUsersPage';
 import { ProfilePage } from '../pages/ProfilePage';
 import { SettingsPage } from '../pages/SettingsPage';
+import { DocumentationPage } from '../pages/DocumentationPage';
 
 export const AppRoutes: React.FC = () => {
   return (
@@ -62,7 +63,7 @@ export const AppRoutes: React.FC = () => {
         <Route path="/contact-messages" element={<ContactListPage />} />
         <Route path="/contact-messages/:id" element={<ContactDetailPage />} />
 
-        {/* System & Profile */}
+        {/* System, Profile & Documentation */}
         <Route
           path="/admin-users"
           element={
@@ -73,6 +74,7 @@ export const AppRoutes: React.FC = () => {
         />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/docs" element={<DocumentationPage />} />
 
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
       </Route>
