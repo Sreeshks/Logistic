@@ -31,6 +31,8 @@ import { getImageUrl } from '../../utils/image';
 import { ScrollReveal, StaggerContainer, StaggerItem } from '../../components/ScrollReveal';
 import { HeroCarousel } from '../../components/HeroCarousel';
 
+import { SEO } from '../../components/SEO';
+
 export const HomePage: React.FC = () => {
   const { data: response, isLoading, isError, refetch } = useQuery({
     queryKey: ['homeData'],
@@ -160,6 +162,11 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="bg-slate-50 text-slate-900 min-h-screen overflow-hidden">
+      <SEO
+        title={companyInfo?.company_name ? `${companyInfo.company_name} - ${companyInfo.tagline || 'Worldwide Air & Sea Cargo Logistics'}` : 'Worldwide Air & Sea Cargo Logistics'}
+        description={hero?.description || companyInfo?.description || 'Worldwide Air & Sea Cargo, Professional Packing & Shifting, and Storage Facilities.'}
+        ogImage={heroBgImage}
+      />
       {/* 1. HERO BANNER SECTION (MATCHES LANDINGPAGE.PNG EXACTLY) */}
       <section className="relative min-h-[640px] lg:min-h-[720px] bg-[#0c182c] text-white flex items-center overflow-hidden py-12 lg:py-16">
         {/* Background Carousel with Dark Overlay */}

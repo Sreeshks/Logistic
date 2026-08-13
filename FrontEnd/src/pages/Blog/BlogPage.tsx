@@ -12,6 +12,7 @@ import { EmptyState } from '../../components/ui/EmptyState';
 import { Breadcrumb } from '../../components/ui/Breadcrumb';
 import { getPublicBlogs } from '../../api/blogs.api';
 import { getImageUrl } from '../../utils/image';
+import { SEO } from '../../components/SEO';
 
 export const BlogPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -25,6 +26,10 @@ export const BlogPage: React.FC = () => {
 
   return (
     <div className="py-12 space-y-12">
+      <SEO
+        title="Logistics Insights & News"
+        description="Stay updated with air freight guides, ocean shipping regulations, customs documentation, and supply chain tips."
+      />
       <Container>
         <Breadcrumb items={[{ label: 'Blog' }]} />
 

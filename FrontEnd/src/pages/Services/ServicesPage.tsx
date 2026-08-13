@@ -12,6 +12,7 @@ import { EmptyState } from '../../components/ui/EmptyState';
 import { Breadcrumb } from '../../components/ui/Breadcrumb';
 import { getPublicServices } from '../../api/services.api';
 import { getImageUrl } from '../../utils/image';
+import { SEO } from '../../components/SEO';
 
 export const ServicesPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -25,6 +26,10 @@ export const ServicesPage: React.FC = () => {
 
   return (
     <div className="py-12 space-y-12">
+      <SEO
+        title="Logistics & Supply Chain Services"
+        description="Comprehensive Air Cargo, Sea Freight, Door-to-Door Delivery, Packing & Shifting, and Storage facilities across India and worldwide."
+      />
       <Container>
         <Breadcrumb items={[{ label: 'Services' }]} />
 

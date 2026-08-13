@@ -11,6 +11,8 @@ import { Breadcrumb } from '../../components/ui/Breadcrumb';
 import { getBlogBySlug } from '../../api/blogs.api';
 import { getImageUrl } from '../../utils/image';
 
+import { SEO } from '../../components/SEO';
+
 export const BlogDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
 
@@ -54,6 +56,13 @@ export const BlogDetailPage: React.FC = () => {
 
   return (
     <div className="py-12 space-y-8">
+      <SEO
+        title={blog.meta_title || blog.title}
+        description={blog.meta_description || blog.summary}
+        ogTitle={blog.og_title || blog.meta_title || blog.title}
+        ogDescription={blog.og_description || blog.meta_description || blog.summary}
+        ogImage={blog.og_image || blog.featured_image_url}
+      />
       <Container size="md">
         <Breadcrumb items={[{ label: 'Blog', href: '/blog' }, { label: blog.title }]} />
 

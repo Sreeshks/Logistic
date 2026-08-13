@@ -119,6 +119,9 @@ export interface BlogPost {
   status: string;
   meta_title?: string | null;
   meta_description?: string | null;
+  og_title?: string | null;
+  og_description?: string | null;
+  og_image?: string | null;
 }
 
 export interface HomeData {

@@ -11,6 +11,8 @@ import { Breadcrumb } from '../../components/ui/Breadcrumb';
 import { getServiceBySlug } from '../../api/services.api';
 import { getImageUrl } from '../../utils/image';
 
+import { SEO } from '../../components/SEO';
+
 export const ServiceDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
 
@@ -54,6 +56,13 @@ export const ServiceDetailPage: React.FC = () => {
 
   return (
     <div className="py-12 space-y-12">
+      <SEO
+        title={service.meta_title || service.title}
+        description={service.meta_description || service.short_description}
+        ogTitle={service.og_title || service.meta_title || service.title}
+        ogDescription={service.og_description || service.meta_description || service.short_description}
+        ogImage={service.og_image || service.image_url || service.image}
+      />
       <Container>
         <Breadcrumb items={[{ label: 'Services', href: '/services' }, { label: service.title }]} />
 
