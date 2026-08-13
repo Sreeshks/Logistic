@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getImageUrl } from '../utils/image';
+import { getImageUrl, getImageUrls } from '../utils/image';
 
 interface HeroCarouselProps {
   bannerImages?: string | string[] | null;
@@ -26,65 +26,52 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
   mobileBannerImages,
   defaultImage,
 }) => {
-  let rawDesktopImages: string[] = [];
-  if (Array.isArray(bannerImages)) {
-    rawDesktopImages = bannerImages.filter(Boolean);
-  } else if (typeof bannerImages === 'string' && bannerImages.trim()) {
-    rawDesktopImages = bannerImages
-      .split(',')
-      .map((s) => s.trim())
-      .filter(Boolean);
+  // 1. Process Desktop Banner Images
+  let parsedDesktop: string[] = getImageUrls(bannerImages);
+  if (defaultImage && !parsedDesktop.includes(getImageUrl(defaultImage))) {
+    parsedDesktop.unshift(getImageUrl(defaultImage));
+  }
+  if (parsedDesktop.length === 0) {
+    parsedDesktop = DEFAULT_SLIDES;
   }
 
-  if (defaultImage && !rawDesktopImages.includes(defaultImage)) {
-    rawDesktopImages.unshift(defaultImage);
-  }
+  // 2. Process Mobile Banner Images
+  const parsedMobile: string[] = getImageUrls(mobileBannerImages);
 
-  let desktopImages = rawDesktopImages.map(img => getImageUrl(img));
-
-  if (desktopImages.length === 0) {
-    desktopImages = DEFAULT_SLIDES;
-  }
-
-  let rawMobileImages: string[] = [];
-  if (Array.isArray(mobileBannerImages)) {
-    rawMobileImages = mobileBannerImages.filter(Boolean);
-  } else if (typeof mobileBannerImages === 'string' && mobileBannerImages.trim()) {
-    rawMobileImages = mobileBannerImages
-      .split(',')
-      .map((s) => s.trim())
-      .filter(Boolean);
-  }
-
-  const mobileImages = rawMobileImages.map(img => getImageUrl(img));
+  // 3. Build total slides array to support different desktop vs mobile slide counts
+  const slideCount = Math.max(parsedDesktop.length, parsedMobile.length);
+  const slides = Array.from({ length: slideCount }, (_, index) => {
+    const desktopUrl = parsedDesktop[index] || parsedDesktop[0] || DEFAULT_SLIDES[0];
+    const mobileUrl = parsedMobile[index] || parsedMobile[0] || undefined;
+    return { desktopUrl, mobileUrl };
+  });
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
-    if (desktopImages.length <= 1) return;
+    if (slides.length <= 1) return;
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % desktopImages.length);
+      setCurrentIndex((prev) => (prev + 1) % slides.length);
     }, 6000);
     return () => clearInterval(interval);
-  }, [desktopImages.length]);
+  }, [slides.length]);
 
   return (
     <div className="absolute inset-0 z-0 overflow-hidden bg-slate-950">
       {/* Slide Images */}
-      {desktopImages.map((desktopImgUrl, index) => {
+      {slides.map((slide, index) => {
         const isActive = index === currentIndex;
-        const mobileImgUrl = mobileImages[index] || mobileImages[0];
         return (
           <div
-            key={desktopImgUrl + index}
+            key={slide.desktopUrl + index}
             className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
               isActive ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
             }`}
           >
             <picture className="block w-full h-full">
-              {mobileImgUrl && <source media="(max-width: 639px)" srcSet={mobileImgUrl} />}
+              {slide.mobileUrl && <source media="(max-width: 639px)" srcSet={slide.mobileUrl} />}
               <img
-                src={desktopImgUrl}
+                src={slide.desktopUrl}
                 alt={`Logistics Banner Slide ${index + 1}`}
                 className={`w-full h-full object-cover object-center ${isActive ? 'animate-kenburns' : ''}`}
               />
