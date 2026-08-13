@@ -145,7 +145,7 @@ export const ServiceDetailPage: React.FC = () => {
                   </Button>
                 </Link>
                 <Link to="/contact" className="block w-full">
-                  <Button variant="outline" size="md" className="w-full justify-center border-slate-700 text-slate-200 hover:bg-slate-800" leftIcon={<PhoneCall className="w-4 h-4" />}>
+                  <Button variant="outline" size="md" className="w-full justify-center bg-white text-slate-950 hover:bg-slate-100 hover:text-black font-extrabold border-2 border-white shadow" leftIcon={<PhoneCall className="w-4 h-4 text-slate-950" />}>
                     Call Freight Desk
                   </Button>
                 </Link>

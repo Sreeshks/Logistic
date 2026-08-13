@@ -98,6 +98,7 @@ export interface GalleryItem {
   id: number;
   title: string;
   category?: string | null;
+  image?: string | null;
   image_url: string;
   description?: string | null;
   is_featured: boolean;
@@ -108,11 +109,14 @@ export interface BlogPost {
   id: number;
   title: string;
   slug: string;
-  summary: string;
+  summary?: string | null;
+  short_description?: string | null;
   content: string;
   category?: string | null;
   tags?: string | null;
+  featured_image?: string | null;
   featured_image_url?: string | null;
+  author?: string | null;
   author_name?: string | null;
   published_at?: string | null;
   is_featured: boolean;

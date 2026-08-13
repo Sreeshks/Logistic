@@ -36,7 +36,12 @@ export const CTASection: React.FC<CTASectionProps> = ({
             </Button>
           </Link>
           <Link to="/contact">
-            <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-slate-900" leftIcon={<PhoneCall className="w-5 h-5" />}>
+            <Button
+              variant="outline"
+              size="lg"
+              className="bg-white text-slate-950 hover:bg-slate-100 hover:text-black font-black border-2 border-white shadow-lg cursor-pointer"
+              leftIcon={<PhoneCall className="w-5 h-5 text-slate-950" />}
+            >
               Speak to an Expert
             </Button>
           </Link>
