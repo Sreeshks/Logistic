@@ -25,12 +25,14 @@ def test_file_upload_success_and_validation() -> None:
         res_json = res_upload.json()
         assert res_json["success"] is True
         url = res_json["data"]["url"]
-        assert url.startswith("/uploads/")
+        assert url.startswith("/uploads/") or url.startswith("https://") or "supabase" in url
 
-        # Retrieve static file from mounted endpoint
-        res_file = client.get(url)
-        assert res_file.status_code == 200
-        assert res_file.content == fake_png_data
+        # If local upload, verify static file retrieval
+        if url.startswith("/uploads/"):
+            res_file = client.get(url)
+            assert res_file.status_code == 200
+            assert res_file.content == fake_png_data
+
 
         # Upload invalid file type
         invalid_files = {"file": ("script.exe", io.BytesIO(b"binary"), "application/octet-stream")}

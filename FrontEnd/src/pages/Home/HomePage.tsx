@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import {
   ArrowRight,
@@ -43,11 +43,25 @@ import { getImageUrl } from '../../utils/image';
 import { ScrollReveal, StaggerContainer, StaggerItem } from '../../components/ScrollReveal';
 import { HeroCarousel } from '../../components/HeroCarousel';
 import { SEO } from '../../components/SEO';
+import { apiClient } from '../../api/client';
 import type { Service, BlogPost, GalleryItem, FAQItem } from '../../types/api';
 
 export const HomePage: React.FC = () => {
-  const navigate = useNavigate();
   const [trackingNumberInput, setTrackingNumberInput] = useState('');
+  const [isTrackingLoading, setIsTrackingLoading] = useState(false);
+  const [isTrackingModalOpen, setIsTrackingModalOpen] = useState(false);
+  const [trackResult, setTrackResult] = useState<{
+    found: boolean;
+    tracking_number: string;
+    status?: string;
+    service_type?: string;
+    origin?: string;
+    destination?: string;
+    current_location?: string;
+    estimated_delivery?: string;
+    last_updated?: string;
+  } | null>(null);
+
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [activeGalleryCategory, setActiveGalleryCategory] = useState<string>('ALL');
   const [openFaqId, setOpenFaqId] = useState<number | null>(1);
@@ -447,12 +461,48 @@ export const HomePage: React.FC = () => {
     }
   }
 
-  const handleTrackSubmit = (e: React.FormEvent) => {
+  const handleTrackSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (trackingNumberInput.trim()) {
-      navigate(`/contact?track=${encodeURIComponent(trackingNumberInput.trim())}`);
+    const query = trackingNumberInput.trim();
+    if (!query) return;
+
+    setIsTrackingLoading(true);
+    setIsTrackingModalOpen(true);
+    setTrackResult(null);
+
+    try {
+      const response: any = await apiClient.get(`/public/orders/track/${encodeURIComponent(query)}`);
+      if (response && response.success && response.data?.found) {
+        setTrackResult(response.data);
+      } else {
+        setTrackResult({ found: false, tracking_number: query });
+      }
+    } catch (err: any) {
+      setTrackResult({ found: false, tracking_number: query });
+    } finally {
+      setIsTrackingLoading(false);
     }
   };
+
+  const getTrackingStepIndex = (status?: string) => {
+    switch (status?.toUpperCase()) {
+      case 'PENDING':
+        return 0;
+      case 'PICKED_UP':
+        return 1;
+      case 'IN_TRANSIT':
+        return 2;
+      case 'OUT_FOR_DELIVERY':
+        return 3;
+      case 'DELIVERED':
+        return 4;
+      case 'CANCELLED':
+        return -1;
+      default:
+        return 0;
+    }
+  };
+
 
   return (
     <div className="bg-slate-50 text-slate-900 min-h-screen overflow-hidden">
@@ -615,37 +665,45 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* 2. TRACK SHIPMENT QUICK SEARCH BAR */}
-      <section className="bg-slate-900 border-y border-slate-800 py-6 text-white relative z-20">
-        <Container>
-          <div className="bg-[#111e36] p-4 sm:p-6 rounded-2xl border border-slate-700/60 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3 text-left">
-              <div className="w-12 h-12 rounded-xl bg-primary/20 text-primary border border-primary/30 flex items-center justify-center shrink-0">
-                <Truck className="w-6 h-6" />
+      {hero?.show_tracking !== false && (
+        <section className="bg-slate-900 border-y border-slate-800 py-6 text-white relative z-20">
+          <Container>
+            <div className="bg-[#111e36] p-4 sm:p-6 rounded-2xl border border-slate-700/60 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-3 text-left">
+                <div className="w-12 h-12 rounded-xl bg-primary/20 text-primary border border-primary/30 flex items-center justify-center shrink-0">
+                  <Truck className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-black text-white">Track Your Cargo Shipment</h3>
+                  <p className="text-xs text-slate-300">Enter tracking number (e.g. WSC-998231) for live shipment updates</p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-base sm:text-lg font-black text-white">Track Your Cargo Shipment</h3>
-                <p className="text-xs text-slate-300">Enter tracking number (e.g. WSC-998231) for live shipment updates</p>
-              </div>
-            </div>
 
-            <form onSubmit={handleTrackSubmit} className="w-full md:w-auto flex items-center gap-2 max-w-md">
-              <div className="relative flex-grow">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3.5" />
-                <input
-                  type="text"
-                  placeholder="Enter Tracking Number..."
-                  value={trackingNumberInput}
-                  onChange={(e) => setTrackingNumberInput(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:border-primary"
-                />
-              </div>
-              <Button type="submit" variant="accent" size="sm" className="px-5 py-2.5 rounded-xl text-xs font-bold shrink-0">
-                Track
-              </Button>
-            </form>
-          </div>
-        </Container>
-      </section>
+              <form onSubmit={handleTrackSubmit} className="w-full md:w-auto flex items-center gap-2 max-w-md">
+                <div className="relative flex-grow">
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3.5" />
+                  <input
+                    type="text"
+                    placeholder="Enter Tracking Number (e.g. WSC-100821)..."
+                    value={trackingNumberInput}
+                    onChange={(e) => setTrackingNumberInput(e.target.value)}
+                    className="w-full pl-9 pr-3 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:border-primary"
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  variant="accent"
+                  size="sm"
+                  isLoading={isTrackingLoading}
+                  className="px-5 py-2.5 rounded-xl text-xs font-bold shrink-0"
+                >
+                  Track
+                </Button>
+              </form>
+            </div>
+          </Container>
+        </section>
+      )}
 
       {/* 3. WHAT WE DO - COMPLETE LOGISTICS SERVICES SECTION */}
       <section className="py-16 sm:py-20 bg-white">
@@ -1197,6 +1255,188 @@ export const HomePage: React.FC = () => {
         </Container>
       </section>
 
+      {/* Live Order Tracking Modal */}
+      {isTrackingModalOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4"
+          onClick={() => setIsTrackingModalOpen(false)}
+        >
+          <div
+            className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-2xl w-full overflow-hidden text-slate-900 animate-in fade-in zoom-in duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="bg-slate-950 text-white p-5 sm:p-6 flex items-center justify-between border-b border-slate-800">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 sm:p-3 bg-primary/20 text-primary rounded-2xl border border-primary/30 shrink-0">
+                  <Package className="w-5 h-5 sm:w-6 sm:h-6" />
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-black text-white">Live Cargo Shipment Tracking</h3>
+                  <p className="text-[11px] sm:text-xs text-slate-400">Real-time status verified with central logistics system</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsTrackingModalOpen(false)}
+                className="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-5 sm:p-6 max-h-[80vh] overflow-y-auto">
+              {isTrackingLoading ? (
+                <div className="py-12 flex flex-col items-center justify-center gap-4 text-center">
+                  <div className="w-12 h-12 rounded-full border-4 border-primary/30 border-t-primary animate-spin" />
+                  <p className="text-sm font-bold text-slate-800">Connecting to Live Freight Database...</p>
+                  <p className="text-xs text-slate-500">Querying waybill: {trackingNumberInput}</p>
+                </div>
+              ) : trackResult?.found ? (
+                <div className="space-y-6">
+                  {/* Waybill & Status Pill */}
+                  <div className="flex flex-wrap items-center justify-between gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                    <div>
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">Waybill / Tracking #</span>
+                      <h4 className="font-mono text-xl font-black text-primary">{trackResult.tracking_number}</h4>
+                    </div>
+                    <div>
+                      <span className="px-3.5 py-1.5 text-xs font-black uppercase tracking-wider rounded-full border bg-emerald-100 text-emerald-800 border-emerald-300">
+                        {trackResult.status?.replace(/_/g, ' ')}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* 5-Step Timeline Tracker */}
+                  <div className="p-4 bg-slate-900 text-white rounded-2xl border border-slate-800">
+                    <h5 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Shipment Journey Progress</h5>
+                    <div className="grid grid-cols-5 gap-2 relative">
+                      {[
+                        { label: 'Booking Confirmed', step: 0 },
+                        { label: 'Picked Up', step: 1 },
+                        { label: 'In Transit', step: 2 },
+                        { label: 'Out for Delivery', step: 3 },
+                        { label: 'Delivered', step: 4 },
+                      ].map((item, idx) => {
+                        const currentStep = getTrackingStepIndex(trackResult.status);
+                        const isDone = currentStep >= item.step;
+                        const isCurrent = currentStep === item.step;
+                        return (
+                          <div key={idx} className="flex flex-col items-center text-center">
+                            <div
+                              className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center font-bold text-xs transition-all ${
+                                isDone
+                                  ? 'bg-primary text-white shadow-md shadow-primary/40'
+                                  : 'bg-slate-800 text-slate-500 border border-slate-700'
+                              } ${isCurrent ? 'ring-4 ring-primary/30 animate-pulse' : ''}`}
+                            >
+                              {isDone ? <CheckCircle2 className="w-4 h-4" /> : idx + 1}
+                            </div>
+                            <span className={`text-[9px] sm:text-xs mt-2 font-bold leading-tight ${isDone ? 'text-white' : 'text-slate-500'}`}>
+                              {item.label}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Details Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block mb-1">Service Type</span>
+                      <div className="flex items-center gap-2">
+                        <Plane className="w-4 h-4 text-primary shrink-0" />
+                        <span className="text-sm font-bold text-slate-900">{trackResult.service_type || 'Air Cargo Express'}</span>
+                      </div>
+                    </div>
+
+                    <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block mb-1">Current Location</span>
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-4 h-4 text-primary shrink-0" />
+                        <span className="text-sm font-bold text-slate-900">{trackResult.current_location || 'Hub Sorting Facility'}</span>
+                      </div>
+                    </div>
+
+                    <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block mb-1">Route (Origin → Destination)</span>
+                      <span className="text-xs font-bold text-slate-800">
+                        {trackResult.origin || 'Muscat, Oman'} → {trackResult.destination || 'Worldwide Destination'}
+                      </span>
+                    </div>
+
+                    <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block mb-1">Estimated Delivery</span>
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <span className="text-sm font-black text-emerald-700">{trackResult.estimated_delivery || 'On Schedule'}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+                    <p className="text-[11px] text-slate-500">
+                      Need customs clearance or delivery assistance?
+                    </p>
+                    <a
+                      href={`https://wa.me/96895318182?text=Hello%20White%20Star%20Cargo%2C%20I%20am%20inquiring%20about%20waybill%20number%20${encodeURIComponent(trackResult.tracking_number)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow-md transition-colors"
+                    >
+                      <PhoneCall className="w-4 h-4" />
+                      <span>WhatsApp Support for this Waybill</span>
+                    </a>
+                  </div>
+                </div>
+              ) : (
+                <div className="py-6 text-center space-y-4">
+                  <div className="w-14 h-14 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto">
+                    <HelpCircle className="w-7 h-7" />
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold text-slate-900">Shipment Not Found</h4>
+                    <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto mt-1">
+                      No registered cargo order was found matching tracking number <span className="font-mono font-bold text-slate-900">"{trackResult?.tracking_number}"</span>.
+                    </p>
+                  </div>
+                  <div className="p-4 bg-amber-50 border border-amber-200 rounded-2xl text-left text-xs text-amber-900 space-y-1 max-w-lg mx-auto">
+                    <p className="font-bold">Tips for finding your shipment:</p>
+                    <ul className="list-disc pl-4 space-y-0.5 text-amber-800">
+                      <li>Check that your waybill or tracking code was typed correctly.</li>
+                      <li>Standard tracking IDs usually start with <code className="font-bold">WSC-</code> (e.g. WSC-100821).</li>
+                      <li>If your cargo was booked today, please allow up to a few hours for the initial hub scanning.</li>
+                    </ul>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+                    <button
+                      onClick={() => {
+                        setTrackingNumberInput('');
+                        setIsTrackingModalOpen(false);
+                      }}
+                      className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition"
+                    >
+                      Close & Try Again
+                    </button>
+                    <a
+                      href="https://wa.me/96895318182?text=Hello%2C%20I%20need%20help%20tracking%20my%20cargo%20shipment."
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-5 py-2.5 bg-primary hover:bg-primary/90 text-white text-xs font-bold rounded-xl shadow-md transition"
+                    >
+                      Contact Customer Support
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Lightbox Modal */}
       {selectedImage && (
         <div
@@ -1215,3 +1455,4 @@ export const HomePage: React.FC = () => {
     </div>
   );
 };
+

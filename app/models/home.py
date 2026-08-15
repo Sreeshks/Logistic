@@ -20,6 +20,8 @@ class HomeHero(Base):
     banner_images: Mapped[str | None] = mapped_column(sa.Text, nullable=True)
     mobile_banner_images: Mapped[str | None] = mapped_column(sa.Text, nullable=True)
     highlights: Mapped[str | None] = mapped_column(sa.Text, nullable=True)
+    show_tracking: Mapped[bool] = mapped_column(sa.Boolean, default=True, server_default=sa.text("true"), nullable=False)
+
 
     created_at: Mapped[datetime] = mapped_column(
         sa.DateTime(timezone=True), server_default=sa.func.now(), nullable=False

@@ -12,6 +12,7 @@ export const homeHeroSchema = z.object({
   banner_images: z.string().optional().nullable(),
   mobile_banner_images: z.string().optional().nullable(),
   highlights: z.string().optional().nullable(),
+  show_tracking: z.boolean().optional(),
 });
 
 export type HomeHeroFormData = z.infer<typeof homeHeroSchema>;

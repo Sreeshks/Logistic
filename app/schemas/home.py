@@ -20,6 +20,7 @@ class HomeHeroUpdate(BaseModel):
     banner_images: str | None = None
     mobile_banner_images: str | None = None
     highlights: str | None = None
+    show_tracking: bool | None = True
 
 
 class HomeHeroResponse(BaseModel):
@@ -35,10 +36,12 @@ class HomeHeroResponse(BaseModel):
     banner_images: str | None = None
     mobile_banner_images: str | None = None
     highlights: str | None = None
+    show_tracking: bool = True
     created_at: datetime
     updated_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
 
 
 class CompanyStatisticCreate(BaseModel):

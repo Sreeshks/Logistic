@@ -48,4 +48,17 @@ export const ordersApi = {
     const res = await apiClient.delete<ApiResponse>(`/admin/orders/${id}`);
     return res.data;
   },
+
+  getTrackingToggle: async (): Promise<ApiResponse<{ show_tracking: boolean }>> => {
+    const res = await apiClient.get<ApiResponse<{ show_tracking: boolean }>>('/admin/orders/tracking-toggle');
+    return res.data;
+  },
+
+  updateTrackingToggle: async (show_tracking: boolean): Promise<ApiResponse<{ show_tracking: boolean }>> => {
+    const res = await apiClient.patch<ApiResponse<{ show_tracking: boolean }>>('/admin/orders/tracking-toggle', {
+      show_tracking,
+    });
+    return res.data;
+  },
 };
+

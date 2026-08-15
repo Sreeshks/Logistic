@@ -60,6 +60,7 @@ export interface HomeHero {
   banner_images?: string | null;
   mobile_banner_images?: string | null;
   highlights?: string | null;
+  show_tracking?: boolean;
 }
 
 export interface Statistic {

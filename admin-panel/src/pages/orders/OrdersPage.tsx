@@ -16,6 +16,7 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 import { ordersApi } from '../../api/orders.api';
+import { toast } from '../../hooks/useToast';
 import type { OrderItem, OrderCreateData, OrderStatus } from '../../types/order';
 
 export const OrdersPage: React.FC = () => {
@@ -28,6 +29,30 @@ export const OrdersPage: React.FC = () => {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editingOrder, setEditingOrder] = useState<OrderItem | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
+
+  // Landing page tracking toggle query & mutation
+  const { data: toggleData, isLoading: toggleLoading } = useQuery({
+    queryKey: ['tracking-toggle'],
+    queryFn: () => ordersApi.getTrackingToggle(),
+  });
+
+  const isTrackingVisible = toggleData?.data?.show_tracking !== false;
+
+  const toggleMutation = useMutation({
+    mutationFn: (newState: boolean) => ordersApi.updateTrackingToggle(newState),
+    onSuccess: (res) => {
+      queryClient.invalidateQueries({ queryKey: ['tracking-toggle'] });
+      queryClient.invalidateQueries({ queryKey: ['home-hero'] });
+      if (res.data?.show_tracking) {
+        toast.success('Live Tracking bar is now VISIBLE on the website landing page.');
+      } else {
+        toast.success('Live Tracking bar is now HIDDEN from the website landing page.');
+      }
+    },
+    onError: () => {
+      toast.error('Failed to update tracking toggle state.');
+    },
+  });
 
   // Form State
   const [formData, setFormData] = useState<OrderCreateData>({
@@ -174,6 +199,48 @@ export const OrdersPage: React.FC = () => {
           <Plus className="w-4 h-4" />
           <span>Add New Cargo Order</span>
         </button>
+      </div>
+
+      {/* Landing Page Tracking Visibility Toggle Card */}
+      <div className="bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-700/60 shadow-md text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3.5">
+          <div className={`p-2.5 rounded-xl ${isTrackingVisible ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'}`}>
+            <Search className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm font-bold text-white">Landing Page Tracking Search Bar</h3>
+              <span className={`px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider rounded-full border ${isTrackingVisible ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' : 'bg-rose-500/20 text-rose-300 border-rose-500/40'}`}>
+                {isTrackingVisible ? 'Visible on Website' : 'Hidden on Website'}
+              </span>
+            </div>
+            <p className="text-xs text-slate-300 mt-0.5">
+              {isTrackingVisible
+                ? 'Public shipment tracking search bar is currently DISPLAYED on the home landing page.'
+                : 'Public shipment tracking search bar is currently HIDDEN from the home landing page.'}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 self-end sm:self-center bg-slate-800/80 px-3.5 py-1.5 rounded-xl border border-slate-700">
+          <span className="text-xs font-semibold text-slate-300">
+            {isTrackingVisible ? 'Active' : 'Disabled'}
+          </span>
+          <button
+            type="button"
+            disabled={toggleMutation.isPending || toggleLoading}
+            onClick={() => toggleMutation.mutate(!isTrackingVisible)}
+            className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-50 ${
+              isTrackingVisible ? 'bg-emerald-500' : 'bg-slate-600'
+            }`}
+          >
+            <span
+              className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out ${
+                isTrackingVisible ? 'translate-x-5' : 'translate-x-0'
+              }`}
+            />
+          </button>
+        </div>
       </div>
 
       {/* Filter & Search Bar */}

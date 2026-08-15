@@ -88,6 +88,7 @@ export const HomeManagementPage: React.FC = () => {
         banner_images: heroData.banner_images || '',
         mobile_banner_images: heroData.mobile_banner_images || '',
         highlights: JSON.stringify(parsed),
+        show_tracking: heroData.show_tracking !== false,
       });
     }
   }, [heroData, resetHero]);
@@ -240,6 +241,27 @@ export const HomeManagementPage: React.FC = () => {
           }
         >
           <div className="space-y-4">
+            <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
+              <div>
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-800 block">
+                  Landing Page Tracking Search Bar
+                </label>
+                <p className="text-[11px] text-slate-500 font-medium">
+                  Enable or disable the public live order tracking search bar on the website home page
+                </p>
+              </div>
+              <Controller
+                name="show_tracking"
+                control={controlHero}
+                render={({ field }) => (
+                  <Switch
+                    checked={field.value !== false}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Controller
                 name="background_image"

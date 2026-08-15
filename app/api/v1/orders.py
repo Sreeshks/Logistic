@@ -14,14 +14,55 @@ from app.schemas.order import (
     PublicOrderTrackResponse,
 )
 from app.services.order_service import OrderService
+from app.services.home_service import get_or_create_home_hero
 from app.utils.pagination import build_paginated_response
 from app.utils.response import success_response, error_response
 
 router = APIRouter(tags=["Orders & Cargo Tracking"])
 
 
+# PUBLIC / ADMIN TRACKING TOGGLE ENDPOINTS
+@router.get("/public/orders/tracking-toggle")
+def get_public_tracking_toggle(db: Annotated[Session, Depends(get_db)]):
+    hero = get_or_create_home_hero(db)
+    return success_response(
+        message="Tracking toggle status retrieved",
+        data={"show_tracking": getattr(hero, "show_tracking", True)},
+    )
+
+
+@router.get("/admin/orders/tracking-toggle")
+def get_admin_tracking_toggle(
+    db: Annotated[Session, Depends(get_db)],
+    current_admin: Annotated[Admin, Depends(get_current_admin)],
+):
+    hero = get_or_create_home_hero(db)
+    return success_response(
+        message="Tracking toggle status retrieved",
+        data={"show_tracking": getattr(hero, "show_tracking", True)},
+    )
+
+
+@router.patch("/admin/orders/tracking-toggle")
+def update_admin_tracking_toggle(
+    payload: dict,
+    db: Annotated[Session, Depends(get_db)],
+    current_admin: Annotated[Admin, Depends(get_current_admin)],
+):
+    hero = get_or_create_home_hero(db)
+    show_tracking = payload.get("show_tracking", True)
+    hero.show_tracking = bool(show_tracking)
+    db.commit()
+    db.refresh(hero)
+    return success_response(
+        message="Landing page tracking visibility updated successfully",
+        data={"show_tracking": hero.show_tracking},
+    )
+
+
 # PUBLIC ORDER TRACKING ENDPOINT
 @router.get("/public/orders/track/{tracking_number}")
+
 def public_track_order(
     tracking_number: str,
     db: Annotated[Session, Depends(get_db)],
