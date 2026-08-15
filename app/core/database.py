@@ -11,7 +11,7 @@ if db_url.startswith("postgresql://"):
 elif db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql+psycopg://", 1)
 
-engine_kwargs: dict = {"pool_pre_ping": True}
+engine_kwargs: dict = {"pool_pre_ping": True, "pool_recycle": 300}
 if db_url.startswith("sqlite"):
     engine_kwargs["connect_args"] = {"check_same_thread": False}
 

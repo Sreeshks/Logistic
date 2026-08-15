@@ -138,15 +138,21 @@ export interface HomeData {
 
 export interface AboutContent {
   id: number;
-  title: string;
-  subtitle?: string | null;
-  story?: string | null;
+  page_title?: string;
+  short_description?: string | null;
+  company_story?: string | null;
   mission?: string | null;
   vision?: string | null;
+  core_values?: string | null;
+  about_image?: string | null;
+  title?: string;
+  subtitle?: string | null;
+  story?: string | null;
   values?: string | null;
   years_experience?: number | null;
   image_url?: string | null;
 }
+
 
 export interface FAQItem {
   id: number;

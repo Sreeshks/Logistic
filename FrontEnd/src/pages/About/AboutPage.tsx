@@ -9,6 +9,7 @@ import { ErrorState } from '../../components/ui/ErrorState';
 import { Breadcrumb } from '../../components/ui/Breadcrumb';
 import { getAboutContent } from '../../api/about.api';
 import { getImageUrl } from '../../utils/image';
+import { SEO } from '../../components/SEO';
 
 export const AboutPage: React.FC = () => {
   const { data: response, isLoading, isError, refetch } = useQuery({
@@ -17,6 +18,16 @@ export const AboutPage: React.FC = () => {
   });
 
   const about = response?.data;
+  const pageTitle = about?.page_title || about?.title || 'Global Freight & Supply Chain Leaders';
+  const pageSubtitle =
+    about?.short_description ||
+    about?.subtitle ||
+    'Pioneering reliable transport networks and transparent logistics management across worldwide trade routes.';
+  const story =
+    about?.company_story ||
+    about?.story ||
+    'Founded on the principle of uncompromised supply chain efficiency, our logistics company operates seamless multi-modal freight operations. We combine modern tracking intelligence with seasoned customs expertise.';
+  const aboutImg = about?.about_image || about?.image_url;
 
   if (isLoading) {
     return (
@@ -46,13 +57,19 @@ export const AboutPage: React.FC = () => {
 
   return (
     <div className="py-12 space-y-16">
+      <SEO
+        title={pageTitle}
+        description={pageSubtitle}
+        ogImage={aboutImg}
+      />
+
       <Container>
         <Breadcrumb items={[{ label: 'About Us' }]} />
 
         <SectionTitle
           badge="Our Story & Culture"
-          title={about?.title || 'Global Freight & Supply Chain Leaders'}
-          subtitle={about?.subtitle || 'Pioneering reliable transport networks and transparent logistics management across worldwide trade routes.'}
+          title={pageTitle}
+          subtitle={pageSubtitle}
         />
 
         {/* Story Section */}
@@ -61,9 +78,8 @@ export const AboutPage: React.FC = () => {
             <h3 className="text-2xl font-extrabold text-slate-900">
               {about?.years_experience ? `${about.years_experience}+ Years of Operational Leadership` : 'Decades of Logistics Precision'}
             </h3>
-            <p className="text-slate-600 leading-relaxed font-normal">
-              {about?.story ||
-                'Founded on the principle of uncompromised supply chain efficiency, our logistics company operates seamless multi-modal freight operations. We combine modern tracking intelligence with seasoned customs expertise.'}
+            <p className="text-slate-600 leading-relaxed font-normal whitespace-pre-line">
+              {story}
             </p>
             <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100">
               <div className="p-4 bg-slate-50 rounded-xl">
@@ -82,11 +98,11 @@ export const AboutPage: React.FC = () => {
           <div className="rounded-xl overflow-hidden shadow-lg border border-slate-200">
             <img
               src={
-                about?.image_url
-                  ? getImageUrl(about.image_url)
+                aboutImg
+                  ? getImageUrl(aboutImg)
                   : 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=1000'
               }
-              alt="Logistics Leadership Team & Fleet"
+              alt={pageTitle}
               className="w-full h-80 lg:h-96 object-cover"
             />
           </div>
@@ -100,7 +116,7 @@ export const AboutPage: React.FC = () => {
               <Target className="w-6 h-6 text-white" />
             </div>
             <h4 className="text-xl font-bold text-white">Our Mission</h4>
-            <p className="text-sm text-slate-300 leading-relaxed">
+            <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-line">
               {about?.mission ||
                 'To deliver dependable, cost-effective, and fully transparent freight solutions that empower commercial enterprise growth globally.'}
             </p>
@@ -112,7 +128,7 @@ export const AboutPage: React.FC = () => {
               <Eye className="w-6 h-6 text-white" />
             </div>
             <h4 className="text-xl font-bold text-white">Our Vision</h4>
-            <p className="text-sm text-slate-300 leading-relaxed">
+            <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-line">
               {about?.vision ||
                 'To be the preferred global supply chain partner recognized for digital innovation, safety standards, and sustainable shipping practices.'}
             </p>
@@ -124,8 +140,9 @@ export const AboutPage: React.FC = () => {
               <ShieldCheck className="w-6 h-6 text-white" />
             </div>
             <h4 className="text-xl font-bold text-white">Core Values</h4>
-            <p className="text-sm text-slate-300 leading-relaxed">
-              {about?.values ||
+            <p className="text-sm text-slate-300 leading-relaxed whitespace-pre-line">
+              {about?.core_values ||
+                about?.values ||
                 'Integrity, speed, absolute cargo safety, and client-first commitment across every shipment tier.'}
             </p>
           </div>
@@ -134,3 +151,4 @@ export const AboutPage: React.FC = () => {
     </div>
   );
 };
+

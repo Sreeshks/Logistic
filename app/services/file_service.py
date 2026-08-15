@@ -55,13 +55,15 @@ async def upload_file_service(file: UploadFile) -> str:
             res = supabase_client.storage.from_(bucket_name).upload(
                 path=unique_filename,
                 file=contents,
-                file_options={"content-type": file.content_type or "image/webp"}
+                file_options={"content-type": file.content_type or "image/webp", "upsert": "true"}
             )
             # Retrieve public URL for the uploaded asset
             public_url = supabase_client.storage.from_(bucket_name).get_public_url(unique_filename)
-            return public_url
+            if public_url:
+                return public_url.rstrip("?")
+            return f"/uploads/{unique_filename}"
         except Exception as e:
-            print(f"[Supabase Storage Warning] Could not upload to bucket '{settings.supabase_bucket}': {e}. Falling back to local storage.")
+            print(f"[Supabase Storage Warning] Could not upload to bucket '{current_settings.supabase_bucket}': {e}. Falling back to local storage.")
 
     # Fallback: Save file locally under upload_dir
     settings.upload_dir.mkdir(parents=True, exist_ok=True)

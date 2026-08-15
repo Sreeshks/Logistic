@@ -822,11 +822,11 @@ export const HomePage: React.FC = () => {
               <div className="relative rounded-3xl overflow-hidden shadow-xl border border-slate-200 group">
                 <img
                   src={
-                    about?.image_url
-                      ? getImageUrl(about.image_url)
+                    (about?.about_image || about?.image_url)
+                      ? getImageUrl(about?.about_image || about?.image_url)
                       : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=1200'
                   }
-                  alt="Logistics Operations Center"
+                  alt={about?.page_title || about?.title || 'Logistics Operations Center'}
                   className="w-full h-[320px] sm:h-[450px] object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-slate-900/10 to-transparent" />
@@ -853,10 +853,10 @@ export const HomePage: React.FC = () => {
                   About Our Company
                 </span>
                 <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-tight">
-                  {about?.title || 'Moving Cargo Worldwide With Unmatched Reliability'}
+                  {about?.page_title || about?.title || 'Moving Cargo Worldwide With Unmatched Reliability'}
                 </h2>
                 <p className="text-slate-600 text-xs sm:text-base leading-relaxed">
-                  {about?.story || about?.subtitle || companyInfo?.description || 'White Star Cargo provides professional logistics solutions including door-to-door air & sea cargo forwarding, expert packing & shifting, and short and long-term storage facilities across Oman.'}
+                  {about?.company_story || about?.story || about?.short_description || about?.subtitle || companyInfo?.description || 'White Star Cargo provides professional logistics solutions including door-to-door air & sea cargo forwarding, expert packing & shifting, and short and long-term storage facilities across Oman.'}
                 </p>
 
                 <div className="space-y-3 sm:space-y-4 pt-1 sm:pt-2">
