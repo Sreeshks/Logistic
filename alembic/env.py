@@ -7,6 +7,9 @@ from app.core.config import get_settings
 from app.core.database import Base
 import app.models  # noqa: F401 - registers model metadata for autogenerate
 
+config = context.config
+settings = get_settings()
+
 db_url = settings.database_url
 if db_url.startswith("postgresql://"):
     db_url = db_url.replace("postgresql://", "postgresql+psycopg://", 1)
