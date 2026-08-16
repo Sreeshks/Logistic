@@ -78,9 +78,14 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }
       }
 
-      if (company.theme_mode) {
-        root.setAttribute('data-theme', company.theme_mode);
-        themeCache.theme_mode = company.theme_mode;
+      if (company.theme_mode === 'dark') {
+        root.setAttribute('data-theme', 'dark');
+        root.classList.add('dark');
+        themeCache.theme_mode = 'dark';
+      } else {
+        root.setAttribute('data-theme', 'light');
+        root.classList.remove('dark');
+        themeCache.theme_mode = 'light';
       }
 
       try {

@@ -25,11 +25,23 @@
     --color-border: #e2e8f0;
   }
 
+  :root[data-theme="dark"],
+  html.dark {
+    --theme-mode: dark;
+    --color-bg: #070d1e;
+    --color-surface: #0f172a;
+    --color-text-main: #f8fafc;
+    --color-text-muted: #94a3b8;
+    --color-border: #1e293b;
+    color-scheme: dark;
+  }
+
   html {
     scroll-behavior: smooth;
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     color: var(--color-text-main);
     background-color: var(--color-bg);
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   body {
@@ -39,8 +51,120 @@
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
-    background-color: #f8fafc;
+    background-color: var(--color-bg);
   }
+}
+
+/* =========================================================
+   DARK MODE STYLES & INVERSIONS (When Theme Mode is 'dark')
+   ========================================================= */
+
+html.dark body,
+html[data-theme="dark"] body {
+  background-color: #070d1e !important;
+  color: #f1f5f9 !important;
+}
+
+/* Background Inversions */
+html.dark .bg-slate-50,
+html[data-theme="dark"] .bg-slate-50 {
+  background-color: #070d1e !important;
+}
+
+html.dark .bg-white,
+html[data-theme="dark"] .bg-white {
+  background-color: #0f172a !important;
+  color: #f1f5f9;
+}
+
+html.dark .bg-white\/95,
+html[data-theme="dark"] .bg-white\/95 {
+  background-color: rgba(15, 23, 42, 0.95) !important;
+}
+
+html.dark .bg-slate-100,
+html[data-theme="dark"] .bg-slate-100 {
+  background-color: #1e293b !important;
+  color: #f1f5f9;
+}
+
+html.dark .bg-slate-50\/50,
+html[data-theme="dark"] .bg-slate-50\/50 {
+  background-color: rgba(15, 23, 42, 0.6) !important;
+}
+
+/* Text Color Inversions */
+html.dark .text-slate-900,
+html[data-theme="dark"] .text-slate-900 {
+  color: #f8fafc !important;
+}
+
+html.dark .text-slate-800,
+html[data-theme="dark"] .text-slate-800 {
+  color: #f1f5f9 !important;
+}
+
+html.dark .text-slate-700,
+html[data-theme="dark"] .text-slate-700 {
+  color: #cbd5e1 !important;
+}
+
+html.dark .text-slate-600,
+html[data-theme="dark"] .text-slate-600 {
+  color: #94a3b8 !important;
+}
+
+html.dark .text-slate-500,
+html[data-theme="dark"] .text-slate-500 {
+  color: #94a3b8 !important;
+}
+
+/* Border Inversions */
+html.dark .border-slate-100,
+html.dark .border-slate-200,
+html[data-theme="dark"] .border-slate-100,
+html[data-theme="dark"] .border-slate-200 {
+  border-color: #1e293b !important;
+}
+
+html.dark .border-slate-300,
+html[data-theme="dark"] .border-slate-300 {
+  border-color: #334155 !important;
+}
+
+/* Card & Glass Utilities in Dark Mode */
+html.dark .glass-card,
+html[data-theme="dark"] .glass-card {
+  background: rgba(15, 23, 42, 0.9) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-color: rgba(51, 65, 85, 0.7) !important;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5) !important;
+}
+
+html.dark .glass-nav,
+html[data-theme="dark"] .glass-nav {
+  background: rgba(15, 23, 42, 0.95) !important;
+  border-bottom-color: #1e293b !important;
+}
+
+/* Form inputs & interactive elements in Dark Mode */
+html.dark input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+html.dark textarea,
+html.dark select,
+html[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]):not([type="color"]),
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: #334155 !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder,
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder {
+  color: #64748b !important;
 }
 
 /* Ken Burns Zoom Effect */
@@ -60,22 +184,6 @@
   animation: kenburns 16s ease-in-out infinite alternate;
 }
 
-/* Premium Light Glassmorphism & Card Utilities */
-.glass-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.05);
-}
-
-.glass-nav {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid #e2e8f0;
-}
-
 /* Custom Gradients & Glows */
 .text-brand-gradient {
   background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
@@ -92,11 +200,16 @@
 }
 
 .glow-orange, .glow-brand {
-  box-shadow: 0 15px 35px -5px rgba(var(--primary-rgb, 234, 88, 12), 0.25);
+  box-shadow: 0 15px 35px -5px rgba(var(--primary-rgb, 2, 132, 199), 0.25);
 }
 
 .bg-grid-pattern {
   background-image: radial-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px);
   background-size: 28px 28px;
+}
+
+html.dark .bg-grid-pattern,
+html[data-theme="dark"] .bg-grid-pattern {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
 }
 

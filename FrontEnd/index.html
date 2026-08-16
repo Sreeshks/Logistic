@@ -25,8 +25,12 @@
               root.style.setProperty('--accent-color', theme.accent_color);
               if (theme.accent_rgb) root.style.setProperty('--accent-rgb', theme.accent_rgb);
             }
-            if (theme.theme_mode) {
-              root.setAttribute('data-theme', theme.theme_mode);
+            if (theme.theme_mode === 'dark') {
+              root.setAttribute('data-theme', 'dark');
+              root.classList.add('dark');
+            } else {
+              root.setAttribute('data-theme', 'light');
+              root.classList.remove('dark');
             }
           }
         } catch (e) {}
