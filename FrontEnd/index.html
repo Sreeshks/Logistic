@@ -4,7 +4,34 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
+    <title>White Star Cargo</title>
+    <script>
+      (function() {
+        try {
+          var cachedTheme = localStorage.getItem('wsc_theme_cache');
+          if (cachedTheme) {
+            var theme = JSON.parse(cachedTheme);
+            var root = document.documentElement;
+            if (theme.primary_color) {
+              root.style.setProperty('--primary-color', theme.primary_color);
+              root.style.setProperty('--primary-hover', theme.primary_hover || theme.primary_color);
+              if (theme.primary_rgb) root.style.setProperty('--primary-rgb', theme.primary_rgb);
+            }
+            if (theme.secondary_color) {
+              root.style.setProperty('--secondary-color', theme.secondary_color);
+              if (theme.secondary_rgb) root.style.setProperty('--secondary-rgb', theme.secondary_rgb);
+            }
+            if (theme.accent_color) {
+              root.style.setProperty('--accent-color', theme.accent_color);
+              if (theme.accent_rgb) root.style.setProperty('--accent-rgb', theme.accent_rgb);
+            }
+            if (theme.theme_mode) {
+              root.setAttribute('data-theme', theme.theme_mode);
+            }
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

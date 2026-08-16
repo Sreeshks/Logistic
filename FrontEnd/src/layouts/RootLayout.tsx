@@ -16,9 +16,20 @@ export const RootLayout: React.FC = () => {
     window.scrollTo(0, 0);
   }, [pathname]);
 
+  const getInitialCompanyInfo = () => {
+    try {
+      const cached = localStorage.getItem('wsc_company_cache');
+      if (cached) {
+        return { success: true, message: 'Cached', data: JSON.parse(cached) };
+      }
+    } catch (e) {}
+    return undefined;
+  };
+
   const { data: response } = useQuery({
     queryKey: ['companyInfo'],
     queryFn: getCompanyInfo,
+    initialData: getInitialCompanyInfo,
     staleTime: 5000,
     refetchOnWindowFocus: true,
   });

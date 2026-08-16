@@ -39,34 +39,54 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (company) {
       const root = document.documentElement;
 
+      const themeCache: Record<string, string> = {};
+
       if (company.primary_color) {
+        const hover = adjustBrightness(company.primary_color, -12);
         root.style.setProperty('--primary-color', company.primary_color);
-        root.style.setProperty('--primary-hover', adjustBrightness(company.primary_color, -12));
+        root.style.setProperty('--primary-hover', hover);
+        themeCache.primary_color = company.primary_color;
+        themeCache.primary_hover = hover;
+
         const rgb = hexToRgb(company.primary_color);
         if (rgb) {
-          root.style.setProperty('--primary-rgb', `${rgb.r}, ${rgb.g}, ${rgb.b}`);
+          const rgbStr = `${rgb.r}, ${rgb.g}, ${rgb.b}`;
+          root.style.setProperty('--primary-rgb', rgbStr);
+          themeCache.primary_rgb = rgbStr;
         }
       }
 
       if (company.secondary_color) {
         root.style.setProperty('--secondary-color', company.secondary_color);
+        themeCache.secondary_color = company.secondary_color;
         const rgb = hexToRgb(company.secondary_color);
         if (rgb) {
-          root.style.setProperty('--secondary-rgb', `${rgb.r}, ${rgb.g}, ${rgb.b}`);
+          const rgbStr = `${rgb.r}, ${rgb.g}, ${rgb.b}`;
+          root.style.setProperty('--secondary-rgb', rgbStr);
+          themeCache.secondary_rgb = rgbStr;
         }
       }
 
       if (company.accent_color) {
         root.style.setProperty('--accent-color', company.accent_color);
+        themeCache.accent_color = company.accent_color;
         const rgb = hexToRgb(company.accent_color);
         if (rgb) {
-          root.style.setProperty('--accent-rgb', `${rgb.r}, ${rgb.g}, ${rgb.b}`);
+          const rgbStr = `${rgb.r}, ${rgb.g}, ${rgb.b}`;
+          root.style.setProperty('--accent-rgb', rgbStr);
+          themeCache.accent_rgb = rgbStr;
         }
       }
 
       if (company.theme_mode) {
         root.setAttribute('data-theme', company.theme_mode);
+        themeCache.theme_mode = company.theme_mode;
       }
+
+      try {
+        localStorage.setItem('wsc_theme_cache', JSON.stringify(themeCache));
+        localStorage.setItem('wsc_company_cache', JSON.stringify(company));
+      } catch (e) {}
     }
   }, [response]);
 

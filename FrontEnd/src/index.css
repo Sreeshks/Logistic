@@ -10,13 +10,13 @@
 
 @layer base {
   :root {
-    --primary-color: #ea580c;
-    --primary-hover: #c2410c;
-    --primary-rgb: 234, 88, 12;
+    --primary-color: #0284c7;
+    --primary-hover: #0369a1;
+    --primary-rgb: 2, 132, 199;
     --secondary-color: #0f172a;
     --secondary-rgb: 15, 23, 42;
-    --accent-color: #0284c7;
-    --accent-rgb: 2, 132, 199;
+    --accent-color: #10b981;
+    --accent-rgb: 16, 185, 129;
     --theme-mode: light;
     --color-bg: #f8fafc;
     --color-surface: #ffffff;

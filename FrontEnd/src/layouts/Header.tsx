@@ -63,14 +63,8 @@ export const Header: React.FC<HeaderProps> = ({ companyInfo }) => {
             )}
           </div>
           <div className="flex items-center space-x-4">
-            {companyInfo?.working_hours && (
-              <span className="text-slate-300 flex items-center gap-1.5 text-[11px] font-medium">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse inline-block" />
-                <span>{companyInfo.working_hours}</span>
-              </span>
-            )}
             {companyInfo?.arabic_name && (
-              <span className="text-amber-400 font-bold text-xs tracking-wider px-2.5 py-0.5 rounded-full bg-slate-800/90 border border-slate-700/60 font-arabic">
+              <span className="text-amber-400 font-bold text-xs tracking-wider px-3 py-1 rounded-full bg-slate-800/90 border border-slate-700/60 font-arabic shadow-sm">
                 {companyInfo.arabic_name}
               </span>
             )}

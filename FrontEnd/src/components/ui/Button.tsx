@@ -30,7 +30,7 @@ export const Button: React.FC<ButtonProps> = ({
 
   const variants = {
     accent:
-      'bg-brand-gradient text-white hover:brightness-110 focus:ring-primary border border-white/20',
+      'bg-primary text-white hover:brightness-110 focus:ring-primary border border-white/20 shadow-md hover:shadow-primary/30',
     primary:
       'bg-secondary text-white hover:brightness-125 focus:ring-secondary border border-slate-700/50',
     secondary:
@@ -47,20 +47,13 @@ export const Button: React.FC<ButtonProps> = ({
     lg: 'px-8 py-4 text-base font-extrabold gap-2.5',
   };
 
-  const dynamicStyle =
-    variant === 'accent'
-      ? { backgroundColor: 'var(--primary-color)', ...style }
-      : variant === 'primary'
-      ? { backgroundColor: 'var(--secondary-color)', ...style }
-      : style;
-
   return (
     <motion.button
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.97 }}
       className={twMerge(clsx(baseStyles, variants[variant], sizes[size], className))}
       disabled={disabled || isLoading}
-      style={dynamicStyle}
+      style={style}
       {...props}
     >
       {/* Animated Shine Highlight Effect */}
