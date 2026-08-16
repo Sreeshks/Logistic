@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Menu, X, Phone, Mail, ArrowRight, ShieldCheck, MapPin } from 'lucide-react';
+import { Menu, X, Phone, Mail, ArrowRight, MapPin } from 'lucide-react';
 import { Container } from '../components/ui/Container';
 import { Button } from '../components/ui/Button';
 import type { CompanyInfo } from '../types/api';
@@ -63,10 +63,17 @@ export const Header: React.FC<HeaderProps> = ({ companyInfo }) => {
             )}
           </div>
           <div className="flex items-center space-x-4">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold bg-slate-800/90 text-slate-200 border border-slate-700/60 shadow-sm">
-              <ShieldCheck className="w-3.5 h-3.5 text-primary" />
-              ISO 9001:2015 Accredited Cargo Hub
-            </span>
+            {companyInfo?.working_hours && (
+              <span className="text-slate-300 flex items-center gap-1.5 text-[11px] font-medium">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse inline-block" />
+                <span>{companyInfo.working_hours}</span>
+              </span>
+            )}
+            {companyInfo?.arabic_name && (
+              <span className="text-amber-400 font-bold text-xs tracking-wider px-2.5 py-0.5 rounded-full bg-slate-800/90 border border-slate-700/60 font-arabic">
+                {companyInfo.arabic_name}
+              </span>
+            )}
           </div>
         </Container>
       </div>
@@ -80,7 +87,7 @@ export const Header: React.FC<HeaderProps> = ({ companyInfo }) => {
         }`}
       >
         <Container className="flex items-center justify-between">
-          {/* Logo */}
+          {/* Logo & Branding */}
           <Link to="/" className="flex items-center gap-3 group">
             {(companyInfo?.logo_url || companyInfo?.logo) ? (
               <img src={getImageUrl(companyInfo.logo_url || companyInfo.logo)} alt={companyInfo.company_name || companyInfo.name || 'Logo'} className="h-10 sm:h-12 w-auto object-contain" />
@@ -92,16 +99,24 @@ export const Header: React.FC<HeaderProps> = ({ companyInfo }) => {
               </div>
             )}
             <div className="flex flex-col">
-              {(companyInfo?.company_name || companyInfo?.name) && (
-                <span className="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 uppercase leading-none">
-                  {companyInfo.company_name || companyInfo.name}
-                </span>
-              )}
-              {companyInfo?.tagline && (
-                <span className="text-[9px] sm:text-[10px] text-primary font-bold tracking-wider uppercase mt-1">
-                  {companyInfo.tagline}
-                </span>
-              )}
+              <span className="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 uppercase leading-none">
+                {companyInfo?.company_name || companyInfo?.name || 'White Star Cargo'}
+              </span>
+              <div className="flex items-center gap-1.5 mt-1">
+                {companyInfo?.arabic_name && (
+                  <span className="text-[10px] text-primary font-bold tracking-wide">
+                    {companyInfo.arabic_name}
+                  </span>
+                )}
+                {companyInfo?.arabic_name && companyInfo?.tagline && (
+                  <span className="text-slate-300 text-[10px] hidden sm:inline">•</span>
+                )}
+                {companyInfo?.tagline && (
+                  <span className="text-[9px] sm:text-[10px] text-slate-500 font-semibold tracking-wider hidden sm:inline uppercase">
+                    {companyInfo.tagline}
+                  </span>
+                )}
+              </div>
             </div>
           </Link>
 
