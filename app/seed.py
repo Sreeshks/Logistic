@@ -60,11 +60,11 @@ def seed_database():
                 country="Oman",
                 tagline="Door to Door Service | Professional Packing & Shifting",
                 short_description="Worldwide Air & Sea Cargo, Professional Packing & Shifting, Long & Short Time Storage Facility.",
-                full_description="White Star Cargo provides professional logistics solutions including door-to-door air & sea cargo forwarding, expert packing & shifting, and short and long-term storage facilities across Oman.",
-                phone="95807130",
-                whatsapp="95807130",
+                full_description="White Star Cargo (النجم الأبيض للشحن) provides professional logistics solutions including door-to-door air & sea cargo forwarding, expert packing & shifting, and short and long-term storage facilities across Oman.",
+                phone="+968 95807130",
+                whatsapp="+968 95807130",
                 email="wstarcargo@rediffmail.com",
-                address="Ruwi & Misfah, Sultanate of Oman",
+                address="Ruwi (Near Softy Ice Cream, Old Fish Market) & Misfah (Near Emerald Hyper Market), Muscat, Sultanate of Oman",
                 google_maps_url=None,
                 working_hours="Sat - Thu: 8:00 AM - 9:00 PM",
                 facebook=None,
@@ -86,11 +86,20 @@ def seed_database():
                 CompanyContact(
                     company_id=company.id,
                     type="WHATSAPP",
-                    value="95807130",
-                    label="Primary WhatsApp",
+                    value="+968 95807130",
+                    label="Main WhatsApp (+968 95807130)",
                     is_primary=True,
                     is_public=True,
                     display_order=1,
+                ),
+                CompanyContact(
+                    company_id=company.id,
+                    type="PHONE",
+                    value="+968 95807130",
+                    label="Customer Service (+968 95807130)",
+                    is_primary=True,
+                    is_public=True,
+                    display_order=2,
                 ),
                 CompanyContact(
                     company_id=company.id,
@@ -99,7 +108,7 @@ def seed_database():
                     label="Business Email",
                     is_primary=True,
                     is_public=True,
-                    display_order=2,
+                    display_order=3,
                 ),
             ]
             db.add_all(c_contacts)
@@ -240,31 +249,31 @@ def seed_database():
         # 6. Seed Destinations
         if db.query(Destination).count() == 0:
             destinations = [
-                Destination(name="India", display_order=1, is_active=True),
-                Destination(name="Bangladesh", display_order=2, is_active=True),
-                Destination(name="Philippines", display_order=3, is_active=True),
-                Destination(name="Indonesia", display_order=4, is_active=True),
-                Destination(name="Sri Lanka", display_order=5, is_active=True),
-                Destination(name="United Kingdom", display_order=6, is_active=True),
-                Destination(name="United States", display_order=7, is_active=True),
-                Destination(name="GCC Countries", display_order=8, is_active=True),
+                Destination(name="India", code="IN", description="Door to Door Delivery across India (Air 7-15 Days | Sea 25-35 Days)", display_order=1, is_active=True),
+                Destination(name="Bangladesh", code="BD", description="Worldwide Air & Sea Cargo Door to Door Delivery", display_order=2, is_active=True),
+                Destination(name="Philippines", code="PH", description="Worldwide Air & Sea Cargo Door to Door Delivery", display_order=3, is_active=True),
+                Destination(name="Indonesia", code="ID", description="Worldwide Air & Sea Cargo Door to Door Delivery", display_order=4, is_active=True),
+                Destination(name="Sri Lanka", code="LK", description="Worldwide Air & Sea Cargo Door to Door Delivery", display_order=5, is_active=True),
+                Destination(name="United Kingdom (UK)", code="GB", description="Worldwide Air & Sea Cargo Door to Door Delivery", display_order=6, is_active=True),
+                Destination(name="United States (USA)", code="US", description="Worldwide Air & Sea Cargo Door to Door Delivery", display_order=7, is_active=True),
+                Destination(name="GCC Countries", code="GCC", description="Oman, UAE, Saudi Arabia, Qatar, Bahrain & Kuwait Door to Door Delivery", display_order=8, is_active=True),
             ]
             db.add_all(destinations)
             print("Seeded Destinations.")
 
         # 7. Seed Home Hero
         default_highlights_json = (
-            '[{"title": "SAFE & SECURE", "subtitle": "Your cargo is safe in our hands", "icon": "shield"}, '
-            '{"title": "ON-TIME DELIVERY", "subtitle": "Fast & reliable delivery across India", "icon": "clock"}, '
-            '{"title": "WORLDWIDE REACH", "subtitle": "Air & Sea cargo to all major destinations", "icon": "globe"}, '
-            '{"title": "DOOR TO DOOR", "subtitle": "Complete logistics solution", "icon": "box"}]'
+            '[{"title": "AIR CARGO (7-15 DAYS)", "subtitle": "Express delivery all over India & worldwide", "icon": "plane"}, '
+            '{"title": "SEA CARGO (25-35 DAYS)", "subtitle": "Economical ocean shipping all over India", "icon": "ship"}, '
+            '{"title": "DOOR TO DOOR DELIVERY", "subtitle": "India, GCC, UK, USA, Philippines & more", "icon": "truck"}, '
+            '{"title": "PACKING & STORAGE", "subtitle": "Professional shifting & secure storage", "icon": "box"}]'
         )
         hero = db.query(HomeHero).first()
         if not hero:
             hero = HomeHero(
-                title="DELIVERING TRUST, CONNECTING WORLDWIDE",
-                subtitle="Door to Door Cargo & Logistics Services",
-                description="Worldwide Air & Sea Cargo, Professional Packing & Shifting, and Long & Short Time Storage Facilities.",
+                title="WHITE STAR CARGO - النجم الأبيض للشحن",
+                subtitle="Door to Door Service | Professional Packing & Shifting",
+                description="Worldwide Air & Sea Cargo, Professional Packing & Shifting, Long & Short Time Storage Facility.",
                 button_text="Contact Us",
                 button_url="/contact",
                 secondary_button_text="Our Services",
@@ -276,16 +285,14 @@ def seed_database():
             db.add(hero)
             print("Seeded Home Hero.")
         else:
-            hero.title = "DELIVERING TRUST, CONNECTING WORLDWIDE"
-            hero.subtitle = "Door to Door Cargo & Logistics Services"
-            hero.description = "Worldwide Air & Sea Cargo, Professional Packing & Shifting, and Long & Short Time Storage Facilities."
+            hero.title = "WHITE STAR CARGO - النجم الأبيض للشحن"
+            hero.subtitle = "Door to Door Service | Professional Packing & Shifting"
+            hero.description = "Worldwide Air & Sea Cargo, Professional Packing & Shifting, Long & Short Time Storage Facility."
             hero.button_text = "Contact Us"
             hero.button_url = "/contact"
             hero.secondary_button_text = "Our Services"
             hero.secondary_button_url = "/services"
-            hero.banner_images = "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&q=80&w=2000,https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=2000,https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&q=80&w=2000,https://images.unsplash.com/photo-1519003722824-194d4455a60c?auto=format&fit=crop&q=80&w=2000"
-            if not hero.highlights:
-                hero.highlights = default_highlights_json
+            hero.highlights = default_highlights_json
 
         # 8. Seed Company Statistics
         if db.query(CompanyStatistic).count() == 0:
@@ -383,23 +390,30 @@ def seed_database():
             faqs = [
                 FAQ(
                     question="What is the estimated delivery time for Air Cargo to India?",
-                    answer="Air Cargo delivery all over India typically takes 7 to 15 days.",
+                    answer="Air Cargo delivery all over India takes 7 to 15 days.",
                     category="Services",
                     display_order=1,
                     is_active=True,
                 ),
                 FAQ(
                     question="What is the estimated delivery time for Sea Cargo to India?",
-                    answer="Sea Cargo delivery all over India typically takes 25 to 35 days.",
+                    answer="Sea Cargo delivery all over India takes 25 to 35 days.",
                     category="Services",
                     display_order=2,
                     is_active=True,
                 ),
                 FAQ(
-                    question="Where are your branches located in Oman?",
-                    answer="We have active branches in Ruwi (Near Softy Ice Cream, Old Fish Market) and Misfah (Near Emerald Hyper Market), with upcoming branches in Barka and Nizwa.",
-                    category="Locations",
+                    question="Which international destinations do you provide Door to Door service to?",
+                    answer="We provide Door to Door delivery to India, Bangladesh, Philippines, Indonesia, Sri Lanka, United Kingdom (UK), United States (USA), and all GCC countries.",
+                    category="Services",
                     display_order=3,
+                    is_active=True,
+                ),
+                FAQ(
+                    question="Where are your branches located in Oman and how can I contact them?",
+                    answer="Our active branches are in Ruwi (Near Softy Ice Cream, Old Fish Market | Tel: +968 99896945, +968 71100628) and Misfah (Near Emerald Hyper Market | Tel: +968 92725902, +968 99231653). Our WhatsApp is +968 95807130. Upcoming branches will be in Barka and Nizwa.",
+                    category="Locations",
+                    display_order=4,
                     is_active=True,
                 ),
             ]
@@ -411,7 +425,7 @@ def seed_database():
             c_msg = ContactMessage(
                 name="Customer Support Test",
                 email="customer@example.com",
-                phone="95807130",
+                phone="+968 95807130",
                 subject="General Freight Inquiry",
                 message="Requesting door to door air cargo rates to Kerala.",
                 status=ContactStatus.NEW,

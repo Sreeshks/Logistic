@@ -374,7 +374,7 @@ export const HomePage: React.FC = () => {
       name: 'Ruwi Branch',
       status: 'ACTIVE',
       location: 'Near Softy Ice Cream, Old Fish Market, Ruwi, Oman',
-      phones: ['99896945', '71100628'],
+      phones: ['+968 99896945', '+968 71100628'],
       badge: 'Main Branch',
     },
     {
@@ -382,7 +382,7 @@ export const HomePage: React.FC = () => {
       name: 'Misfah Branch',
       status: 'ACTIVE',
       location: 'Near Emerald Hyper Market, Misfah, Oman',
-      phones: ['92725902', '99231653'],
+      phones: ['+968 92725902', '+968 99231653'],
       badge: 'Logistics Hub',
     },
     {
@@ -390,16 +390,16 @@ export const HomePage: React.FC = () => {
       name: 'Barka Branch',
       status: 'COMING SOON',
       location: 'Sultanate of Oman',
-      phones: ['95807130'],
-      badge: 'Expanding Soon',
+      phones: ['+968 95807130'],
+      badge: 'Opening Soon',
     },
     {
       id: 4,
       name: 'Nizwa Branch',
       status: 'COMING SOON',
       location: 'Sultanate of Oman',
-      phones: ['95807130'],
-      badge: 'Expanding Soon',
+      phones: ['+968 95807130'],
+      badge: 'Opening Soon',
     },
   ];
 
@@ -1018,21 +1018,25 @@ export const HomePage: React.FC = () => {
                     </p>
                   </div>
 
-                  <div className="pt-4 border-t border-slate-100 space-y-2">
+                    <div className="pt-4 border-t border-slate-100 space-y-2">
                     {branch.phones.length > 0 ? (
-                      branch.phones.map((phone, pIdx) => (
-                        <a
-                          key={pIdx}
-                          href={`tel:+968${phone}`}
-                          className="flex items-center justify-between text-xs font-bold text-slate-700 hover:text-primary transition-colors py-1 px-2.5 rounded-lg bg-slate-50 hover:bg-slate-100"
-                        >
-                          <span className="flex items-center gap-1.5">
-                            <PhoneCall className="w-3.5 h-3.5 text-primary" />
-                            +968 {phone}
-                          </span>
-                          <span className="text-[10px] text-primary">Call</span>
-                        </a>
-                      ))
+                      branch.phones.map((phone, pIdx) => {
+                        const cleanPhone = phone.replace(/[^0-9]/g, '').replace(/^968/, '');
+                        const displayPhone = phone.startsWith('+968') ? phone : `+968 ${phone}`;
+                        return (
+                          <a
+                            key={pIdx}
+                            href={`tel:+968${cleanPhone}`}
+                            className="flex items-center justify-between text-xs font-bold text-slate-700 hover:text-primary transition-colors py-1 px-2.5 rounded-lg bg-slate-50 hover:bg-slate-100"
+                          >
+                            <span className="flex items-center gap-1.5">
+                              <PhoneCall className="w-3.5 h-3.5 text-primary" />
+                              {displayPhone}
+                            </span>
+                            <span className="text-[10px] text-primary">Call</span>
+                          </a>
+                        );
+                      })
                     ) : (
                       <div className="text-xs font-medium text-slate-400 italic py-1">Contact Muscat Main Office</div>
                     )}
