@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 export const companySchema = z.object({
   name: z.string().min(1, 'Company name is required'),
+  arabic_name: z.string().optional().nullable(),
   tagline: z.string().optional().nullable(),
   short_description: z.string().optional().nullable(),
   full_description: z.string().optional().nullable(),

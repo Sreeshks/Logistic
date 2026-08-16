@@ -1,6 +1,7 @@
 export interface CompanyInfo {
   id: number;
   name: string;
+  arabic_name?: string | null;
   logo?: string | null;
   favicon?: string | null;
   tagline?: string | null;
