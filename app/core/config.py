@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     refresh_token_expire_days: int = Field(default=7, gt=0)
     cors_origins: list[str] = ["http://localhost:3000", "http://localhost:5173"]
     upload_dir: Path = Path("uploads")
-    max_upload_size_mb: int = Field(default=10, gt=0)
+    max_upload_size_mb: int = Field(default=50, gt=0)
 
     # Supabase Cloud Storage & Project Integration
     supabase_url: str | None = "https://fhvlgotshslsawgfagea.supabase.co"

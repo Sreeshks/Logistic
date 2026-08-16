@@ -7,8 +7,17 @@ from app.core.config import get_settings
 
 settings = get_settings()
 
-ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
-ALLOWED_MIME_TYPES = {"image/jpeg", "image/png", "image/webp"}
+ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".mp4", ".webm", ".mov", ".ogg"}
+ALLOWED_MIME_TYPES = {
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "video/mp4",
+    "video/webm",
+    "video/quicktime",
+    "video/ogg",
+    "application/octet-stream",
+}
 
 
 async def upload_file_service(file: UploadFile) -> str:
@@ -27,7 +36,23 @@ async def upload_file_service(file: UploadFile) -> str:
             detail=f"Unsupported file extension '{ext}'. Allowed extensions: {', '.join(sorted(ALLOWED_EXTENSIONS))}",
         )
 
-    if file.content_type not in ALLOWED_MIME_TYPES:
+    # Determine content type fallback from extension if generic octet-stream
+    content_type = file.content_type
+    if not content_type or content_type == "application/octet-stream":
+        if ext in {".mp4", ".m4v"}:
+            content_type = "video/mp4"
+        elif ext == ".webm":
+            content_type = "video/webm"
+        elif ext == ".mov":
+            content_type = "video/quicktime"
+        elif ext in {".jpg", ".jpeg"}:
+            content_type = "image/jpeg"
+        elif ext == ".png":
+            content_type = "image/png"
+        elif ext == ".webp":
+            content_type = "image/webp"
+
+    if content_type not in ALLOWED_MIME_TYPES:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Unsupported MIME type '{file.content_type}'. Allowed types: {', '.join(sorted(ALLOWED_MIME_TYPES))}",
@@ -55,7 +80,7 @@ async def upload_file_service(file: UploadFile) -> str:
             res = supabase_client.storage.from_(bucket_name).upload(
                 path=unique_filename,
                 file=contents,
-                file_options={"content-type": file.content_type or "image/webp", "upsert": "true"}
+                file_options={"content-type": content_type or "image/webp", "upsert": "true"}
             )
             # Retrieve public URL for the uploaded asset
             public_url = supabase_client.storage.from_(bucket_name).get_public_url(unique_filename)

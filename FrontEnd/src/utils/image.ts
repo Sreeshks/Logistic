@@ -45,3 +45,15 @@ export const getImageUrls = (url?: string | string[] | null): string[] => {
   }
   return rawList.map((item) => getImageUrl(item)).filter(Boolean);
 };
+
+export const isVideoUrl = (url?: string | null): boolean => {
+  if (!url) return false;
+  const clean = url.split('?')[0].toLowerCase().trim();
+  return (
+    clean.endsWith('.mp4') ||
+    clean.endsWith('.webm') ||
+    clean.endsWith('.mov') ||
+    clean.endsWith('.ogg') ||
+    clean.endsWith('.m4v')
+  );
+};

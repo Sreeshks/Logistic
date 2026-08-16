@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getImageUrl, getImageUrls } from '../utils/image';
+import { getImageUrl, getImageUrls, isVideoUrl } from '../utils/image';
 
 interface HeroCarouselProps {
   bannerImages?: string | string[] | null;
@@ -26,7 +26,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
   mobileBannerImages,
   defaultImage,
 }) => {
-  // 1. Process Desktop Banner Images
+  // 1. Process Desktop Banner Images / Videos
   let parsedDesktop: string[] = getImageUrls(bannerImages);
   if (defaultImage && !parsedDesktop.includes(getImageUrl(defaultImage))) {
     parsedDesktop.unshift(getImageUrl(defaultImage));
@@ -35,7 +35,7 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
     parsedDesktop = DEFAULT_SLIDES;
   }
 
-  // 2. Process Mobile Banner Images
+  // 2. Process Mobile Banner Images / Videos
   const parsedMobile: string[] = getImageUrls(mobileBannerImages);
 
   // 3. Build total slides array to support different desktop vs mobile slide counts
@@ -58,9 +58,12 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
 
   return (
     <div className="absolute inset-0 z-0 overflow-hidden bg-slate-950">
-      {/* Slide Images */}
+      {/* Slide Images or Videos */}
       {slides.map((slide, index) => {
         const isActive = index === currentIndex;
+        const isDesktopVideo = isVideoUrl(slide.desktopUrl);
+        const isMobileVideo = isVideoUrl(slide.mobileUrl);
+
         return (
           <div
             key={slide.desktopUrl + index}
@@ -68,16 +71,47 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({
               isActive ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
             }`}
           >
-            <picture className="block w-full h-full">
-              {slide.mobileUrl && <source media="(max-width: 639px)" srcSet={slide.mobileUrl} />}
-              <img
+            {isDesktopVideo ? (
+              <video
                 src={slide.desktopUrl}
-                alt={`Logistics Banner Slide ${index + 1}`}
-                className={`w-full h-full object-cover object-center ${isActive ? 'animate-kenburns' : ''}`}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover object-center"
               />
-            </picture>
+            ) : isMobileVideo && slide.mobileUrl ? (
+              <>
+                <div className="hidden sm:block w-full h-full">
+                  <img
+                    src={slide.desktopUrl}
+                    alt={`Hero Slide ${index + 1}`}
+                    className={`w-full h-full object-cover object-center ${isActive ? 'animate-kenburns' : ''}`}
+                  />
+                </div>
+                <div className="block sm:hidden w-full h-full">
+                  <video
+                    src={slide.mobileUrl}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="w-full h-full object-cover object-center"
+                  />
+                </div>
+              </>
+            ) : (
+              <picture className="block w-full h-full">
+                {slide.mobileUrl && <source media="(max-width: 639px)" srcSet={slide.mobileUrl} />}
+                <img
+                  src={slide.desktopUrl}
+                  alt={`Logistics Banner Slide ${index + 1}`}
+                  className={`w-full h-full object-cover object-center ${isActive ? 'animate-kenburns' : ''}`}
+                />
+              </picture>
+            )}
 
-            {/* Balanced Gradient Overlay for proper background image visibility & text readability */}
+            {/* Balanced Gradient Overlay for proper background image/video visibility & text readability */}
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-slate-950/10" />
             <div className="absolute inset-0 bg-gradient-to-r from-slate-950/75 via-slate-950/35 to-transparent" />
           </div>

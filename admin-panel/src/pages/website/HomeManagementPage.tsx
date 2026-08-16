@@ -17,7 +17,7 @@ import { Modal } from '../../components/ui/Modal';
 import { ConfirmDialog } from '../../components/ui/ConfirmDialog';
 import { DataTable, Column } from '../../components/ui/DataTable';
 import { StatusBadge } from '../../components/ui/StatusBadge';
-import { getImageUrl } from '../../utils/image';
+import { getImageUrl, isVideoUrl } from '../../utils/image';
 import { CompanyStatistic } from '../../types/home';
 
 export const HomeManagementPage: React.FC = () => {
@@ -268,9 +268,10 @@ export const HomeManagementPage: React.FC = () => {
                 control={controlHero}
                 render={({ field }) => (
                   <ImageUploader
-                    label="Primary Hero Background Image"
+                    label="Primary Hero Background (Image or Video .mp4/.webm)"
                     value={field.value}
                     onChange={field.onChange}
+                    allowVideo={true}
                     error={heroErrors.background_image?.message}
                   />
                 )}
@@ -283,8 +284,9 @@ export const HomeManagementPage: React.FC = () => {
                   render={({ field }) => (
                     <div>
                       <ImageUploader
-                        label="Add Hero Banner Image to Carousel"
+                        label="Add Hero Banner Slide (Image or Video)"
                         value=""
+                        allowVideo={true}
                         onChange={(newUrl) => {
                           if (newUrl) {
                             const existing = field.value ? field.value.split(',').map((s) => s.trim()).filter(Boolean) : [];
@@ -300,7 +302,7 @@ export const HomeManagementPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Desktop Banner Carousel Images Manager */}
+            {/* Desktop Banner Carousel Images / Videos Manager */}
             <Controller
               name="banner_images"
               control={controlHero}
@@ -310,41 +312,55 @@ export const HomeManagementPage: React.FC = () => {
                   <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
                     <div className="flex items-center justify-between">
                       <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                        Desktop Banner Carousel Slides ({imageList.length} images)
+                        Desktop Banner Carousel Slides ({imageList.length} media items)
                       </label>
                       <span className="text-[11px] text-slate-500 font-medium">
-                        For desktop screens & laptops
+                        For desktop screens & laptops (Images & Videos)
                       </span>
                     </div>
 
                     {imageList.length > 0 && (
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        {imageList.map((imgUrl, idx) => (
-                          <div key={idx} className="relative group rounded-lg overflow-hidden border border-slate-200 h-24 bg-slate-900">
-                            <img src={getImageUrl(imgUrl)} alt={`Desktop Slide ${idx + 1}`} className="w-full h-full object-cover" />
-                            <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  const updated = imageList.filter((_, i) => i !== idx);
-                                  field.onChange(updated.join(','));
-                                }}
-                                className="p-1.5 bg-rose-600 text-white rounded-md hover:bg-rose-700 text-xs font-bold"
-                              >
-                                Remove
-                              </button>
+                        {imageList.map((imgUrl, idx) => {
+                          const isVid = isVideoUrl(imgUrl);
+                          return (
+                            <div key={idx} className="relative group rounded-lg overflow-hidden border border-slate-200 h-24 bg-slate-900">
+                              {isVid ? (
+                                <video
+                                  src={getImageUrl(imgUrl)}
+                                  className="w-full h-full object-cover"
+                                  autoPlay
+                                  muted
+                                  loop
+                                  playsInline
+                                />
+                              ) : (
+                                <img src={getImageUrl(imgUrl)} alt={`Desktop Slide ${idx + 1}`} className="w-full h-full object-cover" />
+                              )}
+                              <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const updated = imageList.filter((_, i) => i !== idx);
+                                    field.onChange(updated.join(','));
+                                  }}
+                                  className="p-1.5 bg-rose-600 text-white rounded-md hover:bg-rose-700 text-xs font-bold"
+                                >
+                                  Remove
+                                </button>
+                              </div>
+                              <span className="absolute bottom-1 left-1 bg-slate-900/80 text-white text-[10px] px-1.5 py-0.5 rounded font-mono flex items-center gap-1">
+                                {isVid ? '🎬' : '🖼️'} Desktop #{idx + 1}
+                              </span>
                             </div>
-                            <span className="absolute bottom-1 left-1 bg-slate-900/80 text-white text-[10px] px-1.5 py-0.5 rounded font-mono">
-                              Desktop #{idx + 1}
-                            </span>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     )}
 
                     <Textarea
                       rows={2}
-                      placeholder="Multiple desktop image URLs separated by commas..."
+                      placeholder="Multiple desktop media URLs separated by commas..."
                       value={field.value || ''}
                       onChange={(e) => field.onChange(e.target.value)}
                     />
@@ -353,7 +369,7 @@ export const HomeManagementPage: React.FC = () => {
               }}
             />
 
-            {/* Mobile Banner Carousel Images Manager */}
+            {/* Mobile Banner Carousel Images / Videos Manager */}
             <div className="space-y-3">
               <Controller
                 name="mobile_banner_images"
@@ -361,8 +377,9 @@ export const HomeManagementPage: React.FC = () => {
                 render={({ field }) => (
                   <div>
                     <ImageUploader
-                      label="Upload Mobile Banner Image (Optimized for Phones / Vertical Display)"
+                      label="Upload Mobile Banner Slide (Image or Video)"
                       value=""
+                      allowVideo={true}
                       onChange={(newUrl) => {
                         if (newUrl) {
                           const existing = field.value ? field.value.split(',').map((s) => s.trim()).filter(Boolean) : [];
@@ -385,7 +402,7 @@ export const HomeManagementPage: React.FC = () => {
                     <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
                       <div className="flex items-center justify-between">
                         <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                          Mobile Banner Carousel Slides ({mobileImageList.length} images)
+                          Mobile Banner Carousel Slides ({mobileImageList.length} media items)
                         </label>
                         <span className="text-[11px] text-slate-500 font-medium">
                           Displays on mobile screens (&lt; 640px)
@@ -394,26 +411,40 @@ export const HomeManagementPage: React.FC = () => {
 
                       {mobileImageList.length > 0 && (
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                          {mobileImageList.map((imgUrl, idx) => (
-                            <div key={idx} className="relative group rounded-lg overflow-hidden border border-slate-200 h-28 bg-slate-900">
-                              <img src={getImageUrl(imgUrl)} alt={`Mobile Slide ${idx + 1}`} className="w-full h-full object-cover" />
-                              <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    const updated = mobileImageList.filter((_, i) => i !== idx);
-                                    field.onChange(updated.join(','));
-                                  }}
-                                  className="p-1.5 bg-rose-600 text-white rounded-md hover:bg-rose-700 text-xs font-bold"
-                                >
-                                  Remove
-                                </button>
+                          {mobileImageList.map((imgUrl, idx) => {
+                            const isVid = isVideoUrl(imgUrl);
+                            return (
+                              <div key={idx} className="relative group rounded-lg overflow-hidden border border-slate-200 h-28 bg-slate-900">
+                                {isVid ? (
+                                  <video
+                                    src={getImageUrl(imgUrl)}
+                                    className="w-full h-full object-cover"
+                                    autoPlay
+                                    muted
+                                    loop
+                                    playsInline
+                                  />
+                                ) : (
+                                  <img src={getImageUrl(imgUrl)} alt={`Mobile Slide ${idx + 1}`} className="w-full h-full object-cover" />
+                                )}
+                                <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const updated = mobileImageList.filter((_, i) => i !== idx);
+                                      field.onChange(updated.join(','));
+                                    }}
+                                    className="p-1.5 bg-rose-600 text-white rounded-md hover:bg-rose-700 text-xs font-bold"
+                                  >
+                                    Remove
+                                  </button>
+                                </div>
+                                <span className="absolute bottom-1 left-1 bg-blue-600 text-white text-[10px] px-1.5 py-0.5 rounded font-mono flex items-center gap-1">
+                                  {isVid ? '🎬' : '🖼️'} Mobile #{idx + 1}
+                                </span>
                               </div>
-                              <span className="absolute bottom-1 left-1 bg-blue-600 text-white text-[10px] px-1.5 py-0.5 rounded font-mono">
-                                Mobile #{idx + 1}
-                              </span>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       )}
 
