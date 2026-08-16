@@ -14,6 +14,8 @@ elif db_url.startswith("postgres://"):
 engine_kwargs: dict = {"pool_pre_ping": True, "pool_recycle": 300}
 if db_url.startswith("sqlite"):
     engine_kwargs["connect_args"] = {"check_same_thread": False}
+elif "postgresql" in db_url or "postgres" in db_url:
+    engine_kwargs["connect_args"] = {"prepare_threshold": None}
 
 engine = create_engine(db_url, **engine_kwargs)
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False, expire_on_commit=False)

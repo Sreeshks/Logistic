@@ -12,6 +12,7 @@ from app.models.gallery import GalleryItem
 from app.models.blog import Blog, BlogStatus
 from app.models.faq import FAQ
 from app.models.contact import ContactMessage, ContactStatus
+from app.models.order import Order, OrderStatus
 
 __all__ = [
     "Base",
@@ -33,4 +34,6 @@ __all__ = [
     "FAQ",
     "ContactMessage",
     "ContactStatus",
+    "Order",
+    "OrderStatus",
 ]

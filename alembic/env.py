@@ -42,10 +42,15 @@ def run_migrations_offline() -> None:
 def run_migrations_online() -> None:
     """Run migrations with a database connection."""
     configuration = config.get_section(config.config_ini_section, {})
+    connect_args = {}
+    if "postgresql" in db_url or "postgres" in db_url:
+        connect_args["prepare_threshold"] = None
+
     connectable = engine_from_config(
         configuration,
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
+        connect_args=connect_args,
     )
 
     with connectable.connect() as connection:
